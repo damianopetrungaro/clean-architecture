@@ -1,0 +1,16 @@
+{
+    "name": "damianopetrungaro/clean-architecture",
+    "description": "A package of utilities for build clean application in PHP",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Damiano Petrungaro",
+            "email": "damianopetrungaro@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Damianopetrungaro\\CleanArchitecture\\": "src/"
+        }
+    }
+}
