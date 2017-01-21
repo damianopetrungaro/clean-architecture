@@ -54,7 +54,7 @@ class Response implements ResponseInterface
     {
         $values = $this->data->get($key, []);
         $values[] = $value;
-        $this->data->set($key, $values);
+        $this->data->set($values, $key);
     }
 
     /**
@@ -64,7 +64,7 @@ class Response implements ResponseInterface
     {
         $values = $this->errors->get($key, []);
         $values[] = $error;
-        $this->errors->set($key, $values);
+        $this->errors->set($values, $key);
     }
 
     /**
