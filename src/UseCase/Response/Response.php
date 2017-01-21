@@ -4,7 +4,7 @@ namespace Damianopetrungaro\CleanArchitecture\UseCase\Response;
 
 
 use Damianopetrungaro\CleanArchitecture\Common\Collection\CollectionInterface;
-use Damianopetrungaro\CleanArchitecture\UseCase\Error\Error;
+use Damianopetrungaro\CleanArchitecture\UseCase\Error\AbstractError;
 
 class Response implements ResponseInterface
 {
@@ -60,7 +60,7 @@ class Response implements ResponseInterface
     /**
      * {@inheritDoc}
      */
-    public function addError($key, Error $error) : void
+    public function addError($key, AbstractError $error) : void
     {
         $values = $this->errors->get($key, []);
         $values[] = $error;

@@ -3,7 +3,7 @@
 namespace Damianopetrungaro\CleanArchitecture\UseCase\Response;
 
 
-use Damianopetrungaro\CleanArchitecture\UseCase\Error\Error;
+use Damianopetrungaro\CleanArchitecture\UseCase\Error\AbstractError;
 
 interface ResponseInterface
 {
@@ -21,11 +21,11 @@ interface ResponseInterface
      * Add an Error to the error list.
      *
      * @param $key
-     * @param Error $error
+     * @param AbstractError $error
      *
      * @return void
      */
-    public function addError($key, Error $error) : void;
+    public function addError($key, AbstractError $error) : void;
 
     /**
      * Return the data list content.

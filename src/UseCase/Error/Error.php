@@ -3,15 +3,8 @@
 namespace Damianopetrungaro\CleanArchitecture\UseCase\Error;
 
 
-class Error
+class Error extends AbstractError
 {
-    /**
-     * Error code.
-     *
-     * @var string
-     */
-    protected $code;
-
     /**
      * Error detail.
      *
@@ -42,12 +35,6 @@ class Error
      */
     protected $title;
 
-    /**
-     * Error type.
-     *
-     * @var ErrorType
-     */
-    protected $type;
 
     /**
      * Error constructor.
@@ -61,22 +48,11 @@ class Error
      */
     public function __construct(string $code, ErrorType $type, string $pointer = null, string $title = null, string $detail = null, array $meta = [])
     {
-        $this->code = $code;
-        $this->type = $type;
+        parent::__construct($code, $type);
         $this->title = $title;
         $this->detail = $detail;
         $this->pointer = $pointer;
         $this->meta = $meta;
-    }
-
-    /**
-     * Return the error code.
-     *
-     * @return string
-     */
-    public function code() : string
-    {
-        return $this->code;
     }
 
     /**
@@ -117,15 +93,5 @@ class Error
     public function title() : ?string
     {
         return $this->title;
-    }
-
-    /**
-     * Return the error type.
-     *
-     * @return ErrorType
-     */
-    public function type() : ErrorType
-    {
-        return $this->type;
     }
 }
