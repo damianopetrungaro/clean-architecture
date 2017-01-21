@@ -83,27 +83,36 @@ class Collection implements CollectionInterface
     /**
      * {@inheritDoc}
      */
-    public function merge(CollectionInterface ...$collections) : void
+    public function merge(CollectionInterface ...$collections) : CollectionInterface
     {
+        $clone = clone $this;
         foreach ($collections as $collection) {
-            $this->items = array_merge($this->all(), $collection->all());
+            $clone->items = array_merge($this->all(), $collection->all());
         }
+
+        return $clone;
     }
 
     /**
      * {@inheritDoc}
      */
-    public function remove($key) : void
+    public function remove($key) : CollectionInterface
     {
-        unset($this->items[$key]);
+        $clone = clone $this;
+        unset($clone->items[$key]);
+
+        return $clone;
     }
 
     /**
      * {@inheritDoc}
      */
-    public function set($item, $key = null) : void
+    public function set($item, $key = null) : CollectionInterface
     {
-        (func_num_args() == 2) ? $this->items[$key] = $item : $this->items[] = $item;
+        $clone = clone $this;
+        (func_num_args() == 2) ? $clone->items[$key] = $item : $clone->items[] = $item;
+
+        return $clone;
     }
 
     /**

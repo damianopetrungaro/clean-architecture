@@ -69,17 +69,18 @@ interface CollectionInterface
      *
      * @param CollectionInterface[] $collection
      *
+     * @return CollectionInterface
      */
-    public function merge(CollectionInterface ...$collection) : void;
+    public function merge(CollectionInterface ...$collection) : CollectionInterface;
 
     /**
      * Remove a specific key.
      *
      * @param mixed $key
      *
-     * @return void
+     * @return CollectionInterface
      */
-    public function remove($key) : void;
+    public function remove($key) : CollectionInterface;
 
     /**
      * Add or override an item.
@@ -87,9 +88,9 @@ interface CollectionInterface
      * @param mixed $item
      * @param mixed $key
      *
-     * @return void
+     * @return CollectionInterface
      */
-    public function set($item, $key = null) : void;
+    public function set($item, $key = null) : CollectionInterface;
 
     /**
      * Return an array containing all the collection's items.
