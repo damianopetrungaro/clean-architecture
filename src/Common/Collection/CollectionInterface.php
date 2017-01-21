@@ -65,32 +65,32 @@ interface CollectionInterface
     public function length() : int;
 
     /**
-     * Merge with one or more collection.
+     * Return a CollectionInterface merging it with one or more collection.
      *
      * @param CollectionInterface[] $collection
      *
      * @return CollectionInterface
      */
-    public function merge(CollectionInterface ...$collection) : CollectionInterface;
+    public function mergeWith(CollectionInterface ...$collection) : CollectionInterface;
 
     /**
-     * Remove a specific key.
+     * Return a CollectionInterface without a specific key.
      *
      * @param mixed $key
      *
      * @return CollectionInterface
      */
-    public function remove($key) : CollectionInterface;
+    public function without($key) : CollectionInterface;
 
     /**
-     * Add or override an item.
+     * Return a CollectionInterface with a new item value.
      *
      * @param mixed $item
      * @param mixed $key
      *
      * @return CollectionInterface
      */
-    public function set($item, $key = null) : CollectionInterface;
+    public function with($item, $key = null) : CollectionInterface;
 
     /**
      * Return an array containing all the collection's items.

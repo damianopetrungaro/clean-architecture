@@ -54,7 +54,7 @@ class Response implements ResponseInterface
     {
         $values = $this->data->get($key, []);
         $values[] = $value;
-        $this->data = $this->data->set($values, $key);
+        $this->data = $this->data->with($values, $key);
     }
 
     /**
@@ -64,7 +64,7 @@ class Response implements ResponseInterface
     {
         $values = $this->errors->get($key, []);
         $values[] = $error;
-        $this->errors = $this->errors->set($values, $key);
+        $this->errors = $this->errors->with($values, $key);
     }
 
     /**
@@ -113,6 +113,22 @@ class Response implements ResponseInterface
     public function isSuccessful() : bool
     {
         return $this->status === self::STATUS_SUCCESSFUL;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function removeData($key) : void
+    {
+        $this->data = $this->data->without($key);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function removeError($key) : void
+    {
+        $this->data = $this->data->without($key);
     }
 
     /**

@@ -83,7 +83,7 @@ class Collection implements CollectionInterface
     /**
      * {@inheritDoc}
      */
-    public function merge(CollectionInterface ...$collections) : CollectionInterface
+    public function mergeWith(CollectionInterface ...$collections) : CollectionInterface
     {
         $clone = clone $this;
         foreach ($collections as $collection) {
@@ -96,7 +96,7 @@ class Collection implements CollectionInterface
     /**
      * {@inheritDoc}
      */
-    public function remove($key) : CollectionInterface
+    public function without($key) : CollectionInterface
     {
         $clone = clone $this;
         unset($clone->items[$key]);
@@ -107,7 +107,7 @@ class Collection implements CollectionInterface
     /**
      * {@inheritDoc}
      */
-    public function set($item, $key = null) : CollectionInterface
+    public function with($item, $key = null) : CollectionInterface
     {
         $clone = clone $this;
         (func_num_args() == 2) ? $clone->items[$key] = $item : $clone->items[] = $item;

@@ -70,6 +70,24 @@ interface ResponseInterface
     public function isSuccessful() : bool;
 
     /**
+     * Remove data to the data list.
+     *
+     * @param $key
+     *
+     * @return void
+     */
+    public function removeData($key) : void;
+
+    /**
+     * Remove an Error to the error list.
+     *
+     * @param $key
+     *
+     * @return void
+     */
+    public function removeError($key) : void;
+
+    /**
      * Set the response as failed.
      *
      * @return void
