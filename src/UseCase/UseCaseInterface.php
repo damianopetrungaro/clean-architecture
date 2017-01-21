@@ -14,6 +14,8 @@ interface UseCaseInterface
      *
      * @param RequestInterface $request
      * @param ResponseInterface $response
+     *
+     * @return void
      */
     public function __invoke(RequestInterface $request, ResponseInterface $response) : void;
 }

@@ -39,7 +39,7 @@ interface ResponseInterface
      *
      * @return array
      */
-    public function getError() : array;
+    public function getErrors() : array;
 
     /**
      * Return true if data list is not empty, otherwise return false.
@@ -53,7 +53,7 @@ interface ResponseInterface
      *
      * @return bool
      */
-    public function hasError() : bool;
+    public function hasErrors() : bool;
 
     /**
      * Check if Response is failed.

@@ -52,7 +52,9 @@ class Response implements ResponseInterface
      */
     public function addData($key, $value) : void
     {
-        $this->data->set($key, $value);
+        $values = $this->data->get($key, []);
+        $values[] = $value;
+        $this->data->set($key, $values);
     }
 
     /**
@@ -60,7 +62,9 @@ class Response implements ResponseInterface
      */
     public function addError($key, Error $error) : void
     {
-        $this->errors->set($key, $error);
+        $values = $this->errors->get($key, []);
+        $values[] = $error;
+        $this->errors->set($key, $values);
     }
 
     /**
@@ -74,7 +78,7 @@ class Response implements ResponseInterface
     /**
      * {@inheritDoc}
      */
-    public function getError() : array
+    public function getErrors() : array
     {
         return $this->errors->all();
     }
@@ -84,15 +88,15 @@ class Response implements ResponseInterface
      */
     public function hasData() : bool
     {
-        return (bool)$this->data->length();
+        return $this->data->length() !== 0;
     }
 
     /**
      * {@inheritDoc}
      */
-    public function hasError() : bool
+    public function hasErrors() : bool
     {
-        return (bool)$this->errors->length();
+        return $this->errors->length() !== 0;
     }
 
     /**
