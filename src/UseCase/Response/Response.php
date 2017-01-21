@@ -3,7 +3,7 @@
 namespace Damianopetrungaro\CleanArchitecture\UseCase\Response;
 
 
-use Damianopetrungaro\CleanArchitecture\Common\CollectionInterface;
+use Damianopetrungaro\CleanArchitecture\Common\Collection\CollectionInterface;
 use Damianopetrungaro\CleanArchitecture\UseCase\Error\Error;
 
 class Response implements ResponseInterface
@@ -48,35 +48,23 @@ class Response implements ResponseInterface
     }
 
     /**
-     * Add data to the data list
-     *
-     * @param $key
-     * @param $value
-     *
-     * @return void
+     * {@inheritDoc}
      */
     public function addData($key, $value) : void
     {
-        $this->data->add($key, $value);
+        $this->data->set($key, $value);
     }
 
     /**
-     * Add an Error to the error list
-     *
-     * @param $key
-     * @param Error $error
-     *
-     * @return void
+     * {@inheritDoc}
      */
     public function addError($key, Error $error) : void
     {
-        $this->errors->add($key, $error);
+        $this->errors->set($key, $error);
     }
 
     /**
-     * Return the data list content
-     *
-     * @return array
+     * {@inheritDoc}
      */
     public function getData() : array
     {
@@ -84,9 +72,7 @@ class Response implements ResponseInterface
     }
 
     /**
-     * Return the error list content
-     *
-     * @return array
+     * {@inheritDoc}
      */
     public function getError() : array
     {
@@ -94,9 +80,7 @@ class Response implements ResponseInterface
     }
 
     /**
-     * Return true if data list is not empty, otherwise return false
-     *
-     * @return bool
+     * {@inheritDoc}
      */
     public function hasData() : bool
     {
@@ -104,9 +88,7 @@ class Response implements ResponseInterface
     }
 
     /**
-     * Return true if error list is not empty, otherwise return false
-     *
-     * @return bool
+     * {@inheritDoc}
      */
     public function hasError() : bool
     {
@@ -114,9 +96,7 @@ class Response implements ResponseInterface
     }
 
     /**
-     * Check if Response is failed
-     *
-     * @return bool
+     * {@inheritDoc}
      */
     public function isFailed() : bool
     {
@@ -124,9 +104,7 @@ class Response implements ResponseInterface
     }
 
     /**
-     * Check if Response is successful
-     *
-     * @return bool
+     * {@inheritDoc}
      */
     public function isSuccessful() : bool
     {
@@ -134,9 +112,7 @@ class Response implements ResponseInterface
     }
 
     /**
-     * Set the response as failed
-     *
-     * @return void
+     * {@inheritDoc}
      */
     public function setAsFailed() : void
     {
@@ -144,9 +120,7 @@ class Response implements ResponseInterface
     }
 
     /**
-     * Set the response as success
-     *
-     * @return void
+     * {@inheritDoc}
      */
     public function setAsSuccess() : void
     {

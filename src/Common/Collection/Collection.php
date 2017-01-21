@@ -3,119 +3,114 @@
 namespace Damianopetrungaro\CleanArchitecture\Common\Collection;
 
 
-use Damianopetrungaro\CleanArchitecture\Common\CollectionInterface;
-
 class Collection implements CollectionInterface
 {
     /**
-     * Array of request parameters
+     * Array of request parameters.
      *
-     * @var array $entries
+     * @var array $items
      */
-    protected $entries;
+    protected $items;
 
     /**
      * Request constructor.
      *
-     * @param array $entries Populate the entries.
+     * @param array $items Populate the items.
      */
-    public function __construct(array $entries = [])
+    public function __construct(array $items = [])
     {
-        $this->entries = $entries;
+        $this->items = $items;
     }
 
     /**
-     * Add or override an entry
-     *
-     * @param mixed $key
-     * @param mixed $entry
-     *
-     * @return void
-     */
-    public function add(mixed $key, mixed $entry) : void
-    {
-        $this->entries[$key] = $entry;
-    }
-
-    /**
-     * Return all the entries
-     *
-     * @return array
+     * @inheritdoc
      */
     public function all() : array
     {
-        return $this->entries;
+        return $this->items;
     }
 
     /**
-     * Remove all the keys from the Request
-     *
-     * @return void
+     * {@inheritDoc}
      */
     public function clear() : void
     {
-        $this->entries = [];
+        $this->items = [];
     }
 
     /**
-     * Return a value from the request.
-     * Default if is not found,
-     *
-     * @param mixed $key
-     * @param mixed|null $default
-     *
-     * @return mixed
+     * {@inheritDoc}
      */
-    public function get(mixed $key, mixed $default = null) : mixed
+    public function contains($item, bool $strict = true) : bool
     {
-        return isset($this->entries[$key]) ? $this->entries[$key] : $default;
+        return in_array($item, $this->items, $strict);
     }
 
     /**
-     * Return true if key is set, otherwise false
-     *
-     * @param mixed $key
-     *
-     * @return bool
+     * {@inheritDoc}
      */
-    public function has(mixed $key) : bool
+    public function get($key, $default = null)
     {
-        return isset($this->entries[$key]);
+        return isset($this->items[$key]) ? $this->items[$key] : $default;
     }
 
     /**
-     * Return the number of entries
+     * {@inheritDoc}
+     */
+    public function has($key) : bool
+    {
+        return isset($this->items[$key]);
+    }
+
+    /**
+     * Return an array containing all the collection's keys
      *
-     * @return int
+     * @return array
+     */
+    public function keys() : array
+    {
+        return array_keys($this->items);
+    }
+
+    /**
+     * {@inheritDoc}
      */
     public function length() : int
     {
-        return count($this->entries);
+        return count($this->items);
     }
 
     /**
-     * Merge with one or more collection
-     *
-     * @param CollectionInterface[] $collections
-     *
+     * {@inheritDoc}
      */
     public function merge(CollectionInterface ...$collections) : void
     {
         foreach ($collections as $collection) {
-            array_merge($this->all(), $collection->all());
+            $this->items = array_merge($this->all(), $collection->all());
         }
     }
 
     /**
-     * Remove a key from the Request
-     *
-     * @param mixed $key
-     *
-     * @return void
+     * {@inheritDoc}
      */
-    public function remove(mixed $key) : void
+    public function remove($key) : void
     {
-        unset($this->entries[$key]);
+        unset($this->items[$key]);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public function set($item, $key = null) : void
+    {
+        (func_num_args() == 2) ? $this->items[$key] = $item : $this->items[] = $item;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function values() : array
+    {
+        return array_values($this->items);
+    }
 }

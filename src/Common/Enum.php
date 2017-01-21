@@ -5,10 +5,18 @@ namespace Damianopetrungaro\CleanArchitecture\Common;
 
 use ReflectionClass;
 
+/**
+ * The class that will extents Enum should only contains constant.
+ * Example:
+ *
+ * const PHP = 'PHP';
+ * const CLEAN = 'CLEAN';
+ * const ARCHITECTURE = 'ARCHITECTURE';
+ */
 abstract class Enum
 {
     /**
-     * Throw an exception if there's no constant in the child class, otherwise return the constant value
+     * Throw an exception if there's no constant in the child class, otherwise return the constant value.
      *
      * @param string $enum
      * @param array $args

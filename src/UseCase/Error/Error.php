@@ -6,44 +6,44 @@ namespace Damianopetrungaro\CleanArchitecture\UseCase\Error;
 class Error
 {
     /**
-     * Error code
+     * Error code.
      *
      * @var string
      */
     protected $code;
 
     /**
-     * Error detail
+     * Error detail.
      *
-     * @var mixed
+     * @var string|null
      */
     protected $detail;
 
     /**
-     * Error meta information
+     * Error meta information.
      *
      * @var array
      */
     protected $meta;
 
     /**
-     * Error pointer
+     * Error pointer.
      * (Object containing references to the source of the error inspired by jsonapi.org)
-     * @link http://jsonapi.org/format/#errors
+     * @see http://jsonapi.org/format/#errors
      *
-     * @var mixed
+     * @var string|null
      */
     protected $pointer;
 
     /**
-     * Error title
+     * Error title.
      *
-     * @var mixed
+     * @var string|null
      */
     protected $title;
 
     /**
-     * Error type
+     * Error type.
      *
      * @var ErrorType
      */
@@ -53,13 +53,13 @@ class Error
      * Error constructor.
      *
      * @param string $code Error code
-     * @param ErrorType $type Specify error using an enum
-     * @param string|null $title Optional title
-     * @param string|null $detail Optional detail
-     * @param string|null $pointer Optional pointer
-     * @param array $meta Optional meta information
+     * @param ErrorType $type Specify error using an enum.
+     * @param string|null $pointer Optional pointer.
+     * @param string|null $title Optional title.
+     * @param string|null $detail Optional detail.
+     * @param array $meta Optional meta information.
      */
-    public function __construct(string $code, ErrorType $type, string $title = null, string $detail = null, string $pointer = null, array $meta = [])
+    public function __construct(string $code, ErrorType $type, string $pointer = null, string $title = null, string $detail = null, array $meta = [])
     {
         $this->code = $code;
         $this->type = $type;
@@ -70,7 +70,7 @@ class Error
     }
 
     /**
-     * Return the error code
+     * Return the error code.
      *
      * @return string
      */
@@ -80,7 +80,7 @@ class Error
     }
 
     /**
-     * Return the detail
+     * Return the detail.
      *
      * @return mixed
      */
@@ -90,7 +90,7 @@ class Error
     }
 
     /**
-     * Return the meta information
+     * Return the meta information.
      *
      * @return array
      */
@@ -100,6 +100,8 @@ class Error
     }
 
     /**
+     * Return the pointer.
+     *
      * @return mixed
      */
     public function pointer() : ?string
@@ -108,7 +110,7 @@ class Error
     }
 
     /**
-     * Return the title
+     * Return the title.
      *
      * @return mixed
      */
@@ -118,7 +120,7 @@ class Error
     }
 
     /**
-     * Return the error type
+     * Return the error type.
      *
      * @return ErrorType
      */
