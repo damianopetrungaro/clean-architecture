@@ -9,9 +9,9 @@ use ReflectionClass;
  * The class that will extents Enum should only contains constant.
  * Example:
  *
- * const PHP = 'PHP';
- * const CLEAN = 'CLEAN';
- * const ARCHITECTURE = 'ARCHITECTURE';
+ * const ERROR_VALIDATION = 'ERROR_VALIDATION';
+ * const ENTITY_NOT_FOUND = 'ENTITY_NOT_FOUND';
+ * const PERSISTENCE_ERROR= 'PERSISTENCE_ERROR';
  */
 abstract class Enum
 {
