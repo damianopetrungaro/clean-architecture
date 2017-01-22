@@ -87,7 +87,7 @@ class Collection implements CollectionInterface
     {
         $clone = clone $this;
         foreach ($collections as $collection) {
-            $clone->items = array_merge($this->all(), $collection->all());
+            $clone->items = array_merge($clone->all(), $collection->all());
         }
 
         return $clone;

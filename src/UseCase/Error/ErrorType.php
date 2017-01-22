@@ -3,7 +3,7 @@
 namespace Damianopetrungaro\CleanArchitecture\UseCase\Error;
 
 
-use Damianopetrungaro\CleanArchitecture\Common\Enum;
+use Damianopetrungaro\CleanArchitecture\Common\Enum\Enum;
 
 /**
  * See enum comments.

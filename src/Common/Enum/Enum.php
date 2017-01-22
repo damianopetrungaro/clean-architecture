@@ -1,6 +1,6 @@
 <?php
 
-namespace Damianopetrungaro\CleanArchitecture\Common;
+namespace Damianopetrungaro\CleanArchitecture\Common\Enum;
 
 
 use ReflectionClass;
@@ -13,7 +13,7 @@ use ReflectionClass;
  * const ENTITY_NOT_FOUND = 'ENTITY_NOT_FOUND';
  * const PERSISTENCE_ERROR= 'PERSISTENCE_ERROR';
  */
-abstract class Enum
+class Enum implements EnumInterface
 {
     /**
      * Throw an exception if there's no constant in the child class, otherwise return the constant value.
