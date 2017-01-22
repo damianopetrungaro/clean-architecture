@@ -31,6 +31,7 @@ abstract class Enum
         if (!isset($self->getConstants()[$enum])) {
             throw new \InvalidArgumentException("$enum is not available in " . static::class);
         }
+
         return $self->getConstants()[$enum];
     }
 }
