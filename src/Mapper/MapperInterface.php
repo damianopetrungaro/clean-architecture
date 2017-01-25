@@ -16,10 +16,10 @@ interface MapperInterface
     /**
      * Transform an array into an object
      *
-     * @param $className
+     * @param $class
      * @param array $array
      *
      * @return mixed
      */
-    public function toObject($className, array $array);
+    public function toObject($class, array $array);
 }
