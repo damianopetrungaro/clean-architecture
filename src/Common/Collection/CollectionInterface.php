@@ -13,11 +13,11 @@ interface CollectionInterface
     public function all() : array;
 
     /**
-     * Remove all the keys.
+     * Remove all the items.
      *
-     * @return void
+     * @return CollectionInterface
      */
-    public function clear() : void;
+    public function clear() : CollectionInterface;
 
     /**
      * Return true if collection contains the required value, otherwise return false.

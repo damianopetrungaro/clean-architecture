@@ -8,7 +8,7 @@ use Damianopetrungaro\CleanArchitecture\Common\Collection\Collection;
 class CollectionTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * TODO Add description
+     * Check that the items passed in the constructor is correctly assigned
      *
      * @param $items
      * @dataProvider itemsDataProviders
@@ -23,7 +23,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * TODO Add description
+     * Check that the items retrieved is the same inserted
      *
      * @param $items
      * @dataProvider itemsDataProviders
@@ -35,7 +35,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * TODO Add description
+     * Check that the new instance of collection returned from clear has no items
      *
      * @param $items
      * @dataProvider itemsDataProviders
@@ -43,13 +43,12 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     public function testClearMethod($items)
     {
         $collection = new Collection($items);
-        $collection->clear();
+        $collection = $collection->clear();
         $this->assertEquals($collection->all(), []);
     }
 
-
     /**
-     * TODO Add description
+     * Check that the contains method correctly controls the existence of required values
      *
      * @param $items
      * @param $expectedValue
@@ -63,7 +62,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * TODO Add description
+     * Check that the contains method correctly controls the inexistence of required values
      *
      * @param $items
      * @param $expectedValue
@@ -77,7 +76,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * TODO Add description
+     * Check that get method return inserted values
      *
      * @param $items
      * @param $expectedKey
@@ -92,7 +91,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * TODO Add description
+     * Check that get method return default values
      *
      * @param $items
      * @param $expectedKey
@@ -107,7 +106,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * TODO Add description
+     * Check that has method return expected result
      *
      * @param $items
      * @param $requiredKey
@@ -122,7 +121,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * TODO Add description
+     * Check that keys method return all the inserted keys
      *
      * @param $items
      * @dataProvider itemsDataProviders
@@ -135,7 +134,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * TODO Add description
+     * Check that the expected length is right
      *
      * @param $items
      * @dataProvider itemsDataProviders
@@ -147,6 +146,10 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($collection->length(), $length);
     }
 
+    /**
+     * Check that the merged collection contains all the expected data
+     *
+     */
     public function testMergeWith()
     {
         $collection1 = new Collection(['a', 'b']);
@@ -156,6 +159,10 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($final == $collection1->mergeWith($collection2, $collection3));
     }
 
+    /**
+     * Check that the returned collection haven't the removed key
+     *
+     */
     public function testWithout()
     {
         $collection1 = new Collection(['key1' => 'value1', 'key2' => 'value2']);
@@ -163,6 +170,10 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($final == $collection1->without('key1'));
     }
 
+    /**
+     * Check that the returned collection have the inserted key
+     *
+     */
     public function testWith()
     {
         $collection1 = new Collection(['key2' => 'value2']);
@@ -171,7 +182,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * TODO Add description
+     * Check that all the values inserted is returned
      *
      * @param $items
      * @dataProvider itemsDataProviders

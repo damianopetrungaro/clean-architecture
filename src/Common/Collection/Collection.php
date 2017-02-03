@@ -33,9 +33,12 @@ class Collection implements CollectionInterface
     /**
      * {@inheritDoc}
      */
-    public function clear() : void
+    public function clear() : CollectionInterface
     {
-        $this->items = [];
+        $clone = clone $this;
+        $clone->items = [];
+
+        return $clone;
     }
 
     /**
@@ -61,7 +64,7 @@ class Collection implements CollectionInterface
     {
         return isset($this->items[$key]);
     }
-    
+
     /**
      * {@inheritDoc}
      */
