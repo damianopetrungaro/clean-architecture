@@ -15,7 +15,7 @@ interface ErrorInterface
     /**
      * Return the error type.
      *
-     * @return ErrorType
+     * @return ErrorTypeInterface
      */
-    public function type() : ErrorType;
+    public function type() : ErrorTypeInterface;
 }

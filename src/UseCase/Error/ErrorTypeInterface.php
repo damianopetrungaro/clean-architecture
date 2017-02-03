@@ -4,13 +4,14 @@ namespace Damianopetrungaro\CleanArchitecture\UseCase\Error;
 
 
 use Damianopetrungaro\CleanArchitecture\Common\Enum\Enum;
+use Damianopetrungaro\CleanArchitecture\Common\Enum\EnumInterface;
 
 /**
  * See enum comments.
  *
  * @see Damianopetrungaro\CleanArchitecture\Common\Enum\Enum
  */
-abstract class ErrorType extends Enum implements ErrorTypeInterface
+interface ErrorTypeInterface extends EnumInterface
 {
 
 }
