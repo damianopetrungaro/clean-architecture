@@ -61,11 +61,9 @@ class Collection implements CollectionInterface
     {
         return isset($this->items[$key]);
     }
-
+    
     /**
-     * Return an array containing all the collection's keys
-     *
-     * @return array
+     * {@inheritDoc}
      */
     public function keys() : array
     {
