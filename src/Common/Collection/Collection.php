@@ -84,10 +84,15 @@ class Collection implements CollectionInterface
     /**
      * {@inheritDoc}
      */
-    public function mergeWith(CollectionInterface ...$collections) : CollectionInterface
+    public function mergeWith(...$collections) : CollectionInterface
     {
         $clone = clone $this;
         foreach ($collections as $collection) {
+
+            if (!$collection instanceof CollectionInterface) {
+                throw new \InvalidArgumentException("$collection must implement CollectionInterface");
+            }
+
             $clone->items = array_merge($clone->all(), $collection->all());
         }
 

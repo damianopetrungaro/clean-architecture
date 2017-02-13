@@ -17,7 +17,7 @@ interface CollectionInterface
      *
      * @return CollectionInterface
      */
-    public function clear() : CollectionInterface;
+    public function clear();
 
     /**
      * Return true if collection contains the required value, otherwise return false.
@@ -71,7 +71,7 @@ interface CollectionInterface
      *
      * @return CollectionInterface
      */
-    public function mergeWith(CollectionInterface ...$collection) : CollectionInterface;
+    public function mergeWith(...$collection);
 
     /**
      * Return a CollectionInterface without a specific key.
@@ -80,7 +80,7 @@ interface CollectionInterface
      *
      * @return CollectionInterface
      */
-    public function without($key) : CollectionInterface;
+    public function without($key);
 
     /**
      * Return a CollectionInterface with a new item value.
@@ -90,7 +90,7 @@ interface CollectionInterface
      *
      * @return CollectionInterface
      */
-    public function with($item, $key = null) : CollectionInterface;
+    public function with($item, $key = null);
 
     /**
      * Return an array containing all the collection's items.
