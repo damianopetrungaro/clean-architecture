@@ -14,10 +14,11 @@ interface CollectionInterface
 
     /**
      * Remove all the items.
+     * TODO Add deep cloning for values
      *
      * @return CollectionInterface
      */
-    public function clear();
+    public function clear() : CollectionInterface;
 
     /**
      * Return true if collection contains the required value, otherwise return false.
@@ -71,7 +72,7 @@ interface CollectionInterface
      *
      * @return CollectionInterface
      */
-    public function mergeWith(...$collection);
+    public function mergeWith(CollectionInterface...$collection) : CollectionInterface;
 
     /**
      * Return a CollectionInterface without a specific key.
@@ -80,17 +81,18 @@ interface CollectionInterface
      *
      * @return CollectionInterface
      */
-    public function without($key);
+    public function without($key) : CollectionInterface;
 
     /**
      * Return a CollectionInterface with a new item value.
+     *
      *
      * @param mixed $item
      * @param mixed $key
      *
      * @return CollectionInterface
      */
-    public function with($item, $key = null);
+    public function with($item, $key = null) : CollectionInterface;
 
     /**
      * Return an array containing all the collection's items.
@@ -98,4 +100,12 @@ interface CollectionInterface
      * @return array
      */
     public function values() : array;
+
+    /**
+     * Return a new cloned object
+     * It's recommended to deep clone the object
+     *
+     * @return CollectionInterface
+     */
+    public function __clone();
 }

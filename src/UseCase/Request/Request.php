@@ -3,48 +3,47 @@
 namespace Damianopetrungaro\CleanArchitecture\UseCase\Request;
 
 
-use Damianopetrungaro\CleanArchitecture\Common\Collection\Collection;
+use Damianopetrungaro\CleanArchitecture\Common\Collection\CollectionInterface;
 
-class Request extends Collection implements RequestInterface
+class Request implements RequestInterface
 {
     /**
-     * {@inheritDoc}
+     * @var CollectionInterface $collection
      */
-    public function clear() : RequestInterface
-    {
-        $clone = clone $this;
-        $clone->items = [];
+    protected $collection;
 
-        return $clone;
+    /**
+     * Request constructor.
+     *
+     * @param CollectionInterface $collection
+     */
+    public function __construct(CollectionInterface $collection)
+    {
+        $this->collection = $collection;
     }
 
     /**
      * {@inheritDoc}
      */
-    public function mergeWith(...$collections) : RequestInterface
+    public function all() : array
     {
-        $clone = clone $this;
-        foreach ($collections as $collection) {
-
-            if (!$collection instanceof RequestInterface) {
-                throw new \InvalidArgumentException("$collection must implement RequestInterface");
-            }
-
-            $clone->items = array_merge($clone->all(), $collection->all());
-        }
-
-        return $clone;
+        return $this->collection->all();
     }
 
     /**
      * {@inheritDoc}
      */
-    public function without($key) : RequestInterface
+    public function get($key, $default = null)
     {
-        $clone = clone $this;
-        unset($clone->items[$key]);
+        return $this->collection->get($key, $default);
+    }
 
-        return $clone;
+    /**
+     * {@inheritDoc}
+     */
+    public function has($key) : bool
+    {
+        return $this->collection->has($key);
     }
 
     /**
@@ -52,17 +51,6 @@ class Request extends Collection implements RequestInterface
      */
     public function with($item, $key = null) : RequestInterface
     {
-        $clone = clone $this;
-        (func_num_args() == 2) ? $clone->items[$key] = $item : $clone->items[] = $item;
-
-        return $clone;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function values() : array
-    {
-        return array_values($this->items);
+        return $this->collection->with($item, $key);
     }
 }

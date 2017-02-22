@@ -2,7 +2,6 @@
 
 namespace Damianopetrungaro\CleanArchitecture\Unit\Common\Collection;
 
-
 use Damianopetrungaro\CleanArchitecture\Common\Collection\Collection;
 
 class CollectionTest extends \PHPUnit_Framework_TestCase
@@ -192,6 +191,38 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $collection = new Collection($items);
         $keys = array_values($items);
         $this->assertEquals($collection->values(), $keys);
+    }
+
+    /**
+     * Check that the clone of the Collection is a deep clone.
+     * All the object inside the collection must be cloned too.
+     */
+    public function testDeepClone()
+    {
+        // The array has object nested object inside
+        $items = [
+            'very' => [
+                'deep' => new \SplObjectStorage()
+            ],
+            'simple' => 'variable',
+            'deep' => new \ArrayIterator(),
+            new \ArrayObject()
+        ];
+
+        // Init and clone the object
+        $collection = new Collection($items);
+        $clonedCollection = clone $collection;
+
+        // Object has the same type
+        $this->assertTrue($clonedCollection->get(0) == $collection->get(0));
+        $this->assertTrue($clonedCollection->get('deep') == $collection->get('deep'));
+        $this->assertTrue($clonedCollection->get('simple') == $collection->get('simple'));
+        $this->assertTrue($clonedCollection->get('very')['deep'] == $collection->get('very')['deep']);
+
+        // Object is not the same instance
+        $this->assertTrue($clonedCollection->get(0) !== $collection->get(0));
+        $this->assertTrue($clonedCollection->get('deep') !== $collection->get('deep'));
+        $this->assertTrue($clonedCollection->get('very')['deep'] !== $collection->get('very')['deep']);
     }
 
     /**

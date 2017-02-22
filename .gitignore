@@ -3,3 +3,4 @@ composer.phar
 .idea
 composer.lock
 phpDocumentor.phar
+coverage/*

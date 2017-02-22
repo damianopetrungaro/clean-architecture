@@ -3,8 +3,12 @@
 namespace Damianopetrungaro\CleanArchitecture\Common\Collection;
 
 
+use Damianopetrungaro\CleanArchitecture\Common\CommonTrait\CloneArrayTrait;
+
 class Collection implements CollectionInterface
 {
+    use CloneArrayTrait;
+
     /**
      * Array of request parameters.
      *
@@ -84,15 +88,10 @@ class Collection implements CollectionInterface
     /**
      * {@inheritDoc}
      */
-    public function mergeWith(...$collections) : CollectionInterface
+    public function mergeWith(CollectionInterface...$collections) : CollectionInterface
     {
         $clone = clone $this;
         foreach ($collections as $collection) {
-
-            if (!$collection instanceof CollectionInterface) {
-                throw new \InvalidArgumentException("$collection must implement CollectionInterface");
-            }
-
             $clone->items = array_merge($clone->all(), $collection->all());
         }
 
@@ -127,5 +126,13 @@ class Collection implements CollectionInterface
     public function values() : array
     {
         return array_values($this->items);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function __clone()
+    {
+        return new self($this->cloneArray($this->items));
     }
 }

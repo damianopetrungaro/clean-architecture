@@ -6,12 +6,12 @@ namespace Damianopetrungaro\CleanArchitecture\UseCase\Error;
 class AbstractError implements ErrorInterface
 {
     /**
-     * @var string
+     * @var string $code
      */
     private $code;
 
     /**
-     * @var ErrorTypeInterface
+     * @var ErrorTypeInterface $errorType
      */
     private $errorType;
 
@@ -40,6 +40,6 @@ class AbstractError implements ErrorInterface
      */
     public function type() : ErrorTypeInterface
     {
-        return $this->type;
+        return $this->errorType;
     }
 }
