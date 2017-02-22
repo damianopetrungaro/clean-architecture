@@ -1,7 +1,8 @@
 <?php
 
-namespace Damianopetrungaro\CleanArchitecture\UseCase\Error;
+declare(strict_types = 1);
 
+namespace Damianopetrungaro\CleanArchitecture\UseCase\Error;
 
 interface ErrorInterface
 {

@@ -1,7 +1,8 @@
 <?php
 
-namespace Damianopetrungaro\CleanArchitecture\UseCase;
+declare(strict_types = 1);
 
+namespace Damianopetrungaro\CleanArchitecture\UseCase;
 
 use Damianopetrungaro\CleanArchitecture\UseCase\Request\RequestInterface;
 use Damianopetrungaro\CleanArchitecture\UseCase\Response\ResponseInterface;

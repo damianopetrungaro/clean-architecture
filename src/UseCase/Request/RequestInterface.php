@@ -1,7 +1,8 @@
 <?php
 
-namespace Damianopetrungaro\CleanArchitecture\UseCase\Request;
+declare(strict_types = 1);
 
+namespace Damianopetrungaro\CleanArchitecture\UseCase\Request;
 
 interface RequestInterface
 {
@@ -10,7 +11,14 @@ interface RequestInterface
      *
      * @return array
      */
-    public function all() : array;
+    public function all(): array;
+
+    /**
+     * Remove all the data.
+     *
+     * @return RequestInterface
+     */
+    public function clear(): RequestInterface;
 
     /**
      * Return the value of required key.
@@ -30,15 +38,16 @@ interface RequestInterface
      *
      * @return bool
      */
-    public function has($key) : bool;
+    public function has($key): bool;
 
     /**
      * Return a RequestInterface with a new data value.
+     *
      *
      * @param mixed $data
      * @param mixed $key
      *
      * @return RequestInterface
      */
-    public function with($data, $key = null) : RequestInterface;
+    public function with($data, $key = null): RequestInterface;
 }

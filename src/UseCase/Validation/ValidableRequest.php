@@ -1,7 +1,8 @@
 <?php
 
-namespace Damianopetrungaro\CleanArchitecture\UseCase\Validation;
+declare(strict_types = 1);
 
+namespace Damianopetrungaro\CleanArchitecture\UseCase\Validation;
 
 use Damianopetrungaro\CleanArchitecture\UseCase\Request\Request;
 use Damianopetrungaro\CleanArchitecture\UseCase\Response\ResponseInterface;

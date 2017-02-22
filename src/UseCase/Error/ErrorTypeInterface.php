@@ -1,7 +1,8 @@
 <?php
 
-namespace Damianopetrungaro\CleanArchitecture\UseCase\Error;
+declare(strict_types = 1);
 
+namespace Damianopetrungaro\CleanArchitecture\UseCase\Error;
 
 use Damianopetrungaro\CleanArchitecture\Common\Enum\Enum;
 use Damianopetrungaro\CleanArchitecture\Common\Enum\EnumInterface;
@@ -13,5 +14,4 @@ use Damianopetrungaro\CleanArchitecture\Common\Enum\EnumInterface;
  */
 interface ErrorTypeInterface extends EnumInterface
 {
-
 }

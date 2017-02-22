@@ -1,7 +1,8 @@
 <?php
 
-namespace Damianopetrungaro\CleanArchitecture\Persistence;
+declare(strict_types = 1);
 
+namespace Damianopetrungaro\CleanArchitecture\Persistence;
 
 interface TransactionInterface
 {

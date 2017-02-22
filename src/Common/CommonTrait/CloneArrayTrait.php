@@ -1,12 +1,13 @@
 <?php
 
-namespace Damianopetrungaro\CleanArchitecture\Common\CommonTrait;
+declare(strict_types = 1);
 
+namespace Damianopetrungaro\CleanArchitecture\Common\CommonTrait;
 
 trait CloneArrayTrait
 {
     /**
-     * Return a cloned array from an array reference
+     * Return a cloned array from an array reference.
      *
      * @param array $array
      *
@@ -15,7 +16,6 @@ trait CloneArrayTrait
     protected function cloneArray(array &$array)
     {
         foreach ($array as $key => $value) {
-
             if (is_array($value)) {
                 $array[$key] = $this->cloneArray($value);
                 continue;

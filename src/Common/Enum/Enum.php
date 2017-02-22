@@ -1,7 +1,8 @@
 <?php
 
-namespace Damianopetrungaro\CleanArchitecture\Common\Enum;
+declare(strict_types = 1);
 
+namespace Damianopetrungaro\CleanArchitecture\Common\Enum;
 
 use ReflectionClass;
 
@@ -9,9 +10,9 @@ use ReflectionClass;
  * The class that will extents Enum should only contains constant.
  * Example:
  *
- * const ERROR_VALIDATION = 'ERROR_VALIDATION';
- * const ENTITY_NOT_FOUND = 'ENTITY_NOT_FOUND';
- * const PERSISTENCE_ERROR= 'PERSISTENCE_ERROR';
+ * protected const ERROR_VALIDATION = 'ERROR_VALIDATION';
+ * protected const ENTITY_NOT_FOUND = 'ENTITY_NOT_FOUND';
+ * protected const PERSISTENCE_ERROR= 'PERSISTENCE_ERROR';
  */
 class Enum implements EnumInterface
 {
@@ -25,13 +26,15 @@ class Enum implements EnumInterface
      *
      * @return mixed
      */
-    public static function __callStatic(string $enum, array $args = []) : string
+    public static function __callStatic(string $enum, array $args = []): string
     {
         $self = new ReflectionClass(static::class);
-        if (!isset($self->getConstants()[$enum])) {
+        $constants = $self->getConstants();
+
+        if (!isset($constants[$enum])) {
             throw new \InvalidArgumentException("$enum is not available in " . static::class);
         }
 
-        return $self->getConstants()[$enum];
+        return $constants[$enum];
     }
 }

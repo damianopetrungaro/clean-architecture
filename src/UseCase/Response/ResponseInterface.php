@@ -1,7 +1,8 @@
 <?php
 
-namespace Damianopetrungaro\CleanArchitecture\UseCase\Response;
+declare(strict_types = 1);
 
+namespace Damianopetrungaro\CleanArchitecture\UseCase\Response;
 
 use Damianopetrungaro\CleanArchitecture\UseCase\Error\ErrorInterface;
 

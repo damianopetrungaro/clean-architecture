@@ -1,7 +1,8 @@
 <?php
 
-namespace Damianopetrungaro\CleanArchitecture\Common\Collection;
+declare(strict_types = 1);
 
+namespace Damianopetrungaro\CleanArchitecture\Common\Collection;
 
 interface CollectionInterface
 {
@@ -14,7 +15,6 @@ interface CollectionInterface
 
     /**
      * Remove all the items.
-     * TODO Add deep cloning for values
      *
      * @return CollectionInterface
      */
@@ -24,7 +24,6 @@ interface CollectionInterface
      * Return true if collection contains the required value, otherwise return false.
      *
      * @param mixed $item
-     *
      * @param bool $strict
      *
      * @return bool
@@ -75,6 +74,17 @@ interface CollectionInterface
     public function mergeWith(CollectionInterface...$collection) : CollectionInterface;
 
     /**
+     * Return a CollectionInterface with a new item value.
+     *
+     * @param mixed $item
+     * @param mixed $key
+     *
+     * @return CollectionInterface
+     */
+
+    public function with($item, $key = null) : CollectionInterface;
+
+    /**
      * Return a CollectionInterface without a specific key.
      *
      * @param mixed $key
@@ -82,17 +92,6 @@ interface CollectionInterface
      * @return CollectionInterface
      */
     public function without($key) : CollectionInterface;
-
-    /**
-     * Return a CollectionInterface with a new item value.
-     *
-     *
-     * @param mixed $item
-     * @param mixed $key
-     *
-     * @return CollectionInterface
-     */
-    public function with($item, $key = null) : CollectionInterface;
 
     /**
      * Return an array containing all the collection's items.

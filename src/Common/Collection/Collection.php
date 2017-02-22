@@ -1,7 +1,8 @@
 <?php
 
-namespace Damianopetrungaro\CleanArchitecture\Common\Collection;
+declare(strict_types = 1);
 
+namespace Damianopetrungaro\CleanArchitecture\Common\Collection;
 
 use Damianopetrungaro\CleanArchitecture\Common\CommonTrait\CloneArrayTrait;
 
@@ -24,14 +25,6 @@ class Collection implements CollectionInterface
     public function __construct(array $items = [])
     {
         $this->items = $items;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function all() : array
-    {
-        return $this->items;
     }
 
     /**
@@ -99,14 +92,11 @@ class Collection implements CollectionInterface
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritdoc
      */
-    public function without($key) : CollectionInterface
+    public function all() : array
     {
-        $clone = clone $this;
-        unset($clone->items[$key]);
-
-        return $clone;
+        return $this->items;
     }
 
     /**
@@ -116,6 +106,17 @@ class Collection implements CollectionInterface
     {
         $clone = clone $this;
         (func_num_args() == 2) ? $clone->items[$key] = $item : $clone->items[] = $item;
+
+        return $clone;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function without($key) : CollectionInterface
+    {
+        $clone = clone $this;
+        unset($clone->items[$key]);
 
         return $clone;
     }
