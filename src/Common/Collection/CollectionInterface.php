@@ -4,7 +4,7 @@ declare(strict_types = 1);
 
 namespace Damianopetrungaro\CleanArchitecture\Common\Collection;
 
-interface CollectionInterface
+interface CollectionInterface extends \IteratorAggregate
 {
     /**
      * Return all the items.

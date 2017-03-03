@@ -194,6 +194,22 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Check that iterator works as expected
+     *
+     */
+    public function testIterator()
+    {
+        $keys = ['key-0', 'key-1'];
+        $indexKey = 0;
+        $items = ['key-0' => 'value-0', 'key-1' => 'value-1'];
+        $collection = new Collection($items);
+        foreach ($collection->getIterator() as $key => $value) {
+            $this->assertTrue($items[$keys[$indexKey]] === $value);
+            $indexKey++;
+        }
+    }
+
+    /**
      * Check that the clone of the Collection is a deep clone.
      * All the object inside the collection must be cloned too.
      */

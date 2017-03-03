@@ -105,7 +105,7 @@ class Collection implements CollectionInterface
     public function with($item, $key = null) : CollectionInterface
     {
         $clone = clone $this;
-        (func_num_args() == 2) ? $clone->items[$key] = $item : $clone->items[] = $item;
+        ($key !== null) ? $clone->items[$key] = $item : $clone->items[] = $item;
 
         return $clone;
     }
@@ -135,5 +135,15 @@ class Collection implements CollectionInterface
     public function __clone()
     {
         return new self($this->cloneArray($this->items));
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getIterator()
+    {
+        foreach ($this->items as $key => $item) {
+            yield $key => $item;
+        }
     }
 }
