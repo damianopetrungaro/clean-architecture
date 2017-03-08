@@ -14,8 +14,7 @@ class Request implements RequestInterface
     /**
      * @var CollectionInterface $collection
      */
-    #protected $collection;
-    public $collection;
+    protected $collection;
 
     /**
      * Request constructor.
@@ -36,9 +35,7 @@ class Request implements RequestInterface
     }
 
     /**
-     * Remove all the data.
-     *
-     * @return RequestInterface
+     * {@inheritDoc}
      */
     public function clear(): RequestInterface
     {
@@ -76,11 +73,7 @@ class Request implements RequestInterface
     }
 
     /**
-     * Return a RequestInterface without a specific key.
-     *
-     * @param mixed $key
-     *
-     * @return RequestInterface
+     * {@inheritDoc}
      */
     public function without($key): RequestInterface
     {

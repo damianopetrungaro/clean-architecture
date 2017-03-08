@@ -4,10 +4,10 @@ declare(strict_types = 1);
 
 namespace Damianopetrungaro\CleanArchitecture\UseCase\Validation;
 
-use Damianopetrungaro\CleanArchitecture\UseCase\Request\Request;
+use Damianopetrungaro\CleanArchitecture\UseCase\Request\RequestInterface;
 use Damianopetrungaro\CleanArchitecture\UseCase\Response\ResponseInterface;
 
-abstract class ValidableRequest extends Request
+interface ValidableRequestInterface extends RequestInterface
 {
     /**
      * Method to call for validate a Request.
@@ -17,5 +17,5 @@ abstract class ValidableRequest extends Request
      *
      * @return bool
      */
-    abstract public function isValid(ResponseInterface $response) : bool;
+    public function isValid(ResponseInterface $response) : bool;
 }

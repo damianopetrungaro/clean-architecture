@@ -50,4 +50,13 @@ interface RequestInterface
      * @return RequestInterface
      */
     public function with($data, $key = null): RequestInterface;
+
+    /**
+     * Return a RequestInterface without a specific key.
+     *
+     * @param mixed $key
+     *
+     * @return RequestInterface
+     */
+    public function without($key): RequestInterface;
 }

@@ -113,7 +113,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
      *
      * @dataProvider itemsWithKeyValueForTestHasMethodDataProviders
      */
-    public function testHas($items, $requiredKey, $expectedValue)
+    public function testHasMethod($items, $requiredKey, $expectedValue)
     {
         $collection = new Collection($items);
         $this->assertEquals($collection->has($requiredKey), $expectedValue);
@@ -125,7 +125,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
      * @param $items
      * @dataProvider itemsDataProviders
      */
-    public function testKeys($items)
+    public function testKeysMethod($items)
     {
         $collection = new Collection($items);
         $keys = array_keys($items);
@@ -138,7 +138,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
      * @param $items
      * @dataProvider itemsDataProviders
      */
-    public function testLength($items)
+    public function testLengthMethod($items)
     {
         $collection = new Collection($items);
         $length = count($items);
@@ -149,7 +149,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
      * Check that the merged collection contains all the expected data
      *
      */
-    public function testMergeWith()
+    public function testMergeWithMethod()
     {
         $collection1 = new Collection(['a', 'b']);
         $collection2 = new Collection(['c', 'd']);
@@ -162,7 +162,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
      * Check that the returned collection haven't the removed key
      *
      */
-    public function testWithout()
+    public function testWithoutMethod()
     {
         $collection1 = new Collection(['key1' => 'value1', 'key2' => 'value2']);
         $final = new Collection(['key2' => 'value2']);
@@ -173,7 +173,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
      * Check that the returned collection have the inserted key
      *
      */
-    public function testWith()
+    public function testWithMethod()
     {
         $collection1 = new Collection(['key2' => 'value2']);
         $final = new Collection(['key1' => 'value1', 'key2' => 'value2']);
@@ -186,7 +186,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
      * @param $items
      * @dataProvider itemsDataProviders
      */
-    public function testValues($items)
+    public function testValuesMethod($items)
     {
         $collection = new Collection($items);
         $keys = array_values($items);
@@ -197,7 +197,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
      * Check that iterator works as expected
      *
      */
-    public function testIterator()
+    public function testIterability()
     {
         $keys = ['key-0', 'key-1'];
         $indexKey = 0;
