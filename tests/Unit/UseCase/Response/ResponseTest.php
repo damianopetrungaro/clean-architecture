@@ -1,6 +1,6 @@
 <?php
 
-namespace Damianopetrungaro\CleanArchitecture\Unit\Response;
+namespace Damianopetrungaro\CleanArchitecture\Unit\UseCase\Response;
 
 use Damianopetrungaro\CleanArchitecture\Common\Collection\CollectionInterface;
 use Damianopetrungaro\CleanArchitecture\UseCase\Error\ErrorInterface;
@@ -8,6 +8,26 @@ use Damianopetrungaro\CleanArchitecture\UseCase\Response\Response;
 
 class ResponseTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * Check that Response object when initialized set 'data' and 'errors' properties as CollectionInterface
+     *
+     */
+    public function testThatResponseOnInitSetErrorAndData()
+    {
+        $data = $this->getMockBuilder(CollectionInterface::class)->disableOriginalConstructor()->getMock();
+        $errors = $this->getMockBuilder(CollectionInterface::class)->disableOriginalConstructor()->getMock();
+        $response = new Response($data, $errors);
+        $reflection = new \ReflectionClass($response);
+
+        $dataCollectionReflected = $reflection->getProperty('data');
+        $dataCollectionReflected->setAccessible(true);
+        $this->assertTrue($dataCollectionReflected->getValue($response) instanceof CollectionInterface);
+
+        $errorsCollectionReflected = $reflection->getProperty('errors');
+        $errorsCollectionReflected->setAccessible(true);
+        $this->assertTrue($errorsCollectionReflected->getValue($response) instanceof CollectionInterface);
+    }
+
     /**
      * Test that the addData method push new element into an array
      *
@@ -190,6 +210,61 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
         $statusReflected->setAccessible(true);
         $statusReflected->setValue($response, $value);
         $this->assertEquals($response->isSuccessful(), $expected);
+    }
+
+    /**
+     * Test that removeData method set a new collection on data property
+     */
+    public function testRemoveDataErrorMethod()
+    {
+        // Create a mock for data and error
+        $dataCollectionMock = $this->getMockBuilder(CollectionInterface::class)->disableOriginalConstructor()->getMock();
+        $errorCollectionMock = $this->getMockBuilder(CollectionInterface::class)->disableOriginalConstructor()->getMock();
+        // On 'without' method calls will assert the expected behavior (return a new collection)
+        // And return a CollectionInterface because the return type is specified
+        $dataCollectionMock->method('without')->will($this->returnCallback(function () {
+            return $this->getMockBuilder(CollectionInterface::class)->disableOriginalConstructor()->getMock();
+        }));
+
+        $response = new Response($dataCollectionMock, $errorCollectionMock);
+        // Set accessible data and errors property
+        $responseReflected = new \ReflectionClass($response);
+        $dataReflected = $responseReflected->getProperty('data');
+        $dataReflected->setAccessible(true);
+        // Get data, change it and get the new one that has been set
+        $firstDataCollection = $dataReflected->getValue($response);
+        $response->removeData('key');
+        $secondDataCollection = $dataReflected->getValue($response);
+        // The instance id must be different
+        $this->assertNotEquals(spl_object_hash($firstDataCollection), spl_object_hash($secondDataCollection));
+    }
+
+
+    /**
+     * Test that removeError method set a new collection on errors property
+     */
+    public function testRemoveDataAndRemoveErrorMethod()
+    {
+        // Create a mock for data and error
+        $dataCollectionMock = $this->getMockBuilder(CollectionInterface::class)->disableOriginalConstructor()->getMock();
+        $errorCollectionMock = $this->getMockBuilder(CollectionInterface::class)->disableOriginalConstructor()->getMock();
+        // On 'without' method calls will assert the expected behavior (return a new collection)
+        // And return a CollectionInterface because the return type is specified
+        $errorCollectionMock->method('without')->will($this->returnCallback(function () {
+            return $this->getMockBuilder(CollectionInterface::class)->disableOriginalConstructor()->getMock();
+        }));
+
+        $response = new Response($dataCollectionMock, $errorCollectionMock);
+        // Set accessible data and errors property
+        $responseReflected = new \ReflectionClass($response);
+        $errorReflected = $responseReflected->getProperty('errors');
+        $errorReflected->setAccessible(true);
+        // Get errors, change it and get the new one that has been set
+        $firstErrorCollection = $errorReflected->getValue($response);
+        $response->removeError('key');
+        $secondErrorCollection = $errorReflected->getValue($response);
+        
+        $this->assertNotEquals(spl_object_hash($firstErrorCollection), spl_object_hash($secondErrorCollection));
     }
 
     /**

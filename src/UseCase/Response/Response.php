@@ -129,7 +129,7 @@ class Response implements ResponseInterface
      */
     public function removeError($key) : void
     {
-        $this->data = $this->data->without($key);
+        $this->errors = $this->errors->without($key);
     }
 
     /**
