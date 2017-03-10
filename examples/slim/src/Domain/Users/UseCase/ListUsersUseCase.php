@@ -32,7 +32,7 @@ final class ListUsersUseCase implements UseCaseInterface
      *
      * @return void
      */
-    public function __invoke(RequestInterface $request, ResponseInterface &$response): void
+    public function __invoke(RequestInterface $request, ResponseInterface $response): void
     {
         $userCollection = $this->userRepository->all();
         $response->addData('users', $userCollection);

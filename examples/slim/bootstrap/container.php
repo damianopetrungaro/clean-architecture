@@ -62,7 +62,7 @@ $entries['domain.users.useCase.listUsers'] = function (Container $c) {
 };
 
 $entries['domain.users.repository'] = function (Container $c) {
-    return new \Damianopetrungaro\CleanArchitectureSlim\Domain\Users\Repository\DBALUserRepository($c->getDatabaseConnection());
+    return new \Damianopetrungaro\CleanArchitectureSlim\Application\Users\Repository\DBALUserRepository($c->getDatabaseConnection());
 };
 
 $entries['app.users.request.lisUser'] = function () {
