@@ -17,24 +17,33 @@ use ReflectionClass;
 class Enum implements EnumInterface
 {
     /**
-     * Throw an exception if there's no constant in the child class, otherwise return the constant value.
-     *
-     * @param string $enum
-     * @param array $args
-     *
-     * @throws \InvalidArgumentException
-     *
-     * @return mixed
+     * @var string $value
      */
-    public static function __callStatic(string $enum, array $args = []): string
+    protected $value;
+
+    /**
+     * {@inheritDoc}
+     */
+    public static function __callStatic(string $value, array $args = []): EnumInterface
     {
         $self = new ReflectionClass(static::class);
         $constants = $self->getConstants();
 
-        if (!isset($constants[$enum])) {
-            throw new \InvalidArgumentException("$enum is not available in " . static::class);
+        if (!isset($constants[$value])) {
+            throw new \InvalidArgumentException("$value is not available in " . static::class);
         }
 
-        return $constants[$enum];
+        $enum = new self();
+        $enum->value = $constants[$value];
+
+        return $enum;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getValue(): string
+    {
+        return $this->value;
     }
 }

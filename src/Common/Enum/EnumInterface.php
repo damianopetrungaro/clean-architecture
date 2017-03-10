@@ -24,5 +24,12 @@ interface EnumInterface
      *
      * @return mixed
      */
-    public static function __callStatic(string $enum, array $args = []) : string;
+    public static function __callStatic(string $enum, array $args = []) : EnumInterface;
+
+    /**
+     * Return the enum value
+     *
+     * @return string
+     */
+    public function getValue(): string;
 }
