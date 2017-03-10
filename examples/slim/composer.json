@@ -1,0 +1,23 @@
+{
+    "name": "damianopetrungaro/clean-architecture-slim",
+    "require": {
+        "slim/slim": "^3.7",
+        "league/booboo": "^1.0",
+        "doctrine/dbal": "^2.5",
+        "ramsey/uuid": "^3.5",
+        "monolog/monolog": "^1.22",
+        "vlucas/phpdotenv": "^2.4",
+        "damianopetrungaro/clean-architecture": "^0.1.1"
+    },
+    "authors": [
+        {
+            "name": "Damiano Petrungaro",
+            "email": "damiano.petrungaro@qwentes.it"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Damianopetrungaro\\CleanArchitectureSlim\\" : "src/"
+        }
+    }
+}
