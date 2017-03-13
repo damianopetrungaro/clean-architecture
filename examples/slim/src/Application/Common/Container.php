@@ -3,14 +3,21 @@
 namespace Damianopetrungaro\CleanArchitectureSlim\Application\Common;
 
 use Damianopetrungaro\CleanArchitecture\UseCase\Response\ResponseInterface;
+use Damianopetrungaro\CleanArchitectureSlim\Application\Common\Response\SlimResponseBuilder;
 use Damianopetrungaro\CleanArchitectureSlim\Application\Users\Request\ListUserRequest;
+use Damianopetrungaro\CleanArchitectureSlim\Domain\Users\Mapper\UserMapperInterface;
 use Damianopetrungaro\CleanArchitectureSlim\Domain\Users\Repository\UserRepositoryInterface;
+use Damianopetrungaro\CleanArchitectureSlim\Domain\Users\Transformer\UserTransformer;
+use Damianopetrungaro\CleanArchitectureSlim\Domain\Users\Transformer\UserTransformerInterface;
 use Damianopetrungaro\CleanArchitectureSlim\Domain\Users\UseCase\ListUsersUseCase;
 use Doctrine\DBAL\Connection;
 use Psr\Log\LoggerInterface;
 
 final class Container extends \Slim\Container
 {
+    /**
+     * {@inheritdoc}
+     */
     public function __construct(array $values = [])
     {
         parent::__construct($values);
@@ -62,5 +69,29 @@ final class Container extends \Slim\Container
     public function getListUserRequest(): ListUserRequest
     {
         return $this->get('app.users.request.lisUser');
+    }
+
+    /**
+     * @return SlimResponseBuilder
+     */
+    public function getSlimResponseBuilder(): SlimResponseBuilder
+    {
+        return $this->get('app.common.response.slim');
+    }
+
+    /**
+     * @return UserMapperInterface
+     */
+    public function getUserMapper(): UserMapperInterface
+    {
+        return $this->get('domain.users.mapper');
+    }
+
+    /**
+     * @return UserTransformerInterface
+     */
+    public function getUserTransformer(): UserTransformerInterface
+    {
+        return $this->get('domain.users.transformer');
     }
 }

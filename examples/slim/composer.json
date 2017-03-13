@@ -7,7 +7,9 @@
         "ramsey/uuid": "^3.5",
         "monolog/monolog": "^1.22",
         "vlucas/phpdotenv": "^2.4",
-        "damianopetrungaro/clean-architecture": "^0.1.1"
+        "damianopetrungaro/clean-architecture": "^0.1.1",
+        "zendframework/zend-hydrator": "^2.2",
+        "robmorgan/phinx": "^0.8.0"
     },
     "authors": [
         {
@@ -19,5 +21,8 @@
         "psr-4": {
             "Damianopetrungaro\\CleanArchitectureSlim\\" : "src/"
         }
+    },
+    "require-dev": {
+        "fzaninotto/faker": "^1.6"
     }
 }

@@ -3,6 +3,7 @@
 use Damianopetrungaro\CleanArchitectureSlim\Application\Common\Container;
 
 $entries = [];
+$entries['settings']['displayErrorDetails'] = true;
 
 $entries['notFoundHandler'] = function () {
     return function ($request, \Slim\Http\Response $response) {
@@ -19,7 +20,16 @@ $entries['notAllowedHandler'] = function () {
 $entries['errorHandler'] = function (Container $c) {
     return function ($request, \Slim\Http\Response $response, $exception) use ($c) {
         /** @var Exception $exception */
-        $c->getAppLogger()->error("Uncaught error: {$exception->getMessage()}", ['exception' => $exception]);
+        $c->getLogger()->error("Uncaught error: {$exception->getMessage()}", ['exception' => $exception]);
+
+        return $response->withStatus(500);
+    };
+};
+
+$entries['phpErrorHandler'] = function (Container $c) {
+    return function ($request, \Slim\Http\Response $response, $exception) use ($c) {
+        /** @var Exception $exception */
+        $c->getLogger()->error("Uncaught error: {$exception->getMessage()}", ['exception' => $exception]);
 
         return $response->withStatus(500);
     };
@@ -38,7 +48,7 @@ $entries['app.connection'] = function () {
         'host' => getenv('DB_APP_HOST'),
         'charset' => getenv('DB_APP_CHARSET'),
         'driver' => getenv('DB_APP_DOCTRINE_DRIVER'),
-        'unix_socket' => getenv('DB_APP_SOCK') ?: null,
+        'unix_socket' => getenv('DB_APP_SOCKET') ?: null,
         'port' => getenv('DB_APP_PORT') ?: 3306,
     );
 
@@ -50,6 +60,10 @@ $entries['app.logger'] = function () {
     return new Monolog\Logger('app', [new \Monolog\Handler\RotatingFileHandler(getenv('LOG_APP_DIR') . '/app.log')]);
 };
 
+$entries['app.common.response.slim'] = function () {
+    return new \Damianopetrungaro\CleanArchitectureSlim\Application\Common\Response\SlimResponseBuilder;
+};
+
 $entries['domain.response'] = function () {
     return new Damianopetrungaro\CleanArchitecture\UseCase\Response\Response(
         new \Damianopetrungaro\CleanArchitecture\Common\Collection\Collection(),
@@ -58,11 +72,29 @@ $entries['domain.response'] = function () {
 };
 
 $entries['domain.users.useCase.listUsers'] = function (Container $c) {
-    return new \Damianopetrungaro\CleanArchitectureSlim\Domain\Users\UseCase\ListUsersUseCase($c->getUserRepository());
+    return new \Damianopetrungaro\CleanArchitectureSlim\Domain\Users\UseCase\ListUsersUseCase(
+        $c->getUserRepository(),
+        $c->getUserTransformer(),
+        $c->getUserMapper()
+    );
 };
 
 $entries['domain.users.repository'] = function (Container $c) {
-    return new \Damianopetrungaro\CleanArchitectureSlim\Application\Users\Repository\DBALUserRepository($c->getDatabaseConnection());
+    return new \Damianopetrungaro\CleanArchitectureSlim\Application\Users\Repository\DBALUserRepository(
+        $c->getDatabaseConnection(),
+        $c->getUserMapper(),
+        getenv('DB_TABLE_PREFIX') . 'users' . getenv('DB_TABLE_SUFFIX')
+    );
+};
+
+$entries['domain.users.transformer'] = function () {
+    return new \Damianopetrungaro\CleanArchitectureSlim\Domain\Users\Transformer\UserTransformer();
+};
+
+$entries['domain.users.mapper'] = function () {
+    return new Damianopetrungaro\CleanArchitectureSlim\Domain\Users\Mapper\UserMapper(
+        \Damianopetrungaro\CleanArchitectureSlim\Application\Users\Mapper\ZendHydratorFactory::build()
+    );
 };
 
 $entries['app.users.request.lisUser'] = function () {

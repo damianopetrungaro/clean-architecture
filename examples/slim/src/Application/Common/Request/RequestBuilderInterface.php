@@ -1,6 +1,6 @@
 <?php
 
-namespace Damianopetrungaro\CleanArchitectureSlim\Application\Common;
+namespace Damianopetrungaro\CleanArchitectureSlim\Application\Common\Request;
 
 use Damianopetrungaro\CleanArchitecture\UseCase\Request\RequestInterface;
 use Slim\Http\Request;

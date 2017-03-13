@@ -23,15 +23,20 @@ final class ListUsersController
         $this->useCase = $container->getListUsersUseCase();
         $this->domainResponse = $container->getDomainResponse();
         $this->domainRequest = $container->getListUserRequest();
+        $this->slimResponseBuilder = $container->getSlimResponseBuilder();
     }
 
     /**
      * @param Request $request
      * @param Response $response
      * @param $args
+     *
+     * @return Response
      */
     public function __invoke(Request $request, Response $response, $args)
     {
         $this->useCase->__invoke($this->domainRequest->build($request), $this->domainResponse);
+
+        return $this->slimResponseBuilder->build($this->domainResponse);
     }
 }
