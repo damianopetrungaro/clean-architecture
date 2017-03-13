@@ -1,7 +1,6 @@
-composer.phar
-/vendor/
 .idea
+.env
+composer.phar
 composer.lock
-phpDocumentor.phar
 coverage/*
-/examples/slim/vendor/
+vendor/
