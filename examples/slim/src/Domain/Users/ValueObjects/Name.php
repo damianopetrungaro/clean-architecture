@@ -17,10 +17,10 @@ final class Name
     public function __construct(string $name)
     {
         if (empty($name)) {
-            throw new \InvalidArgumentException("$name can't be empty");
+            throw new \InvalidArgumentException("Name can't be empty");
         }
         if (strlen($name) > 255) {
-            throw new \InvalidArgumentException("$name must be less than 255 chars");
+            throw new \InvalidArgumentException("Name '$name' must be less than 255 chars");
         }
         $this->name = $name;
     }

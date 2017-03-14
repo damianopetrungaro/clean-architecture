@@ -4,11 +4,13 @@ namespace Damianopetrungaro\CleanArchitectureSlim\Application\Common;
 
 use Damianopetrungaro\CleanArchitecture\UseCase\Response\ResponseInterface;
 use Damianopetrungaro\CleanArchitectureSlim\Application\Common\Response\SlimResponseBuilder;
+use Damianopetrungaro\CleanArchitectureSlim\Application\Users\Request\AddUserRequest;
 use Damianopetrungaro\CleanArchitectureSlim\Application\Users\Request\GetUserRequest;
 use Damianopetrungaro\CleanArchitectureSlim\Application\Users\Request\ListUserRequest;
 use Damianopetrungaro\CleanArchitectureSlim\Domain\Users\Mapper\UserMapperInterface;
 use Damianopetrungaro\CleanArchitectureSlim\Domain\Users\Repository\UserRepositoryInterface;
 use Damianopetrungaro\CleanArchitectureSlim\Domain\Users\Transformer\UserTransformerInterface;
+use Damianopetrungaro\CleanArchitectureSlim\Domain\Users\UseCase\AddUserUseCase;
 use Damianopetrungaro\CleanArchitectureSlim\Domain\Users\UseCase\GetUserUseCase;
 use Damianopetrungaro\CleanArchitectureSlim\Domain\Users\UseCase\ListUsersUseCase;
 use Doctrine\DBAL\Connection;
@@ -62,6 +64,22 @@ final class Container extends \Slim\Container
     public function getGetUserUseCase(): GetUserUseCase
     {
         return $this->get('domain.users.useCase.getUsers');
+    }
+
+    /**
+     * @return AddUserUseCase
+     */
+    public function getAddUserUseCase(): AddUserUseCase
+    {
+        return $this->get('domain.users.useCase.addUser');
+    }
+
+    /**
+     * @return AddUserRequest
+     */
+    public function getAddUserRequest(): AddUserRequest
+    {
+        return $this->get('app.users.request.addUser');
     }
 
     /**

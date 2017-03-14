@@ -26,7 +26,7 @@ $entries['notAllowedHandler'] = function () {
 $entries['errorHandler'] = function (Container $c) {
     return function ($request, \Slim\Http\Response $response, $exception) use ($c) {
         /** @var Exception $exception */
-        $c->getLogger()->error("Uncaught error: {$exception->getMessage()}", ['exception' => $exception]);
+        $c->getLogger()->error("Uncaught error: {$exception->getMessage()}", [$exception]);
 
         return $response->withStatus(500);
     };
@@ -35,7 +35,7 @@ $entries['errorHandler'] = function (Container $c) {
 $entries['phpErrorHandler'] = function (Container $c) {
     return function ($request, \Slim\Http\Response $response, $exception) use ($c) {
         /** @var Exception $exception */
-        $c->getLogger()->error("Uncaught error: {$exception->getMessage()}", ['exception' => $exception]);
+        $c->getLogger()->error("Uncaught error: {$exception->getMessage()}", [$exception]);
 
         return $response->withStatus(500);
     };
@@ -109,6 +109,10 @@ $entries['app.users.request.getUser'] = function () {
     return new \Damianopetrungaro\CleanArchitectureSlim\Application\Users\Request\GetUserRequest();
 };
 
+$entries['app.users.request.addUser'] = function () {
+    return new \Damianopetrungaro\CleanArchitectureSlim\Application\Users\Request\AddUserRequest();
+};
+
 $entries['app.users.transformer'] = function () {
     return new \Damianopetrungaro\CleanArchitectureSlim\Application\Users\Transformer\UserTransformer();
 };
@@ -132,6 +136,14 @@ $entries['domain.users.useCase.listUsers'] = function (Container $c) {
 
 $entries['domain.users.useCase.getUsers'] = function (Container $c) {
     return new \Damianopetrungaro\CleanArchitectureSlim\Domain\Users\UseCase\GetUserUseCase(
+        $c->getUserRepository(),
+        $c->getUserTransformer(),
+        $c->getUserMapper()
+    );
+};
+
+$entries['domain.users.useCase.addUser'] = function (Container $c) {
+    return new \Damianopetrungaro\CleanArchitectureSlim\Domain\Users\UseCase\AddUserUseCase(
         $c->getUserRepository(),
         $c->getUserTransformer(),
         $c->getUserMapper()

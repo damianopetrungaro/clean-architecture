@@ -51,7 +51,6 @@ final class ListUsersUseCase implements UseCaseInterface
      */
     public function __invoke(RequestInterface $request, ResponseInterface $response): void
     {
-
         try {
             $userCollection = $this->userRepository->all();
         } catch (UserPersistenceException $e) {

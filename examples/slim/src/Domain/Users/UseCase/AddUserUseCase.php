@@ -7,14 +7,17 @@ use Damianopetrungaro\CleanArchitecture\UseCase\Response\ResponseInterface;
 use Damianopetrungaro\CleanArchitecture\UseCase\Validation\ValidableUseCaseInterface;
 use Damianopetrungaro\CleanArchitectureSlim\Application\Common\Error\ApplicationError;
 use Damianopetrungaro\CleanArchitectureSlim\Application\Common\Error\ApplicationErrorType;
+use Damianopetrungaro\CleanArchitectureSlim\Domain\Users\Entity\UserEntity;
 use Damianopetrungaro\CleanArchitectureSlim\Domain\Users\Mapper\UserMapperInterface;
-use Damianopetrungaro\CleanArchitectureSlim\Domain\Users\Repository\Exception\UserNotFoundException;
 use Damianopetrungaro\CleanArchitectureSlim\Domain\Users\Repository\Exception\UserPersistenceException;
 use Damianopetrungaro\CleanArchitectureSlim\Domain\Users\Repository\UserRepositoryInterface;
 use Damianopetrungaro\CleanArchitectureSlim\Domain\Users\Transformer\UserTransformerInterface;
-use Damianopetrungaro\CleanArchitectureSlim\Domain\Users\ValueObjects\UserId;
+use Damianopetrungaro\CleanArchitectureSlim\Domain\Users\ValueObjects\Email;
+use Damianopetrungaro\CleanArchitectureSlim\Domain\Users\ValueObjects\Name;
+use Damianopetrungaro\CleanArchitectureSlim\Domain\Users\ValueObjects\Password;
+use Damianopetrungaro\CleanArchitectureSlim\Domain\Users\ValueObjects\Surname;
 
-final class GetUserUseCase implements ValidableUseCaseInterface
+final class AddUserUseCase implements ValidableUseCaseInterface
 {
     /**
      * @var UserRepositoryInterface
@@ -58,17 +61,19 @@ final class GetUserUseCase implements ValidableUseCaseInterface
             return;
         }
 
+        $user = new UserEntity(
+            $this->userRepository->nextId(),
+            new Name($request->get('name')),
+            new Surname($request->get('surname')),
+            new Email($request->get('email')),
+            new Password($request->get('password'))
+        );
+
         try {
-            $user = $this->userRepository->getByUserId(
-                UserId::createFromString($request->get('id'))
-            );
+            $this->userRepository->add($user);
         } catch (UserPersistenceException $e) {
             $response->setAsFailed();
             $response->addError('generic', new ApplicationError($e->getMessage(), ApplicationErrorType::PERSISTENCE_ERROR()));
-            return;
-        } catch (UserNotFoundException $e) {
-            $response->setAsFailed();
-            $response->addError('generic', new ApplicationError('user_not_found', ApplicationErrorType::NOT_FOUND_ENTITY()));
             return;
         }
 
@@ -90,9 +95,31 @@ final class GetUserUseCase implements ValidableUseCaseInterface
     public function isValid(RequestInterface $request, ResponseInterface $response) : bool
     {
         try {
-            UserId::createFromString($request->get('id'));
+            $name = new Name($request->get('name', ''));
+            unset($name);
         } catch (\InvalidArgumentException $e) {
-            $response->addError('generics', new ApplicationError($e->getMessage(), ApplicationErrorType::NOT_FOUND_ENTITY()));
+            $response->addError('name', new ApplicationError($e->getMessage(), ApplicationErrorType::VALIDATION_ERROR()));
+        }
+
+        try {
+            $surname = new Surname($request->get('surname', ''));
+            unset($surname);
+        } catch (\InvalidArgumentException $e) {
+            $response->addError('surname', new ApplicationError($e->getMessage(), ApplicationErrorType::VALIDATION_ERROR()));
+        }
+
+        try {
+            $email = new Email($request->get('email', ''));
+            unset($email);
+        } catch (\InvalidArgumentException $e) {
+            $response->addError('email', new ApplicationError($e->getMessage(), ApplicationErrorType::VALIDATION_ERROR()));
+        }
+
+        try {
+            $password = new Password($request->get('password', ''));
+            unset($password);
+        } catch (\InvalidArgumentException $e) {
+            $response->addError('password', new ApplicationError($e->getMessage(), ApplicationErrorType::VALIDATION_ERROR()));
         }
 
         return !$response->hasErrors();

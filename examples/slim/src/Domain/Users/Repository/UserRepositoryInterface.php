@@ -30,4 +30,24 @@ interface UserRepositoryInterface
      * @throws UserPersistenceException
      */
     public function getByUserId(UserId $userId): UserEntity;
+
+    /**
+     * Add a new User
+     *
+     * @param UserEntity $user
+     *
+     * @return void
+     *
+     * @throws UserPersistenceException
+     */
+    public function add(UserEntity $user): void;
+
+    /**
+     * Return next valid UserId
+     *
+     * @return UserId
+     *
+     * @throws UserPersistenceException
+     */
+    public function nextId(): UserId;
 }

@@ -82,7 +82,7 @@ final class SlimResponseBuilder implements ResponseBuilderInterface
                 // If the status code is different from the previous one, the HTTP status will be 500
                 // TODO Use first status char for check error
                 // Es: if errors are 401 and 422, use 400 as main status
-                if ($status != null && $status !== $error->type()->getValue()) {
+                if ($status != null && $status !== $this->statusCodeFromErrorType($error->type())) {
                     $status = 500;
                     continue;
                 }

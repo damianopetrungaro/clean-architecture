@@ -16,11 +16,14 @@ final class Email
      */
     public function __construct(string $email)
     {
+        if (empty($email)) {
+            throw new \InvalidArgumentException("Email must be sent");
+        }
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            throw new \InvalidArgumentException("$email is not a valid email");
+            throw new \InvalidArgumentException("Email '$email' is not a valid email");
         }
         if (strlen($email) > 255) {
-            throw new \InvalidArgumentException("$email must be less than 255 chars");
+            throw new \InvalidArgumentException("Email '$email' must be less than 255 chars");
         }
         $this->email = $email;
     }

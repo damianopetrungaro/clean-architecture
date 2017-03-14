@@ -11,6 +11,7 @@ use Damianopetrungaro\CleanArchitectureSlim\Domain\Users\Repository\Exception\Us
 use Damianopetrungaro\CleanArchitectureSlim\Domain\Users\Repository\UserRepositoryInterface;
 use Damianopetrungaro\CleanArchitectureSlim\Domain\Users\ValueObjects\UserId;
 use Doctrine\DBAL\Connection;
+use Ramsey\Uuid\Uuid;
 
 /**
  * @method clear()
@@ -47,11 +48,7 @@ final class DBALUserRepository implements UserRepositoryInterface
     }
 
     /**
-     * Return a collection of all the Users saved to persistence
-     *
-     * @return UsersCollection
-     *
-     * @throws UserPersistenceException
+     * {@inheritdoc}
      */
     public function all(): UsersCollection
     {
@@ -67,31 +64,52 @@ final class DBALUserRepository implements UserRepositoryInterface
     }
 
     /**
-     * Return a User by UserId
-     *
-     * @param UserId $userId
-     *
-     * @return UserEntity
-     *
-     * @throws UserNotFoundException
-     * @throws UserPersistenceException
+     * {@inheritdoc}
      */
     public function getByUserId(UserId $userId): UserEntity
     {
         try {
+            $userId = $userId->getValue();
             $stmt = $this->connection->prepare("SELECT * FROM {$this->userTable} WHERE id = :id");
-            $stmt->bindParam(':id', $userId->getValue());
+            $stmt->bindParam(':id', $userId);
             $stmt->execute();
             $row = $stmt->fetch(\PDO::FETCH_ASSOC);
         } catch (\Exception $e) {
             throw new UserPersistenceException('impossible_get_user', $e->getCode(), $e);
         }
 
-        var_dump($row);die();
         if (!$row) {
             throw new UserNotFoundException();
         }
 
         return $this->mapper->toObject(UserEntity::class, $row);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function add(UserEntity $user): void
+    {
+        $user = $this->mapper->toArray($user);
+
+        try {
+            $stmt = $this->connection->prepare("INSERT INTO {$this->userTable} (id, name, surname, email, password) VALUES (:id, :name, :surname, :email, :password)");
+            $stmt->bindParam(':id', $user['id']);
+            $stmt->bindParam(':name', $user['name']);
+            $stmt->bindParam(':surname', $user['surname']);
+            $stmt->bindParam(':email', $user['email']);
+            $stmt->bindParam(':password', $user['password']);
+            $stmt->execute();
+        } catch (\Exception $e) {
+            throw new UserPersistenceException('impossible_add_user', $e->getCode(), $e);
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function nextId(): UserId
+    {
+        return new UserId(Uuid::uuid1());
     }
 }
