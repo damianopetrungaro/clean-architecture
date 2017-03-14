@@ -33,7 +33,7 @@ class Enum implements EnumInterface
             throw new \InvalidArgumentException("$value is not available in " . static::class);
         }
 
-        $enum = new self();
+        $enum = new static();
         $enum->value = $constants[$value];
 
         return $enum;
