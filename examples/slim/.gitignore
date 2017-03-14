@@ -1,0 +1,7 @@
+.idea
+.env
+composer.phar
+composer.lock
+vendor/
+runtime/logs
+!runtime/logs/.gitkeep

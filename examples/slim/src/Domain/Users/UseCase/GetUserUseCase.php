@@ -4,15 +4,17 @@ namespace Damianopetrungaro\CleanArchitectureSlim\Domain\Users\UseCase;
 
 use Damianopetrungaro\CleanArchitecture\UseCase\Request\RequestInterface;
 use Damianopetrungaro\CleanArchitecture\UseCase\Response\ResponseInterface;
-use Damianopetrungaro\CleanArchitecture\UseCase\UseCaseInterface;
+use Damianopetrungaro\CleanArchitecture\UseCase\Validation\ValidableUseCaseInterface;
 use Damianopetrungaro\CleanArchitectureSlim\Application\Common\Error\ApplicationError;
 use Damianopetrungaro\CleanArchitectureSlim\Application\Common\Error\ApplicationErrorType;
 use Damianopetrungaro\CleanArchitectureSlim\Domain\Users\Mapper\UserMapperInterface;
+use Damianopetrungaro\CleanArchitectureSlim\Domain\Users\Repository\Exception\UserNotFoundException;
 use Damianopetrungaro\CleanArchitectureSlim\Domain\Users\Repository\Exception\UserPersistenceException;
 use Damianopetrungaro\CleanArchitectureSlim\Domain\Users\Repository\UserRepositoryInterface;
 use Damianopetrungaro\CleanArchitectureSlim\Domain\Users\Transformer\UserTransformerInterface;
+use Damianopetrungaro\CleanArchitectureSlim\Domain\Users\ValueObjects\UserId;
 
-final class ListUsersUseCase implements UseCaseInterface
+final class GetUserUseCase implements ValidableUseCaseInterface
 {
     /**
      * @var UserRepositoryInterface
@@ -51,18 +53,48 @@ final class ListUsersUseCase implements UseCaseInterface
      */
     public function __invoke(RequestInterface $request, ResponseInterface $response): void
     {
+        if (!$this->isValid($request, $response)) {
+            $response->setAsFailed();
+            return;
+        }
 
         try {
-            $userCollection = $this->userRepository->all();
+            $user = $this->userRepository->getByUserId(
+                UserId::createFromString($request->get('id'))
+            );
         } catch (UserPersistenceException $e) {
             $response->setAsFailed();
             $response->addError('generic', new ApplicationError($e->getMessage(), ApplicationErrorType::PERSISTENCE_ERROR()));
             return;
+        } catch (UserNotFoundException $e) {
+            $response->setAsFailed();
+            $response->addError('generic', new ApplicationError($e->getMessage(), ApplicationErrorType::NOT_FOUND_ENTITY()));
+            return;
         }
 
-        $users = $this->userTransformer->mapMultiple($this->userMapper->toMultipleArray($userCollection));
-        $response->addData('users', $users);
+        $user = $this->userTransformer->map($this->userMapper->toArray($user));
+        $response->addData('user', $user);
         $response->setAsSuccess();
         return;
+    }
+
+    /**
+     * Method to call for validate an UseCase.
+     * You must use a reference to ResponseInterface to add errors to response.
+     *
+     * @param RequestInterface $request
+     * @param ResponseInterface $response
+     *
+     * @return bool
+     */
+    public function isValid(RequestInterface $request, ResponseInterface $response) : bool
+    {
+        try {
+            UserId::createFromString($request->get('id'));
+        } catch (\InvalidArgumentException $e) {
+            $response->addError('generic', new ApplicationError('user_not_found', ApplicationErrorType::NOT_FOUND_ENTITY()));
+        }
+
+        return !$response->hasErrors();
     }
 }

@@ -69,10 +69,10 @@ final class SlimResponseBuilder implements ResponseBuilderInterface
                     'status' => $this->statusCodeFromErrorType($error->type())
                 ];
 
-                // Add source and meta if is an ApplicationError
+                // Add source and meta if is an ApplicationError and are set
                 if ($error instanceof ApplicationError) {
-                    $jsonApiError['source'] = ['pointer' => $error->pointer()];
-                    $jsonApiError['meta'] = $error->meta();
+                    !$error->pointer() ?: $jsonApiError['source'] = ['pointer' => $error->pointer()];
+                    !$error->meta() ?: $jsonApiError['meta'] = $error->meta();
                 }
 
                 // Create an array with a specific key if is not set

@@ -5,15 +5,15 @@ namespace Damianopetrungaro\CleanArchitectureSlim\Application\Users\Controller;
 use Damianopetrungaro\CleanArchitecture\UseCase\Response\ResponseInterface;
 use Damianopetrungaro\CleanArchitectureSlim\Application\Common\Container;
 use Damianopetrungaro\CleanArchitectureSlim\Application\Common\Response\SlimResponseBuilder;
-use Damianopetrungaro\CleanArchitectureSlim\Application\Users\Request\ListUserRequest;
-use Damianopetrungaro\CleanArchitectureSlim\Domain\Users\UseCase\ListUsersUseCase;
+use Damianopetrungaro\CleanArchitectureSlim\Application\Users\Request\GetUserRequest;
+use Damianopetrungaro\CleanArchitectureSlim\Domain\Users\UseCase\GetUserUseCase;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
-final class ListUsersController
+final class GetUserController
 {
     /**
-     * @var ListUsersUseCase
+     * @var GetUserUseCase
      */
     private $useCase;
     /**
@@ -21,7 +21,7 @@ final class ListUsersController
      */
     private $domainResponse;
     /**
-     * @var ListUserRequest
+     * @var GetUserRequest
      */
     private $domainRequest;
     /**
@@ -35,14 +35,14 @@ final class ListUsersController
      */
     public function __construct(Container $container)
     {
-        $this->useCase = $container->getListUsersUseCase();
+        $this->useCase = $container->getGetUserUseCase();
         $this->domainResponse = $container->getDomainResponse();
-        $this->domainRequest = $container->getListUserRequest();
+        $this->domainRequest = $container->getGetUserRequest();
         $this->slimResponseBuilder = $container->getSlimResponseBuilder();
     }
 
     /**
-     * Controller for ListUsersUseCase
+     * Controller for GetUserUseCase
      *
      * @param Request $request
      * @param Response $response

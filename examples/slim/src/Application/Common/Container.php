@@ -4,11 +4,12 @@ namespace Damianopetrungaro\CleanArchitectureSlim\Application\Common;
 
 use Damianopetrungaro\CleanArchitecture\UseCase\Response\ResponseInterface;
 use Damianopetrungaro\CleanArchitectureSlim\Application\Common\Response\SlimResponseBuilder;
+use Damianopetrungaro\CleanArchitectureSlim\Application\Users\Request\GetUserRequest;
 use Damianopetrungaro\CleanArchitectureSlim\Application\Users\Request\ListUserRequest;
 use Damianopetrungaro\CleanArchitectureSlim\Domain\Users\Mapper\UserMapperInterface;
 use Damianopetrungaro\CleanArchitectureSlim\Domain\Users\Repository\UserRepositoryInterface;
-use Damianopetrungaro\CleanArchitectureSlim\Domain\Users\Transformer\UserTransformer;
 use Damianopetrungaro\CleanArchitectureSlim\Domain\Users\Transformer\UserTransformerInterface;
+use Damianopetrungaro\CleanArchitectureSlim\Domain\Users\UseCase\GetUserUseCase;
 use Damianopetrungaro\CleanArchitectureSlim\Domain\Users\UseCase\ListUsersUseCase;
 use Doctrine\DBAL\Connection;
 use Psr\Log\LoggerInterface;
@@ -56,6 +57,14 @@ final class Container extends \Slim\Container
     }
 
     /**
+     * @return GetUserUseCase
+     */
+    public function getGetUserUseCase(): GetUserUseCase
+    {
+        return $this->get('domain.users.useCase.getUsers');
+    }
+
+    /**
      * @return UserRepositoryInterface
      */
     public function getUserRepository(): UserRepositoryInterface
@@ -68,7 +77,7 @@ final class Container extends \Slim\Container
      */
     public function getListUserRequest(): ListUserRequest
     {
-        return $this->get('app.users.request.lisUser');
+        return $this->get('app.users.request.listUser');
     }
 
     /**
@@ -76,7 +85,7 @@ final class Container extends \Slim\Container
      */
     public function getSlimResponseBuilder(): SlimResponseBuilder
     {
-        return $this->get('app.common.response.slim');
+        return $this->get('app.response.slim');
     }
 
     /**
@@ -84,7 +93,7 @@ final class Container extends \Slim\Container
      */
     public function getUserMapper(): UserMapperInterface
     {
-        return $this->get('domain.users.mapper');
+        return $this->get('app.users.mapper');
     }
 
     /**
@@ -92,6 +101,14 @@ final class Container extends \Slim\Container
      */
     public function getUserTransformer(): UserTransformerInterface
     {
-        return $this->get('domain.users.transformer');
+        return $this->get('app.users.transformer');
+    }
+
+    /**
+     * @return GetUserRequest
+     */
+    public function getGetUserRequest(): GetUserRequest
+    {
+        return $this->get('app.users.request.getUser');
     }
 }

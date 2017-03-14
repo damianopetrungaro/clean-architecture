@@ -1,7 +1,8 @@
 <?php
 
-namespace Damianopetrungaro\CleanArchitectureSlim\Domain\Users\Transformer;
+namespace Damianopetrungaro\CleanArchitectureSlim\Application\Users\Transformer;
 
+use Damianopetrungaro\CleanArchitectureSlim\Domain\Users\Transformer\UserTransformerInterface;
 
 final class UserTransformer implements UserTransformerInterface
 {
