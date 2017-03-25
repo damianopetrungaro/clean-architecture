@@ -5,7 +5,7 @@ namespace Damianopetrungaro\CleanArchitectureSlim\Users\Application\Request;
 
 use Damianopetrungaro\CleanArchitecture\Common\Collection\Collection;
 use Damianopetrungaro\CleanArchitecture\UseCase\Request\RequestInterface;
-use Damianopetrungaro\CleanArchitectureSlim\Application\Common\Request\RequestBuilderInterface;
+use Damianopetrungaro\CleanArchitectureSlim\Common\Request\RequestBuilderInterface;
 use Slim\Http\Request;
 
 final class AddUserRequest implements RequestBuilderInterface

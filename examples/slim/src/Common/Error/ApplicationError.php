@@ -1,6 +1,6 @@
 <?php
 
-namespace Damianopetrungaro\CleanArchitectureSlim\Application\Common\Error;
+namespace Damianopetrungaro\CleanArchitectureSlim\Common\Error;
 
 
 use Damianopetrungaro\CleanArchitecture\UseCase\Error\AbstractError;

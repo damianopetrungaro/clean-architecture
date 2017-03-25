@@ -47,4 +47,30 @@ final class UserEntity
         $this->email = $email;
         $this->password = $password;
     }
+
+    /**
+     * Update user info
+     *
+     * @param Name $name
+     * @param Surname $surname
+     * @param Email $email
+     * @param Password $password
+     */
+    public function update(Name $name, Surname $surname, Email $email, Password $password)
+    {
+        $this->name = $name;
+        $this->surname = $surname;
+        $this->email = $email;
+        $this->password = $password;
+    }
+
+    /**
+     * Get the user password
+     *
+     * @return Password
+     */
+    public function password(): Password
+    {
+        return $this->password;
+    }
 }

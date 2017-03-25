@@ -1,11 +1,11 @@
 <?php
 
-namespace Damianopetrungaro\CleanArchitectureSlim\Application\Common\Response;
+namespace Damianopetrungaro\CleanArchitectureSlim\Common\Response;
 
 use Damianopetrungaro\CleanArchitecture\UseCase\Error\ErrorTypeInterface;
 use Damianopetrungaro\CleanArchitecture\UseCase\Response\ResponseInterface;
-use Damianopetrungaro\CleanArchitectureSlim\Application\Common\Error\ApplicationError;
-use Damianopetrungaro\CleanArchitectureSlim\Application\Common\Error\ApplicationErrorType;
+use Damianopetrungaro\CleanArchitectureSlim\Common\Error\ApplicationError;
+use Damianopetrungaro\CleanArchitectureSlim\Common\Error\ApplicationErrorType;
 use Ramsey\Uuid\Uuid;
 use Slim\Http\Response;
 
@@ -34,7 +34,12 @@ final class SlimResponseBuilder implements ResponseBuilderInterface
     {
         if ($response->isSuccessful()) {
             if ($response->hasData()) {
-                return (new Response($this->status))->withJson($response->getData());
+
+                $data = array_map(function ($arr) {
+                    return $arr[0];
+                }, $response->getData());
+
+                return (new Response($this->status))->withJson(['data' => $data]);
             }
             return new Response($this->status);
         }
@@ -103,7 +108,11 @@ final class SlimResponseBuilder implements ResponseBuilderInterface
      */
     private function statusCodeFromErrorType(ErrorTypeInterface $type): int
     {
-        if ($type->getValue() == ApplicationErrorType::VALIDATION_ERROR) {
+        if (in_array($type->getValue(), [ApplicationErrorType::VALIDATION_ERROR, ApplicationErrorType::USER_PASSWORD_MISMATCH])) {
+            return 422;
+        }
+
+        if ($type->getValue() == ApplicationErrorType::USER_PASSWORD_MISMATCH) {
             return 422;
         }
 
@@ -114,5 +123,7 @@ final class SlimResponseBuilder implements ResponseBuilderInterface
         if ($type->getValue() == ApplicationErrorType::PERSISTENCE_ERROR) {
             return 500;
         }
+
+        return 500;
     }
 }

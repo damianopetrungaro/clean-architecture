@@ -1,6 +1,6 @@
 <?php
 
-use Damianopetrungaro\CleanArchitectureSlim\Application\Common\Container;
+use Damianopetrungaro\CleanArchitectureSlim\Common\Container;
 
 $entries = [];
 
@@ -73,7 +73,7 @@ $entries['app.logger'] = function () {
 };
 
 $entries['app.response.slim'] = function () {
-    return new \Damianopetrungaro\CleanArchitectureSlim\Application\Common\Response\SlimResponseBuilder;
+    return new \Damianopetrungaro\CleanArchitectureSlim\Common\Response\SlimResponseBuilder;
 };
 
 ##########################################################################
@@ -113,6 +113,10 @@ $entries['app.users.request.addUser'] = function () {
     return new \Damianopetrungaro\CleanArchitectureSlim\Users\Application\Request\AddUserRequest();
 };
 
+$entries['app.users.request.updateUser'] = function () {
+    return new \Damianopetrungaro\CleanArchitectureSlim\Users\Application\Request\UpdateUserRequest();
+};
+
 $entries['app.users.transformer'] = function () {
     return new \Damianopetrungaro\CleanArchitectureSlim\Users\Application\Transformer\UserTransformer();
 };
@@ -144,6 +148,14 @@ $entries['domain.users.useCase.getUsers'] = function (Container $c) {
 
 $entries['domain.users.useCase.addUser'] = function (Container $c) {
     return new \Damianopetrungaro\CleanArchitectureSlim\Users\Domain\UseCase\AddUserUseCase(
+        $c->getUserRepository(),
+        $c->getUserTransformer(),
+        $c->getUserMapper()
+    );
+};
+
+$entries['domain.users.useCase.updateUser'] = function (Container $c) {
+    return new \Damianopetrungaro\CleanArchitectureSlim\Users\Domain\UseCase\UpdateUserUseCase(
         $c->getUserRepository(),
         $c->getUserTransformer(),
         $c->getUserMapper()

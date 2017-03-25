@@ -1,18 +1,20 @@
 <?php
 
-namespace Damianopetrungaro\CleanArchitectureSlim\Application\Common;
+namespace Damianopetrungaro\CleanArchitectureSlim\Common;
 
 use Damianopetrungaro\CleanArchitecture\UseCase\Response\ResponseInterface;
-use Damianopetrungaro\CleanArchitectureSlim\Application\Common\Response\SlimResponseBuilder;
+use Damianopetrungaro\CleanArchitectureSlim\Common\Response\SlimResponseBuilder;
 use Damianopetrungaro\CleanArchitectureSlim\Users\Application\Request\AddUserRequest;
 use Damianopetrungaro\CleanArchitectureSlim\Users\Application\Request\GetUserRequest;
 use Damianopetrungaro\CleanArchitectureSlim\Users\Application\Request\ListUserRequest;
+use Damianopetrungaro\CleanArchitectureSlim\Users\Application\Request\UpdateUserRequest;
 use Damianopetrungaro\CleanArchitectureSlim\Users\Domain\Mapper\UserMapperInterface;
 use Damianopetrungaro\CleanArchitectureSlim\Users\Domain\Repository\UserRepositoryInterface;
 use Damianopetrungaro\CleanArchitectureSlim\Users\Domain\Transformer\UserTransformerInterface;
 use Damianopetrungaro\CleanArchitectureSlim\Users\Domain\UseCase\AddUserUseCase;
 use Damianopetrungaro\CleanArchitectureSlim\Users\Domain\UseCase\GetUserUseCase;
 use Damianopetrungaro\CleanArchitectureSlim\Users\Domain\UseCase\ListUsersUseCase;
+use Damianopetrungaro\CleanArchitectureSlim\Users\Domain\UseCase\UpdateUserUseCase;
 use Doctrine\DBAL\Connection;
 use Psr\Log\LoggerInterface;
 
@@ -75,11 +77,27 @@ final class Container extends \Slim\Container
     }
 
     /**
+     * @return UpdateUserUseCase
+     */
+    public function getUpdateUserUseCase(): UpdateUserUseCase
+    {
+        return $this->get('domain.users.useCase.updateUser');
+    }
+
+    /**
      * @return AddUserRequest
      */
     public function getAddUserRequest(): AddUserRequest
     {
         return $this->get('app.users.request.addUser');
+    }
+
+    /**
+     * @return UpdateUserRequest
+     */
+    public function getUpdateUserRequest(): UpdateUserRequest
+    {
+        return $this->get('app.users.request.updateUser');
     }
 
     /**

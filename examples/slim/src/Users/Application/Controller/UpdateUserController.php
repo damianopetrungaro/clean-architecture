@@ -5,15 +5,15 @@ namespace Damianopetrungaro\CleanArchitectureSlim\Users\Application\Controller;
 use Damianopetrungaro\CleanArchitecture\UseCase\Response\ResponseInterface;
 use Damianopetrungaro\CleanArchitectureSlim\Common\Container;
 use Damianopetrungaro\CleanArchitectureSlim\Common\Response\SlimResponseBuilder;
-use Damianopetrungaro\CleanArchitectureSlim\Users\Application\Request\ListUserRequest;
-use Damianopetrungaro\CleanArchitectureSlim\Users\Domain\UseCase\ListUsersUseCase;
+use Damianopetrungaro\CleanArchitectureSlim\Users\Application\Request\UpdateUserRequest;
+use Damianopetrungaro\CleanArchitectureSlim\Users\Domain\UseCase\UpdateUserUseCase;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
-final class ListUsersController
+final class UpdateUserController
 {
     /**
-     * @var ListUsersUseCase
+     * @var UpdateUserUseCase
      */
     private $useCase;
     /**
@@ -21,7 +21,7 @@ final class ListUsersController
      */
     private $domainResponse;
     /**
-     * @var ListUserRequest
+     * @var UpdateUserRequest
      */
     private $domainRequest;
     /**
@@ -35,14 +35,14 @@ final class ListUsersController
      */
     public function __construct(Container $container)
     {
-        $this->useCase = $container->getListUsersUseCase();
+        $this->useCase = $container->getUpdateUserUseCase();
         $this->domainResponse = $container->getDomainResponse();
-        $this->domainRequest = $container->getListUserRequest();
+        $this->domainRequest = $container->getUpdateUserRequest();
         $this->slimResponseBuilder = $container->getSlimResponseBuilder();
     }
 
     /**
-     * Controller for ListUsersUseCase
+     * Controller for UpdateUserUseCase
      *
      * @param Request $request
      * @param Response $response
@@ -53,6 +53,7 @@ final class ListUsersController
     public function __invoke(Request $request, Response $response, $args)
     {
         $this->useCase->__invoke($this->domainRequest->build($request), $this->domainResponse);
+        $this->slimResponseBuilder->setDefaultSuccessStatusCode(201);
 
         return $this->slimResponseBuilder->build($this->domainResponse);
     }

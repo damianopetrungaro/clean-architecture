@@ -1,6 +1,6 @@
 <?php
 
-namespace Damianopetrungaro\CleanArchitectureSlim\Application\Common\Response;
+namespace Damianopetrungaro\CleanArchitectureSlim\Common\Response;
 
 use Damianopetrungaro\CleanArchitecture\UseCase\Response\ResponseInterface;
 

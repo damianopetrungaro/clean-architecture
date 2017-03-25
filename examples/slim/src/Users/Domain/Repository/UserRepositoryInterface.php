@@ -72,4 +72,15 @@ interface UserRepositoryInterface
      * @throws UserPersistenceException
      */
     public function deleteByUserId(UserId $userId): void;
+
+    /**
+     * Update user
+     *
+     * @param UserEntity $user
+     *
+     * @return void
+     *
+     * @throws UserPersistenceException
+     */
+    public function update(UserEntity $user): void;
 }

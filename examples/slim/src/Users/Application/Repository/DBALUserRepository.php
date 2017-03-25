@@ -13,12 +13,6 @@ use Damianopetrungaro\CleanArchitectureSlim\Users\Domain\ValueObjects\UserId;
 use Doctrine\DBAL\Connection;
 use Ramsey\Uuid\Uuid;
 
-/**
- * @method clear()
- * @method mergeWith()
- * @method with()
- * @method without()
- */
 final class DBALUserRepository implements UserRepositoryInterface
 {
     /**
@@ -114,13 +108,7 @@ final class DBALUserRepository implements UserRepositoryInterface
     }
 
     /**
-     * Return true or false if exists user by UserId
-     *
-     * @param UserId $userId
-     *
-     * @return bool
-     *
-     * @throws UserPersistenceException
+     * {@inheritdoc}
      */
     public function findByUserId(UserId $userId): bool
     {
@@ -138,13 +126,7 @@ final class DBALUserRepository implements UserRepositoryInterface
     }
 
     /**
-     * Delete User by UserId
-     *
-     * @param UserId $userId
-     *
-     * @return void
-     *
-     * @throws UserPersistenceException
+     * {@inheritdoc}
      */
     public function deleteByUserId(UserId $userId): void
     {
@@ -155,6 +137,26 @@ final class DBALUserRepository implements UserRepositoryInterface
             $stmt->execute();
         } catch (\Exception $e) {
             throw new UserPersistenceException('impossible_delete_user', $e->getCode(), $e);
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function update(UserEntity $user): void
+    {
+        $user = $this->mapper->toArray($user);
+
+        try {
+            $stmt = $this->connection->prepare("UPDATE {$this->userTable} SET name = :name, surname = :surname, email = :email, password = :password WHERE id =:id");
+            $stmt->bindParam(':id', $user['id']);
+            $stmt->bindParam(':name', $user['name']);
+            $stmt->bindParam(':surname', $user['surname']);
+            $stmt->bindParam(':email', $user['email']);
+            $stmt->bindParam(':password', $user['password']);
+            $stmt->execute();
+        } catch (\Exception $e) {
+            throw new UserPersistenceException('impossible_update_user', $e->getCode(), $e);
         }
     }
 }

@@ -3,8 +3,8 @@
 namespace Damianopetrungaro\CleanArchitectureSlim\Users\Application\Controller;
 
 use Damianopetrungaro\CleanArchitecture\UseCase\Response\ResponseInterface;
-use Damianopetrungaro\CleanArchitectureSlim\Application\Common\Container;
-use Damianopetrungaro\CleanArchitectureSlim\Application\Common\Response\SlimResponseBuilder;
+use Damianopetrungaro\CleanArchitectureSlim\Common\Container;
+use Damianopetrungaro\CleanArchitectureSlim\Common\Response\SlimResponseBuilder;
 use Damianopetrungaro\CleanArchitectureSlim\Users\Application\Request\GetUserRequest;
 use Damianopetrungaro\CleanArchitectureSlim\Users\Domain\UseCase\GetUserUseCase;
 use Slim\Http\Request;
