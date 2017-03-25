@@ -102,24 +102,24 @@ $entries['domain.response'] = function () {
 # Application
 ########
 $entries['app.users.request.listUser'] = function () {
-    return new \Damianopetrungaro\CleanArchitectureSlim\Application\Users\Request\ListUserRequest();
+    return new \Damianopetrungaro\CleanArchitectureSlim\Users\Application\Request\ListUserRequest();
 };
 
 $entries['app.users.request.getUser'] = function () {
-    return new \Damianopetrungaro\CleanArchitectureSlim\Application\Users\Request\GetUserRequest();
+    return new \Damianopetrungaro\CleanArchitectureSlim\Users\Application\Request\GetUserRequest();
 };
 
 $entries['app.users.request.addUser'] = function () {
-    return new \Damianopetrungaro\CleanArchitectureSlim\Application\Users\Request\AddUserRequest();
+    return new \Damianopetrungaro\CleanArchitectureSlim\Users\Application\Request\AddUserRequest();
 };
 
 $entries['app.users.transformer'] = function () {
-    return new \Damianopetrungaro\CleanArchitectureSlim\Application\Users\Transformer\UserTransformer();
+    return new \Damianopetrungaro\CleanArchitectureSlim\Users\Application\Transformer\UserTransformer();
 };
 
 $entries['app.users.mapper'] = function () {
-    return new Damianopetrungaro\CleanArchitectureSlim\Domain\Users\Mapper\UserMapper(
-        \Damianopetrungaro\CleanArchitectureSlim\Application\Users\Mapper\ZendHydratorFactory::build()
+    return new Damianopetrungaro\CleanArchitectureSlim\Users\Domain\Mapper\UserMapper(
+        \Damianopetrungaro\CleanArchitectureSlim\Users\Application\Mapper\ZendHydratorFactory::build()
     );
 };
 
@@ -127,7 +127,7 @@ $entries['app.users.mapper'] = function () {
 # Domain
 ########
 $entries['domain.users.useCase.listUsers'] = function (Container $c) {
-    return new \Damianopetrungaro\CleanArchitectureSlim\Domain\Users\UseCase\ListUsersUseCase(
+    return new \Damianopetrungaro\CleanArchitectureSlim\Users\Domain\UseCase\ListUsersUseCase(
         $c->getUserRepository(),
         $c->getUserTransformer(),
         $c->getUserMapper()
@@ -135,7 +135,7 @@ $entries['domain.users.useCase.listUsers'] = function (Container $c) {
 };
 
 $entries['domain.users.useCase.getUsers'] = function (Container $c) {
-    return new \Damianopetrungaro\CleanArchitectureSlim\Domain\Users\UseCase\GetUserUseCase(
+    return new \Damianopetrungaro\CleanArchitectureSlim\Users\Domain\UseCase\GetUserUseCase(
         $c->getUserRepository(),
         $c->getUserTransformer(),
         $c->getUserMapper()
@@ -143,7 +143,7 @@ $entries['domain.users.useCase.getUsers'] = function (Container $c) {
 };
 
 $entries['domain.users.useCase.addUser'] = function (Container $c) {
-    return new \Damianopetrungaro\CleanArchitectureSlim\Domain\Users\UseCase\AddUserUseCase(
+    return new \Damianopetrungaro\CleanArchitectureSlim\Users\Domain\UseCase\AddUserUseCase(
         $c->getUserRepository(),
         $c->getUserTransformer(),
         $c->getUserMapper()
@@ -151,7 +151,7 @@ $entries['domain.users.useCase.addUser'] = function (Container $c) {
 };
 
 $entries['domain.users.repository'] = function (Container $c) {
-    return new \Damianopetrungaro\CleanArchitectureSlim\Application\Users\Repository\DBALUserRepository(
+    return new \Damianopetrungaro\CleanArchitectureSlim\Users\Application\Repository\DBALUserRepository(
         $c->getDatabaseConnection(),
         $c->getUserMapper(),
         getenv('DB_TABLE_PREFIX') . 'users' . getenv('DB_TABLE_SUFFIX')
