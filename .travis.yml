@@ -9,3 +9,6 @@ install:
 addons:
     code_climate:
         repo_token: d6155afc5b64caecfe4623d740fb2d09bc0fa826ddac06f89de6aa3ac1dfd9f0
+
+after_success:
+  - vendor/bin/test-reporter
