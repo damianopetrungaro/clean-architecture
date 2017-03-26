@@ -64,7 +64,7 @@ final class GetUserController
         if (isset($data['user'])) {
             $user = $this->userTransformer->mapMultiple(reset($data['user']));
             $this->domainResponse->removeData('user');
-            $this->domainResponse->addData('user', $users);
+            $this->domainResponse->addData('user', $user);
         }
 
         return $this->slimResponseBuilder->build($this->domainResponse);
