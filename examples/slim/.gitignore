@@ -2,5 +2,6 @@
 .env
 composer.phar
 composer.lock
-coverage/*
 vendor/
+runtime/logs
+!runtime/logs/.gitkeep
