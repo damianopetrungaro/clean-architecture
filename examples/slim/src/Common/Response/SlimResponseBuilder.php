@@ -28,20 +28,13 @@ final class SlimResponseBuilder implements ResponseBuilderInterface
 
     /**
      * {@inheritdoc}
+     *
      * @return Response
      */
     public function build(ResponseInterface $response): Response
     {
         if ($response->isSuccessful()) {
-            if ($response->hasData()) {
-
-                $data = array_map(function ($arr) {
-                    return $arr[0];
-                }, $response->getData());
-
-                return (new Response($this->status))->withJson(['data' => $data]);
-            }
-            return new Response($this->status);
+            return $this->buildSuccessResponse($response);
         }
 
         if ($response->hasErrors()) {
@@ -97,6 +90,26 @@ final class SlimResponseBuilder implements ResponseBuilderInterface
         }
 
         return (new Response($status))->withJson(['errors' => $jsonApiErrors]);
+    }
+
+    /**
+     * Return a Response with a standardized response
+     *
+     * @param ResponseInterface $response
+     *
+     * @return Response
+     */
+    private function buildSuccessResponse(ResponseInterface $response): Response
+    {
+        if ($response->hasData()) {
+
+            $data = array_map(function ($arr) {
+                return $arr[0];
+            }, $response->getData());
+
+            return (new Response($this->status))->withJson(['data' => $data]);
+        }
+        return new Response($this->status);
     }
 
     /**

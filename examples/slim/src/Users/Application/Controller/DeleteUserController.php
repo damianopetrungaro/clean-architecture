@@ -2,11 +2,13 @@
 
 namespace Damianopetrungaro\CleanArchitectureSlim\Users\Application\Controller;
 
+use Damianopetrungaro\CleanArchitecture\Common\Collection\Collection;
+use Damianopetrungaro\CleanArchitecture\UseCase\Request\Request as DomainRequest;
 use Damianopetrungaro\CleanArchitecture\UseCase\Response\ResponseInterface;
 use Damianopetrungaro\CleanArchitectureSlim\Common\Container;
 use Damianopetrungaro\CleanArchitectureSlim\Common\Response\SlimResponseBuilder;
-use Damianopetrungaro\CleanArchitectureSlim\Users\Application\Request\AddUserRequest;
-use Damianopetrungaro\CleanArchitectureSlim\Users\Domain\UseCase\AddUserUseCase;
+use Damianopetrungaro\CleanArchitectureSlim\Users\Application\Transformer\UserTransformer;
+use Damianopetrungaro\CleanArchitectureSlim\Users\Domain\UseCase\DeleteUserUseCase;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
@@ -21,23 +23,23 @@ final class DeleteUserController
      */
     private $domainResponse;
     /**
-     * @var DeleteUserRequest
-     */
-    private $domainRequest;
-    /**
      * @var SlimResponseBuilder
      */
     private $slimResponseBuilder;
+    /**
+     * @var UserTransformer
+     */
+    private $userTransformer;
 
     /**
-     * ListUsersController constructor.
+     * DeleteUserController constructor.
      * @param Container $container
      */
     public function __construct(Container $container)
     {
         $this->useCase = $container->getDeleteUserUseCase();
         $this->domainResponse = $container->getDomainResponse();
-        $this->domainRequest = $container->getDeleteUserRequest();
+        $this->userTransformer = $container->getUserTransformer();
         $this->slimResponseBuilder = $container->getSlimResponseBuilder();
     }
 
@@ -50,11 +52,23 @@ final class DeleteUserController
      *
      * @return Response
      */
-    public function __invoke(Request $request, Response $response, $args)
+    public function __invoke(Request $request, Response $response, $args): Response
     {
-        $this->useCase->__invoke($this->domainRequest->build($request), $this->domainResponse);
-        $this->slimResponseBuilder->setDefaultSuccessStatusCode(201);
-        
+        // Invoke the UseCase and use the domainResponse reference for build a response
+        $this->useCase->__invoke($this->createRequest($request), $this->domainResponse);
         return $this->slimResponseBuilder->build($this->domainResponse);
+    }
+
+    /**
+     * Create the specific DomainRequest
+     *
+     * @param Request $request
+     * @return DomainRequest
+     */
+    private function createRequest(Request $request): DomainRequest
+    {
+        // The request for this useCase requires only the id
+        $entries = ['id' => $request->getAttribute('id')];
+        return new DomainRequest(new Collection($entries));
     }
 }

@@ -2,10 +2,12 @@
 
 namespace Damianopetrungaro\CleanArchitectureSlim\Users\Application\Controller;
 
+use Damianopetrungaro\CleanArchitecture\Common\Collection\Collection;
+use Damianopetrungaro\CleanArchitecture\UseCase\Request\Request as DomainRequest;
 use Damianopetrungaro\CleanArchitecture\UseCase\Response\ResponseInterface;
 use Damianopetrungaro\CleanArchitectureSlim\Common\Container;
 use Damianopetrungaro\CleanArchitectureSlim\Common\Response\SlimResponseBuilder;
-use Damianopetrungaro\CleanArchitectureSlim\Users\Application\Request\ListUserRequest;
+use Damianopetrungaro\CleanArchitectureSlim\Users\Application\Transformer\UserTransformer;
 use Damianopetrungaro\CleanArchitectureSlim\Users\Domain\UseCase\ListUsersUseCase;
 use Slim\Http\Request;
 use Slim\Http\Response;
@@ -21,13 +23,13 @@ final class ListUsersController
      */
     private $domainResponse;
     /**
-     * @var ListUserRequest
-     */
-    private $domainRequest;
-    /**
      * @var SlimResponseBuilder
      */
     private $slimResponseBuilder;
+    /**
+     * @var UserTransformer
+     */
+    private $userTransformer;
 
     /**
      * ListUsersController constructor.
@@ -37,7 +39,7 @@ final class ListUsersController
     {
         $this->useCase = $container->getListUsersUseCase();
         $this->domainResponse = $container->getDomainResponse();
-        $this->domainRequest = $container->getListUserRequest();
+        $this->userTransformer = $container->getUserTransformer();
         $this->slimResponseBuilder = $container->getSlimResponseBuilder();
     }
 
@@ -50,10 +52,32 @@ final class ListUsersController
      *
      * @return Response
      */
-    public function __invoke(Request $request, Response $response, $args)
+    public function __invoke(Request $request, Response $response, $args): Response
     {
-        $this->useCase->__invoke($this->domainRequest->build($request), $this->domainResponse);
+        // Invoke the UseCase and use the domainResponse reference for build a response
+        $this->useCase->__invoke($this->createRequest(), $this->domainResponse);
+
+        // Get the data from the response
+        $data = $this->domainResponse->getData();
+
+        // If the response has a data key, transform it, and override it in the response
+        if (isset($data['users'])) {
+            $users = $this->userTransformer->mapMultiple(reset($data['users']));
+            $this->domainResponse->removeData('users');
+            $this->domainResponse->addData('users', $users);
+        }
 
         return $this->slimResponseBuilder->build($this->domainResponse);
+    }
+
+    /**
+     * Create the specific DomainRequest
+     *
+     * @return DomainRequest
+     */
+    private function createRequest(): DomainRequest
+    {
+        // The request for this useCase doesn't need of any data
+        return new DomainRequest(new Collection());
     }
 }

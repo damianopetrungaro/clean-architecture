@@ -11,7 +11,6 @@ use Damianopetrungaro\CleanArchitectureSlim\Users\Domain\Mapper\UserMapperInterf
 use Damianopetrungaro\CleanArchitectureSlim\Users\Domain\Repository\Exception\UserNotFoundException;
 use Damianopetrungaro\CleanArchitectureSlim\Users\Domain\Repository\Exception\UserPersistenceException;
 use Damianopetrungaro\CleanArchitectureSlim\Users\Domain\Repository\UserRepositoryInterface;
-use Damianopetrungaro\CleanArchitectureSlim\Users\Domain\Transformer\UserTransformerInterface;
 use Damianopetrungaro\CleanArchitectureSlim\Users\Domain\ValueObjects\Email;
 use Damianopetrungaro\CleanArchitectureSlim\Users\Domain\ValueObjects\Name;
 use Damianopetrungaro\CleanArchitectureSlim\Users\Domain\ValueObjects\Password;
@@ -25,10 +24,6 @@ final class UpdateUserUseCase implements ValidableUseCaseInterface
      */
     private $userRepository;
     /**
-     * @var UserTransformerInterface
-     */
-    private $userTransformer;
-    /**
      * @var UserMapperInterface
      */
     private $userMapper;
@@ -36,35 +31,30 @@ final class UpdateUserUseCase implements ValidableUseCaseInterface
     /**
      * ListUsersUseCase constructor.
      * @param UserRepositoryInterface $userRepository
-     * @param UserTransformerInterface $userTransformer
      * @param UserMapperInterface $userMapper
      */
-    public function __construct(UserRepositoryInterface $userRepository, UserTransformerInterface $userTransformer, UserMapperInterface $userMapper)
+    public function __construct(UserRepositoryInterface $userRepository, UserMapperInterface $userMapper)
     {
         $this->userRepository = $userRepository;
-        $this->userTransformer = $userTransformer;
         $this->userMapper = $userMapper;
     }
 
     /**
-     * Method to call for initialize the use case.
-     * You must use a reference to ResponseInterface to return the response.
-     *
-     * @param RequestInterface $request
-     * @param ResponseInterface $response
-     *
-     * @return void
+     * {@inheritdoc}
      */
     public function __invoke(RequestInterface $request, ResponseInterface $response): void
     {
+        // If request is not valid set response as failed and return
         if (!$this->isValid($request, $response)) {
             $response->setAsFailed();
             return;
         }
 
+        // Create UserId for check if User exists
         $userId = UserId::createFromString($request->get('id', ''));
 
         try {
+            // Get user by UserId
             $user = $this->userRepository->getByUserId($userId);
 
             // Before update the user check that the old_password match the old one
@@ -74,37 +64,38 @@ final class UpdateUserUseCase implements ValidableUseCaseInterface
                 return;
             }
 
+            // Update the User using valueObjects
             $user->update(
                 new Name($request->get('name')),
                 new Surname($request->get('surname')),
                 new Email($request->get('email')),
                 new Password($request->get('new_password'))
             );
+
+            // Update User to the repository
             $this->userRepository->update($user);
         } catch (UserNotFoundException $e) {
+            // If User is not found set response as failed, add the error and return
             $response->setAsFailed();
             $response->addError('generic', new ApplicationError('user_not_found', ApplicationErrorType::NOT_FOUND_ENTITY()));
             return;
         } catch (UserPersistenceException $e) {
+            // If there's an error on updating set response as failed, add the error and return
             $response->setAsFailed();
             $response->addError('generic', new ApplicationError($e->getMessage(), ApplicationErrorType::PERSISTENCE_ERROR()));
             return;
         }
 
-        $user = $this->userTransformer->map($this->userMapper->toArray($user));
+        // Transform User instances into array
+        // Set the response as success, add the user to the response and return
+        $user = $this->userMapper->toArray($user);
         $response->addData('user', $user);
         $response->setAsSuccess();
         return;
     }
 
     /**
-     * Method to call for validate an UseCase.
-     * You must use a reference to ResponseInterface to add errors to response.
-     *
-     * @param RequestInterface $request
-     * @param ResponseInterface $response
-     *
-     * @return bool
+     * {@inheritdoc}
      */
     public function isValid(RequestInterface $request, ResponseInterface $response) : bool
     {

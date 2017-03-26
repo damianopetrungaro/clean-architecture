@@ -101,22 +101,6 @@ $entries['domain.response'] = function () {
 ########
 # Application
 ########
-$entries['app.users.request.listUser'] = function () {
-    return new \Damianopetrungaro\CleanArchitectureSlim\Users\Application\Request\ListUserRequest();
-};
-
-$entries['app.users.request.getUser'] = function () {
-    return new \Damianopetrungaro\CleanArchitectureSlim\Users\Application\Request\GetUserRequest();
-};
-
-$entries['app.users.request.addUser'] = function () {
-    return new \Damianopetrungaro\CleanArchitectureSlim\Users\Application\Request\AddUserRequest();
-};
-
-$entries['app.users.request.updateUser'] = function () {
-    return new \Damianopetrungaro\CleanArchitectureSlim\Users\Application\Request\UpdateUserRequest();
-};
-
 $entries['app.users.transformer'] = function () {
     return new \Damianopetrungaro\CleanArchitectureSlim\Users\Application\Transformer\UserTransformer();
 };
@@ -133,7 +117,6 @@ $entries['app.users.mapper'] = function () {
 $entries['domain.users.useCase.listUsers'] = function (Container $c) {
     return new \Damianopetrungaro\CleanArchitectureSlim\Users\Domain\UseCase\ListUsersUseCase(
         $c->getUserRepository(),
-        $c->getUserTransformer(),
         $c->getUserMapper()
     );
 };
@@ -141,7 +124,6 @@ $entries['domain.users.useCase.listUsers'] = function (Container $c) {
 $entries['domain.users.useCase.getUsers'] = function (Container $c) {
     return new \Damianopetrungaro\CleanArchitectureSlim\Users\Domain\UseCase\GetUserUseCase(
         $c->getUserRepository(),
-        $c->getUserTransformer(),
         $c->getUserMapper()
     );
 };
@@ -149,7 +131,13 @@ $entries['domain.users.useCase.getUsers'] = function (Container $c) {
 $entries['domain.users.useCase.addUser'] = function (Container $c) {
     return new \Damianopetrungaro\CleanArchitectureSlim\Users\Domain\UseCase\AddUserUseCase(
         $c->getUserRepository(),
-        $c->getUserTransformer(),
+        $c->getUserMapper()
+    );
+};
+
+$entries['domain.users.useCase.deleteUser'] = function (Container $c) {
+    return new \Damianopetrungaro\CleanArchitectureSlim\Users\Domain\UseCase\DeleteUserUseCase(
+        $c->getUserRepository(),
         $c->getUserMapper()
     );
 };
@@ -157,7 +145,6 @@ $entries['domain.users.useCase.addUser'] = function (Container $c) {
 $entries['domain.users.useCase.updateUser'] = function (Container $c) {
     return new \Damianopetrungaro\CleanArchitectureSlim\Users\Domain\UseCase\UpdateUserUseCase(
         $c->getUserRepository(),
-        $c->getUserTransformer(),
         $c->getUserMapper()
     );
 };

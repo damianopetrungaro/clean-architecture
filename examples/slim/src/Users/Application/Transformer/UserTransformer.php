@@ -2,12 +2,14 @@
 
 namespace Damianopetrungaro\CleanArchitectureSlim\Users\Application\Transformer;
 
-use Damianopetrungaro\CleanArchitectureSlim\Users\Domain\Transformer\UserTransformerInterface;
-
-final class UserTransformer implements UserTransformerInterface
+final class UserTransformer
 {
     /**
-     * {@inheritdoc}
+     * Transform an user array transforming keys and values
+     *
+     * @param array $user
+     *
+     * @return array
      */
     public function map(array $user): array
     {
@@ -21,7 +23,11 @@ final class UserTransformer implements UserTransformerInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Transform an array of users array transforming keys and values
+     *
+     * @param array $users
+     *
+     * @return array
      */
     public function mapMultiple(array $users): array
     {

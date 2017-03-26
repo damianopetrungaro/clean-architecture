@@ -4,14 +4,11 @@ namespace Damianopetrungaro\CleanArchitectureSlim\Common;
 
 use Damianopetrungaro\CleanArchitecture\UseCase\Response\ResponseInterface;
 use Damianopetrungaro\CleanArchitectureSlim\Common\Response\SlimResponseBuilder;
-use Damianopetrungaro\CleanArchitectureSlim\Users\Application\Request\AddUserRequest;
-use Damianopetrungaro\CleanArchitectureSlim\Users\Application\Request\GetUserRequest;
-use Damianopetrungaro\CleanArchitectureSlim\Users\Application\Request\ListUserRequest;
-use Damianopetrungaro\CleanArchitectureSlim\Users\Application\Request\UpdateUserRequest;
+use Damianopetrungaro\CleanArchitectureSlim\Users\Application\Transformer\UserTransformer;
 use Damianopetrungaro\CleanArchitectureSlim\Users\Domain\Mapper\UserMapperInterface;
 use Damianopetrungaro\CleanArchitectureSlim\Users\Domain\Repository\UserRepositoryInterface;
-use Damianopetrungaro\CleanArchitectureSlim\Users\Domain\Transformer\UserTransformerInterface;
 use Damianopetrungaro\CleanArchitectureSlim\Users\Domain\UseCase\AddUserUseCase;
+use Damianopetrungaro\CleanArchitectureSlim\Users\Domain\UseCase\DeleteUserUseCase;
 use Damianopetrungaro\CleanArchitectureSlim\Users\Domain\UseCase\GetUserUseCase;
 use Damianopetrungaro\CleanArchitectureSlim\Users\Domain\UseCase\ListUsersUseCase;
 use Damianopetrungaro\CleanArchitectureSlim\Users\Domain\UseCase\UpdateUserUseCase;
@@ -77,6 +74,14 @@ final class Container extends \Slim\Container
     }
 
     /**
+     * @return DeleteUserUseCase
+     */
+    public function getDeleteUserUseCase(): DeleteUserUseCase
+    {
+        return $this->get('domain.users.useCase.deleteUser');
+    }
+
+    /**
      * @return UpdateUserUseCase
      */
     public function getUpdateUserUseCase(): UpdateUserUseCase
@@ -85,35 +90,11 @@ final class Container extends \Slim\Container
     }
 
     /**
-     * @return AddUserRequest
-     */
-    public function getAddUserRequest(): AddUserRequest
-    {
-        return $this->get('app.users.request.addUser');
-    }
-
-    /**
-     * @return UpdateUserRequest
-     */
-    public function getUpdateUserRequest(): UpdateUserRequest
-    {
-        return $this->get('app.users.request.updateUser');
-    }
-
-    /**
      * @return UserRepositoryInterface
      */
     public function getUserRepository(): UserRepositoryInterface
     {
         return $this->get('domain.users.repository');
-    }
-
-    /**
-     * @return ListUserRequest
-     */
-    public function getListUserRequest(): ListUserRequest
-    {
-        return $this->get('app.users.request.listUser');
     }
 
     /**
@@ -133,18 +114,10 @@ final class Container extends \Slim\Container
     }
 
     /**
-     * @return UserTransformerInterface
+     * @return UserTransformer
      */
-    public function getUserTransformer(): UserTransformerInterface
+    public function getUserTransformer(): UserTransformer
     {
         return $this->get('app.users.transformer');
-    }
-
-    /**
-     * @return GetUserRequest
-     */
-    public function getGetUserRequest(): GetUserRequest
-    {
-        return $this->get('app.users.request.getUser');
     }
 }

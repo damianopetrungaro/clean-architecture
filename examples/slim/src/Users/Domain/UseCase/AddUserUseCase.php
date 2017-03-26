@@ -11,7 +11,6 @@ use Damianopetrungaro\CleanArchitectureSlim\Users\Domain\Entity\UserEntity;
 use Damianopetrungaro\CleanArchitectureSlim\Users\Domain\Mapper\UserMapperInterface;
 use Damianopetrungaro\CleanArchitectureSlim\Users\Domain\Repository\Exception\UserPersistenceException;
 use Damianopetrungaro\CleanArchitectureSlim\Users\Domain\Repository\UserRepositoryInterface;
-use Damianopetrungaro\CleanArchitectureSlim\Users\Domain\Transformer\UserTransformerInterface;
 use Damianopetrungaro\CleanArchitectureSlim\Users\Domain\ValueObjects\Email;
 use Damianopetrungaro\CleanArchitectureSlim\Users\Domain\ValueObjects\Name;
 use Damianopetrungaro\CleanArchitectureSlim\Users\Domain\ValueObjects\Password;
@@ -24,10 +23,6 @@ final class AddUserUseCase implements ValidableUseCaseInterface
      */
     private $userRepository;
     /**
-     * @var UserTransformerInterface
-     */
-    private $userTransformer;
-    /**
      * @var UserMapperInterface
      */
     private $userMapper;
@@ -35,32 +30,26 @@ final class AddUserUseCase implements ValidableUseCaseInterface
     /**
      * ListUsersUseCase constructor.
      * @param UserRepositoryInterface $userRepository
-     * @param UserTransformerInterface $userTransformer
      * @param UserMapperInterface $userMapper
      */
-    public function __construct(UserRepositoryInterface $userRepository, UserTransformerInterface $userTransformer, UserMapperInterface $userMapper)
+    public function __construct(UserRepositoryInterface $userRepository, UserMapperInterface $userMapper)
     {
         $this->userRepository = $userRepository;
-        $this->userTransformer = $userTransformer;
         $this->userMapper = $userMapper;
     }
 
     /**
-     * Method to call for initialize the use case.
-     * You must use a reference to ResponseInterface to return the response.
-     *
-     * @param RequestInterface $request
-     * @param ResponseInterface $response
-     *
-     * @return void
+     * {@inheritdoc}
      */
     public function __invoke(RequestInterface $request, ResponseInterface $response): void
     {
+        // If request is not valid set response as failed and return
         if (!$this->isValid($request, $response)) {
             $response->setAsFailed();
             return;
         }
 
+        // Create new User using valueObjects
         $user = new UserEntity(
             $this->userRepository->nextId(),
             new Name($request->get('name')),
@@ -70,27 +59,25 @@ final class AddUserUseCase implements ValidableUseCaseInterface
         );
 
         try {
+            // Add User to repository
             $this->userRepository->add($user);
         } catch (UserPersistenceException $e) {
+            // If there's an error on saving set response as failed, add the error and return
             $response->setAsFailed();
             $response->addError('generic', new ApplicationError($e->getMessage(), ApplicationErrorType::PERSISTENCE_ERROR()));
             return;
         }
 
-        $user = $this->userTransformer->map($this->userMapper->toArray($user));
+        // Transform User instances into array
+        // Set the response as success, add the user to the response and return
+        $user = $this->userMapper->toArray($user);
         $response->addData('user', $user);
         $response->setAsSuccess();
         return;
     }
 
     /**
-     * Method to call for validate an UseCase.
-     * You must use a reference to ResponseInterface to add errors to response.
-     *
-     * @param RequestInterface $request
-     * @param ResponseInterface $response
-     *
-     * @return bool
+     * {@inheritdoc}
      */
     public function isValid(RequestInterface $request, ResponseInterface $response) : bool
     {
