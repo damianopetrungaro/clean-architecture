@@ -47,12 +47,10 @@ final class UpdateUserController
      * Controller for UpdateUserUseCase
      *
      * @param Request $request
-     * @param Response $response
-     * @param $args
-     *
+     * 
      * @return Response
      */
-    public function __invoke(Request $request, Response $response, $args)
+    public function __invoke(Request $request)
     {
         // Invoke the UseCase and use the domainResponse reference for build a response
         $this->useCase->__invoke($this->createRequest($request), $this->domainResponse);
