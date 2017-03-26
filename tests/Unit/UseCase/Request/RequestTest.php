@@ -156,8 +156,6 @@ class RequestTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * TODO Add description
-     *
      * @return array
      */
     public function allMethodDataProvider()
@@ -169,8 +167,6 @@ class RequestTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * TODO Add description
-     *
      * @return array
      */
     public function getMethodDataProvider()
@@ -179,8 +175,6 @@ class RequestTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * TODO Add description
-     *
      * @return array
      */
     public function hasMethodDataProvider()
@@ -189,8 +183,6 @@ class RequestTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * TODO Add description
-     *
      * @return array
      */
     public function withMethodDataProvider()
@@ -199,8 +191,6 @@ class RequestTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * TODO Add description
-     *
      * @return array
      */
     public function withoutMethodDataProvider()

@@ -25,8 +25,6 @@ class AbstractErrorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * TODO Add description
-     *
      * @return array
      */
     public function testAbstractErrorDataProvider()

@@ -242,8 +242,6 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * TODO Add description
-     *
      * @return array
      */
     public function itemsDataProviders()
@@ -256,8 +254,6 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
 
 
     /**
-     * TODO Add description
-     *
      * @return array
      */
     public function itemsWithValidValueForTestContainsMethodDataProviders()
@@ -271,8 +267,6 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * TODO Add description
-     *
      * @return array
      */
     public function itemsWithInvalidValueForTestContainsMethodDataProviders()
@@ -285,8 +279,6 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * TODO Add description
-     *
      * @return array
      */
     public function itemsWithValidKeyValueForTestGetMethodDataProviders()
@@ -300,8 +292,6 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * TODO Add description
-     *
      * @return array
      */
     public function itemsWithInvalidKeyValueForTestGetMethodDataProviders()
@@ -314,8 +304,6 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * TODO Add description
-     *
      * @return array
      */
     public function itemsWithKeyValueForTestHasMethodDataProviders()

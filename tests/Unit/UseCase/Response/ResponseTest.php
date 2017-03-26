@@ -308,7 +308,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * TODO Add Description
+     * Retr
      *
      * @return array
      */
@@ -322,8 +322,6 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * TODO Add Description
-     *
      * @return array
      */
     public function addErrorMethodDataProvider()
@@ -341,8 +339,6 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * TODO Add Description
-     *
      * @return array
      */
     public function getDataAndGetErrorsMethodAreEqualsDataProvider()
@@ -355,8 +351,6 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * TODO Add Description
-     *
      * @return array
      */
     public function getDataAndGetErrorsMethodAreNotEqualsDataProvider()
@@ -369,8 +363,6 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * TODO Add Description
-     *
      * @return array
      */
     public function hasDataAndHasErrorsMethodAreEqualsDataProvider()
@@ -379,8 +371,6 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * TODO Add Description
-     *
      * @return array
      */
     public function hasDataAndHasErrorsMethodAreNotEqualsDataProvider()
@@ -389,8 +379,6 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * TODO Add Description
-     *
      * @return array
      */
     public function isFailedMethodAreEqualsDataProvider()
@@ -399,8 +387,6 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * TODO Add Description
-     *
      * @return array
      */
     public function isSuccessMethodAreEqualsDataProvider()
