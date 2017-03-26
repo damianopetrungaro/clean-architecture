@@ -2,6 +2,7 @@
 namespace Damianopetrungaro\CleanArchitecture\Unit\Common\Enum;
 
 use Damianopetrungaro\CleanArchitecture\Common\Enum\Enum;
+use Damianopetrungaro\CleanArchitecture\Common\Enum\EnumInterface;
 
 class EnumTest extends \PHPUnit_Framework_TestCase
 {
@@ -29,8 +30,17 @@ class EnumTest extends \PHPUnit_Framework_TestCase
             protected const LAST_CONSTANT_NAME = 'Last!';
         };
 
-        $this->assertEquals($extendedEnum::CONSTANT_NAME(), 'this is a value');
-        $this->assertEquals($extendedEnum::ANOTHER_CONSTANT_NAME(), 'ANOTHER_CONSTANT_NAME');
-        $this->assertEquals($extendedEnum::LAST_CONSTANT_NAME(), 'Last!');
+        $firstEnum = $extendedEnum::CONSTANT_NAME();
+        $secondEnum = $extendedEnum::ANOTHER_CONSTANT_NAME();
+        $thirdEnum = $extendedEnum::LAST_CONSTANT_NAME();
+
+
+        $this->assertTrue($firstEnum instanceof Enum);
+        $this->assertTrue($secondEnum instanceof Enum);
+        $this->assertTrue($thirdEnum instanceof Enum);
+
+        $this->assertEquals($firstEnum->getValue(), 'this is a value');
+        $this->assertEquals($secondEnum->getValue(), 'ANOTHER_CONSTANT_NAME');
+        $this->assertEquals($thirdEnum->getValue(), 'Last!');
     }
 }

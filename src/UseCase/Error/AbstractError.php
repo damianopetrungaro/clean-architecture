@@ -4,7 +4,7 @@ declare(strict_types = 1);
 
 namespace Damianopetrungaro\CleanArchitecture\UseCase\Error;
 
-class AbstractError implements ErrorInterface
+abstract class AbstractError implements ErrorInterface
 {
     /**
      * @var string $code
