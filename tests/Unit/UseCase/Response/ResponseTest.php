@@ -96,8 +96,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
     public function testGetDataAndGetErrorsMethodAreEquals(array $expected, array $actual)
     {
         // Create a mock for data and error
-        $dataCollectionMock = $this->getMockBuilder(CollectionInterface::class)->disableOriginalConstructor()->getMock();
-        $errorCollectionMock = $this->getMockBuilder(CollectionInterface::class)->disableOriginalConstructor()->getMock();
+        list($dataCollectionMock, $errorCollectionMock) = $this->getCollectionsMock();
         // On 'all' method calls will return a fake value
         $dataCollectionMock->method('all')->will($this->returnValue($expected));
         $errorCollectionMock->method('all')->will($this->returnValue($expected));
@@ -117,8 +116,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
     public function testGetDataAndErrorsMethodAreNotEquals(array $expected, $actual)
     {
         // Create a mock for data and error
-        $dataCollectionMock = $this->getMockBuilder(CollectionInterface::class)->disableOriginalConstructor()->getMock();
-        $errorCollectionMock = $this->getMockBuilder(CollectionInterface::class)->disableOriginalConstructor()->getMock();
+        list($dataCollectionMock, $errorCollectionMock) = $this->getCollectionsMock();
         // On 'all' method calls will return a fake value
         $dataCollectionMock->method('all')->will($this->returnValue($expected));
         $errorCollectionMock->method('all')->will($this->returnValue($expected));
@@ -138,8 +136,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
     public function testHasDataAndHasErrorsMethodAreEquals($expected, $actual)
     {
         // Create a mock for data and error
-        $dataCollectionMock = $this->getMockBuilder(CollectionInterface::class)->disableOriginalConstructor()->getMock();
-        $errorCollectionMock = $this->getMockBuilder(CollectionInterface::class)->disableOriginalConstructor()->getMock();
+        list($dataCollectionMock, $errorCollectionMock) = $this->getCollectionsMock();
         // On 'length' method calls will return a fake value
         $dataCollectionMock->method('length')->will($this->returnValue($expected));
         $errorCollectionMock->method('length')->will($this->returnValue($expected));
@@ -159,8 +156,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
     public function testHasDataAndHasErrorsMethodAreNotEquals($expected, $actual)
     {
         // Create a mock for data and error
-        $dataCollectionMock = $this->getMockBuilder(CollectionInterface::class)->disableOriginalConstructor()->getMock();
-        $errorCollectionMock = $this->getMockBuilder(CollectionInterface::class)->disableOriginalConstructor()->getMock();
+        list($dataCollectionMock, $errorCollectionMock) = $this->getCollectionsMock();
         // On 'length' method calls will return a fake value
         $dataCollectionMock->method('length')->will($this->returnValue($expected));
         $errorCollectionMock->method('length')->will($this->returnValue($expected));
@@ -179,9 +175,8 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
      */
     public function testIsFailedMethod($expected, $value)
     {
-        // Create a mock for data and error
-        $dataCollectionMock = $this->getMockBuilder(CollectionInterface::class)->disableOriginalConstructor()->getMock();
-        $errorCollectionMock = $this->getMockBuilder(CollectionInterface::class)->disableOriginalConstructor()->getMock();
+        list($dataCollectionMock, $errorCollectionMock) = $this->getCollectionsMock();
+
         // Create Response and call isFailed method after set the status
         $response = new Response($dataCollectionMock, $errorCollectionMock);
         $responseReflected = new \ReflectionClass($response);
@@ -218,8 +213,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
     public function testRemoveDataErrorMethod()
     {
         // Create a mock for data and error
-        $dataCollectionMock = $this->getMockBuilder(CollectionInterface::class)->disableOriginalConstructor()->getMock();
-        $errorCollectionMock = $this->getMockBuilder(CollectionInterface::class)->disableOriginalConstructor()->getMock();
+        list($dataCollectionMock, $errorCollectionMock) = $this->getCollectionsMock();
         // On 'without' method calls will assert the expected behavior (return a new collection)
         // And return a CollectionInterface because the return type is specified
         $dataCollectionMock->method('without')->will($this->returnCallback(function () {
@@ -246,8 +240,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
     public function testRemoveDataAndRemoveErrorMethod()
     {
         // Create a mock for data and error
-        $dataCollectionMock = $this->getMockBuilder(CollectionInterface::class)->disableOriginalConstructor()->getMock();
-        $errorCollectionMock = $this->getMockBuilder(CollectionInterface::class)->disableOriginalConstructor()->getMock();
+        list($dataCollectionMock, $errorCollectionMock) = $this->getCollectionsMock();
         // On 'without' method calls will assert the expected behavior (return a new collection)
         // And return a CollectionInterface because the return type is specified
         $errorCollectionMock->method('without')->will($this->returnCallback(function () {
@@ -263,7 +256,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
         $firstErrorCollection = $errorReflected->getValue($response);
         $response->removeError('key');
         $secondErrorCollection = $errorReflected->getValue($response);
-        
+
         $this->assertNotEquals(spl_object_hash($firstErrorCollection), spl_object_hash($secondErrorCollection));
     }
 
@@ -274,8 +267,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
     public function testSetAsFailedMethod()
     {
         // Create a mock for data and error
-        $dataCollectionMock = $this->getMockBuilder(CollectionInterface::class)->disableOriginalConstructor()->getMock();
-        $errorCollectionMock = $this->getMockBuilder(CollectionInterface::class)->disableOriginalConstructor()->getMock();
+        list($dataCollectionMock, $errorCollectionMock) = $this->getCollectionsMock();
         // Create Response and call setAsFailed method
         $response = new Response($dataCollectionMock, $errorCollectionMock);
         $response->setAsFailed();
@@ -413,5 +405,15 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
         }
 
         return $errors;
+    }
+
+    /**
+     * @return array
+     */
+    private function getCollectionsMock()
+    {
+        $dataCollectionMock = $this->getMockBuilder(CollectionInterface::class)->disableOriginalConstructor()->getMock();
+        $errorCollectionMock = $this->getMockBuilder(CollectionInterface::class)->disableOriginalConstructor()->getMock();
+        return array($dataCollectionMock, $errorCollectionMock);
     }
 }
