@@ -5,3 +5,4 @@
 /LICENSE            export-ignore
 /phpunit.xml        export-ignore
 /README.md          export-ignore
+/examples           export-ignore
