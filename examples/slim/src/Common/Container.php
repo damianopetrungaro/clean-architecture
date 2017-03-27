@@ -3,6 +3,7 @@
 namespace Damianopetrungaro\CleanArchitectureSlim\Common;
 
 use Damianopetrungaro\CleanArchitecture\UseCase\Response\ResponseInterface;
+use Damianopetrungaro\CleanArchitectureSlim\Common\Error\ApplicationErrorFactory;
 use Damianopetrungaro\CleanArchitectureSlim\Common\Response\SlimResponseBuilder;
 use Damianopetrungaro\CleanArchitectureSlim\Users\Application\Transformer\UserTransformer;
 use Damianopetrungaro\CleanArchitectureSlim\Users\Domain\Mapper\UserMapperInterface;
@@ -119,5 +120,13 @@ final class Container extends \Slim\Container
     public function getUserTransformer(): UserTransformer
     {
         return $this->get('app.users.transformer');
+    }
+
+    /**
+     * @return ApplicationErrorFactory
+     */
+    public function getApplicationErrorFactory(): ApplicationErrorFactory
+    {
+        return new ApplicationErrorFactory();
     }
 }

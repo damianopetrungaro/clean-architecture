@@ -5,8 +5,9 @@ namespace Damianopetrungaro\CleanArchitectureSlim\Users\Domain\UseCase;
 use Damianopetrungaro\CleanArchitecture\UseCase\Request\RequestInterface;
 use Damianopetrungaro\CleanArchitecture\UseCase\Response\ResponseInterface;
 use Damianopetrungaro\CleanArchitecture\UseCase\Validation\ValidableUseCaseInterface;
-use Damianopetrungaro\CleanArchitectureSlim\Common\Error\ApplicationError;
+use Damianopetrungaro\CleanArchitectureSlim\Common\Error\ApplicationErrorFactory;
 use Damianopetrungaro\CleanArchitectureSlim\Common\Error\ApplicationErrorType;
+use Damianopetrungaro\CleanArchitectureSlim\Users\Domain\Entity\UserEntity;
 use Damianopetrungaro\CleanArchitectureSlim\Users\Domain\Mapper\UserMapperInterface;
 use Damianopetrungaro\CleanArchitectureSlim\Users\Domain\Repository\Exception\UserNotFoundException;
 use Damianopetrungaro\CleanArchitectureSlim\Users\Domain\Repository\Exception\UserPersistenceException;
@@ -27,14 +28,20 @@ final class UpdateUserUseCase implements ValidableUseCaseInterface
      * @var UserMapperInterface
      */
     private $userMapper;
+    /**
+     * @var ApplicationErrorFactory
+     */
+    private $applicationErrorFactory;
 
     /**
      * ListUsersUseCase constructor.
+     * @param ApplicationErrorFactory $applicationErrorFactory
      * @param UserRepositoryInterface $userRepository
      * @param UserMapperInterface $userMapper
      */
-    public function __construct(UserRepositoryInterface $userRepository, UserMapperInterface $userMapper)
+    public function __construct(ApplicationErrorFactory $applicationErrorFactory, UserRepositoryInterface $userRepository, UserMapperInterface $userMapper)
     {
+        $this->applicationErrorFactory = $applicationErrorFactory;
         $this->userRepository = $userRepository;
         $this->userMapper = $userMapper;
     }
@@ -51,7 +58,7 @@ final class UpdateUserUseCase implements ValidableUseCaseInterface
         }
 
         // Create UserId for check if User exists
-        $userId = UserId::createFromString($request->get('id', ''));
+        $userId = $this->createUserId($request);
 
         try {
             // Get user by UserId
@@ -60,29 +67,24 @@ final class UpdateUserUseCase implements ValidableUseCaseInterface
             // Before update the user check that the old_password match the old one
             if (!$user->password()->checkValidity($request->get('old_password'))) {
                 $response->setAsFailed();
-                $response->addError('generic', new ApplicationError('password_mismatch', ApplicationErrorType::USER_PASSWORD_MISMATCH()));
+                $response->addError('generic', $this->applicationErrorFactory->build('password_mismatch', ApplicationErrorType::USER_PASSWORD_MISMATCH));
                 return;
             }
 
             // Update the User using valueObjects
-            $user->update(
-                new Name($request->get('name')),
-                new Surname($request->get('surname')),
-                new Email($request->get('email')),
-                new Password($request->get('new_password'))
-            );
+            $this->updateUser($request, $user);
 
             // Update User to the repository
             $this->userRepository->update($user);
         } catch (UserNotFoundException $e) {
             // If User is not found set response as failed, add the error and return
             $response->setAsFailed();
-            $response->addError('generic', new ApplicationError('user_not_found', ApplicationErrorType::NOT_FOUND_ENTITY()));
+            $response->addError('generic', $this->applicationErrorFactory->build('user_not_found', ApplicationErrorType::NOT_FOUND_ENTITY));
             return;
         } catch (UserPersistenceException $e) {
             // If there's an error on updating set response as failed, add the error and return
             $response->setAsFailed();
-            $response->addError('generic', new ApplicationError($e->getMessage(), ApplicationErrorType::PERSISTENCE_ERROR()));
+            $response->addError('generic', $this->applicationErrorFactory->build($e->getMessage(), ApplicationErrorType::PERSISTENCE_ERROR));
             return;
         }
 
@@ -100,46 +102,79 @@ final class UpdateUserUseCase implements ValidableUseCaseInterface
     public function isValid(RequestInterface $request, ResponseInterface $response) : bool
     {
         try {
-            UserId::createFromString($request->get('id', ''));
+            $userId = $this->createUserId($request);
+            unset($userId);
         } catch (\InvalidArgumentException $e) {
-            $response->addError('generics', new ApplicationError($e->getMessage(), ApplicationErrorType::NOT_FOUND_ENTITY()));
+            $response->addError('generics', $this->applicationErrorFactory->build($e->getMessage(), ApplicationErrorType::NOT_FOUND_ENTITY));
         }
 
         try {
             $name = new Name($request->get('name', ''));
             unset($name);
         } catch (\InvalidArgumentException $e) {
-            $response->addError('name', new ApplicationError($e->getMessage(), ApplicationErrorType::VALIDATION_ERROR()));
+            $response->addError('name', $this->applicationErrorFactory->build($e->getMessage(), ApplicationErrorType::VALIDATION_ERROR));
         }
 
         try {
             $surname = new Surname($request->get('surname', ''));
             unset($surname);
         } catch (\InvalidArgumentException $e) {
-            $response->addError('surname', new ApplicationError($e->getMessage(), ApplicationErrorType::VALIDATION_ERROR()));
+            $response->addError('surname', $this->applicationErrorFactory->build($e->getMessage(), ApplicationErrorType::VALIDATION_ERROR));
         }
 
         try {
             $email = new Email($request->get('email', ''));
             unset($email);
         } catch (\InvalidArgumentException $e) {
-            $response->addError('email', new ApplicationError($e->getMessage(), ApplicationErrorType::VALIDATION_ERROR()));
+            $response->addError('email', $this->applicationErrorFactory->build($e->getMessage(), ApplicationErrorType::VALIDATION_ERROR));
         }
 
         try {
             $password = new Password($request->get('old_password', ''));
             unset($password);
         } catch (\InvalidArgumentException $e) {
-            $response->addError('old_password', new ApplicationError($e->getMessage(), ApplicationErrorType::VALIDATION_ERROR()));
+            $response->addError('old_password', $this->applicationErrorFactory->build($e->getMessage(), ApplicationErrorType::VALIDATION_ERROR));
         }
 
         try {
             $password = new Password($request->get('new_password', ''));
             unset($password);
         } catch (\InvalidArgumentException $e) {
-            $response->addError('new_password', new ApplicationError($e->getMessage(), ApplicationErrorType::VALIDATION_ERROR()));
+            $response->addError('new_password', $this->applicationErrorFactory->build($e->getMessage(), ApplicationErrorType::VALIDATION_ERROR));
         }
 
         return !$response->hasErrors();
+    }
+
+    /**
+     * Create a UserId using a string
+     * Extracted for better testability
+     *
+     * @param RequestInterface $request
+     *
+     * @return UserId
+     */
+    private function createUserId(RequestInterface $request): UserId
+    {
+        return UserId::createFromString($request->get('id', ''));
+    }
+
+    /**
+     * Update User info
+     * Extracted for better testability
+     *
+     * @param RequestInterface $request
+     * @param $user
+     *
+     * @return void
+     */
+    private function updateUser(RequestInterface $request, UserEntity &$user): void
+    {
+        $user->update(
+            new Name($request->get('name')),
+            new Surname($request->get('surname')),
+            new Email($request->get('email')),
+            new Password($request->get('new_password'))
+        );
     }
 }

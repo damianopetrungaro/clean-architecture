@@ -60,7 +60,7 @@ final class GetUserController
 
         // If the response has a data key, transform it, and override it in the response
         if (isset($data['user'])) {
-            $user = $this->userTransformer->mapMultiple(reset($data['user']));
+            $user = $this->userTransformer->map(reset($data['user']));
             $this->domainResponse->removeData('user');
             $this->domainResponse->addData('user', $user);
         }

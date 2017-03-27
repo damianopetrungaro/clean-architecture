@@ -5,7 +5,7 @@ namespace Damianopetrungaro\CleanArchitectureSlim\Users\Domain\UseCase;
 use Damianopetrungaro\CleanArchitecture\UseCase\Request\RequestInterface;
 use Damianopetrungaro\CleanArchitecture\UseCase\Response\ResponseInterface;
 use Damianopetrungaro\CleanArchitecture\UseCase\Validation\ValidableUseCaseInterface;
-use Damianopetrungaro\CleanArchitectureSlim\Common\Error\ApplicationError;
+use Damianopetrungaro\CleanArchitectureSlim\Common\Error\ApplicationErrorFactory;
 use Damianopetrungaro\CleanArchitectureSlim\Common\Error\ApplicationErrorType;
 use Damianopetrungaro\CleanArchitectureSlim\Users\Domain\Entity\UserEntity;
 use Damianopetrungaro\CleanArchitectureSlim\Users\Domain\Mapper\UserMapperInterface;
@@ -26,14 +26,20 @@ final class AddUserUseCase implements ValidableUseCaseInterface
      * @var UserMapperInterface
      */
     private $userMapper;
+    /**
+     * @var ApplicationErrorFactory
+     */
+    private $applicationErrorFactory;
 
     /**
      * ListUsersUseCase constructor.
+     * @param ApplicationErrorFactory $applicationErrorFactory
      * @param UserRepositoryInterface $userRepository
      * @param UserMapperInterface $userMapper
      */
-    public function __construct(UserRepositoryInterface $userRepository, UserMapperInterface $userMapper)
+    public function __construct(ApplicationErrorFactory $applicationErrorFactory, UserRepositoryInterface $userRepository, UserMapperInterface $userMapper)
     {
+        $this->applicationErrorFactory = $applicationErrorFactory;
         $this->userRepository = $userRepository;
         $this->userMapper = $userMapper;
     }
@@ -49,14 +55,8 @@ final class AddUserUseCase implements ValidableUseCaseInterface
             return;
         }
 
-        // Create new User using valueObjects
-        $user = new UserEntity(
-            $this->userRepository->nextId(),
-            new Name($request->get('name')),
-            new Surname($request->get('surname')),
-            new Email($request->get('email')),
-            new Password($request->get('password'))
-        );
+        // Create user
+        $user = $this->createUser($request);
 
         try {
             // Add User to repository
@@ -64,7 +64,7 @@ final class AddUserUseCase implements ValidableUseCaseInterface
         } catch (UserPersistenceException $e) {
             // If there's an error on saving set response as failed, add the error and return
             $response->setAsFailed();
-            $response->addError('generic', new ApplicationError($e->getMessage(), ApplicationErrorType::PERSISTENCE_ERROR()));
+            $response->addError('generic', $this->applicationErrorFactory->build($e->getMessage(), ApplicationErrorType::PERSISTENCE_ERROR));
             return;
         }
 
@@ -85,30 +85,50 @@ final class AddUserUseCase implements ValidableUseCaseInterface
             $name = new Name($request->get('name', ''));
             unset($name);
         } catch (\InvalidArgumentException $e) {
-            $response->addError('name', new ApplicationError($e->getMessage(), ApplicationErrorType::VALIDATION_ERROR()));
+            $response->addError('name', $this->applicationErrorFactory->build($e->getMessage(), ApplicationErrorType::VALIDATION_ERROR));
         }
 
         try {
             $surname = new Surname($request->get('surname', ''));
             unset($surname);
         } catch (\InvalidArgumentException $e) {
-            $response->addError('surname', new ApplicationError($e->getMessage(), ApplicationErrorType::VALIDATION_ERROR()));
+            $response->addError('surname', $this->applicationErrorFactory->build($e->getMessage(), ApplicationErrorType::VALIDATION_ERROR));
         }
 
         try {
             $email = new Email($request->get('email', ''));
             unset($email);
         } catch (\InvalidArgumentException $e) {
-            $response->addError('email', new ApplicationError($e->getMessage(), ApplicationErrorType::VALIDATION_ERROR()));
+            $response->addError('email', $this->applicationErrorFactory->build($e->getMessage(), ApplicationErrorType::VALIDATION_ERROR));
         }
 
         try {
             $password = new Password($request->get('password', ''));
             unset($password);
         } catch (\InvalidArgumentException $e) {
-            $response->addError('password', new ApplicationError($e->getMessage(), ApplicationErrorType::VALIDATION_ERROR()));
+            $response->addError('password', $this->applicationErrorFactory->build($e->getMessage(), ApplicationErrorType::VALIDATION_ERROR));
         }
 
         return !$response->hasErrors();
+    }
+
+    /**
+     * Create a new User
+     * Extracted as method for better testability
+     *
+     * @param RequestInterface $request
+     *
+     * @return UserEntity
+     */
+    private function createUser(RequestInterface $request): UserEntity
+    {
+        // Create new User using valueObjects
+        return new UserEntity(
+            $this->userRepository->nextId(),
+            new Name($request->get('name')),
+            new Surname($request->get('surname')),
+            new Email($request->get('email')),
+            new Password($request->get('password'))
+        );
     }
 }

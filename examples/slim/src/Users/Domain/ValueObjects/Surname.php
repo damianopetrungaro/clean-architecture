@@ -30,7 +30,7 @@ final class Surname
      *
      * @return string
      */
-    public function getValue()
+    public function getValue(): string
     {
         return $this->surname;
     }

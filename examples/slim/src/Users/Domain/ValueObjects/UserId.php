@@ -38,7 +38,7 @@ final class UserId
      *
      * @return string
      */
-    public function getValue()
+    public function getValue(): string
     {
         return $this->userId->toString();
     }

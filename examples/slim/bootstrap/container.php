@@ -116,6 +116,7 @@ $entries['app.users.mapper'] = function () {
 ########
 $entries['domain.users.useCase.listUsers'] = function (Container $c) {
     return new \Damianopetrungaro\CleanArchitectureSlim\Users\Domain\UseCase\ListUsersUseCase(
+        $c->getApplicationErrorFactory(),
         $c->getUserRepository(),
         $c->getUserMapper()
     );
@@ -123,6 +124,7 @@ $entries['domain.users.useCase.listUsers'] = function (Container $c) {
 
 $entries['domain.users.useCase.getUsers'] = function (Container $c) {
     return new \Damianopetrungaro\CleanArchitectureSlim\Users\Domain\UseCase\GetUserUseCase(
+        $c->getApplicationErrorFactory(),
         $c->getUserRepository(),
         $c->getUserMapper()
     );
@@ -130,6 +132,7 @@ $entries['domain.users.useCase.getUsers'] = function (Container $c) {
 
 $entries['domain.users.useCase.addUser'] = function (Container $c) {
     return new \Damianopetrungaro\CleanArchitectureSlim\Users\Domain\UseCase\AddUserUseCase(
+        $c->getApplicationErrorFactory(),
         $c->getUserRepository(),
         $c->getUserMapper()
     );
@@ -137,6 +140,7 @@ $entries['domain.users.useCase.addUser'] = function (Container $c) {
 
 $entries['domain.users.useCase.deleteUser'] = function (Container $c) {
     return new \Damianopetrungaro\CleanArchitectureSlim\Users\Domain\UseCase\DeleteUserUseCase(
+        $c->getApplicationErrorFactory(),
         $c->getUserRepository(),
         $c->getUserMapper()
     );
@@ -144,6 +148,7 @@ $entries['domain.users.useCase.deleteUser'] = function (Container $c) {
 
 $entries['domain.users.useCase.updateUser'] = function (Container $c) {
     return new \Damianopetrungaro\CleanArchitectureSlim\Users\Domain\UseCase\UpdateUserUseCase(
+        $c->getApplicationErrorFactory(),
         $c->getUserRepository(),
         $c->getUserMapper()
     );

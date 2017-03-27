@@ -56,7 +56,7 @@ final class UserEntity
      * @param Email $email
      * @param Password $password
      */
-    public function update(Name $name, Surname $surname, Email $email, Password $password)
+    public function update(Name $name, Surname $surname, Email $email, Password $password): void
     {
         $this->name = $name;
         $this->surname = $surname;

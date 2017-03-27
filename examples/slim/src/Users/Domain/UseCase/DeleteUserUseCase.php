@@ -5,7 +5,7 @@ namespace Damianopetrungaro\CleanArchitectureSlim\Users\Domain\UseCase;
 use Damianopetrungaro\CleanArchitecture\UseCase\Request\RequestInterface;
 use Damianopetrungaro\CleanArchitecture\UseCase\Response\ResponseInterface;
 use Damianopetrungaro\CleanArchitecture\UseCase\Validation\ValidableUseCaseInterface;
-use Damianopetrungaro\CleanArchitectureSlim\Common\Error\ApplicationError;
+use Damianopetrungaro\CleanArchitectureSlim\Common\Error\ApplicationErrorFactory;
 use Damianopetrungaro\CleanArchitectureSlim\Common\Error\ApplicationErrorType;
 use Damianopetrungaro\CleanArchitectureSlim\Users\Domain\Mapper\UserMapperInterface;
 use Damianopetrungaro\CleanArchitectureSlim\Users\Domain\Repository\Exception\UserPersistenceException;
@@ -22,14 +22,20 @@ final class DeleteUserUseCase implements ValidableUseCaseInterface
      * @var UserMapperInterface
      */
     private $userMapper;
+    /**
+     * @var ApplicationErrorFactory
+     */
+    private $applicationErrorFactory;
 
     /**
      * ListUsersUseCase constructor.
+     * @param ApplicationErrorFactory $applicationErrorFactory
      * @param UserRepositoryInterface $userRepository
      * @param UserMapperInterface $userMapper
      */
-    public function __construct(UserRepositoryInterface $userRepository, UserMapperInterface $userMapper)
+    public function __construct(ApplicationErrorFactory $applicationErrorFactory, UserRepositoryInterface $userRepository, UserMapperInterface $userMapper)
     {
+        $this->applicationErrorFactory = $applicationErrorFactory;
         $this->userRepository = $userRepository;
         $this->userMapper = $userMapper;
     }
@@ -46,14 +52,14 @@ final class DeleteUserUseCase implements ValidableUseCaseInterface
         }
 
         // Create UserId for check if User exists
-        $userId = UserId::createFromString($request->get('id', ''));
+        $userId = $this->createUserId($request);
 
         try {
 
             // If user is not found set response as failed, add the error and return
             if (!$this->userRepository->findByUserId($userId)) {
                 $response->setAsFailed();
-                $response->addError('generic', new ApplicationError('user_not_found', ApplicationErrorType::NOT_FOUND_ENTITY()));
+                $response->addError('generic', $this->applicationErrorFactory->build('user_not_found', ApplicationErrorType::NOT_FOUND_ENTITY));
                 return;
             }
             // Delete user using the UserId
@@ -61,7 +67,7 @@ final class DeleteUserUseCase implements ValidableUseCaseInterface
         } catch (UserPersistenceException $e) {
             // If there's an error on deleting set response as failed, add the error and return
             $response->setAsFailed();
-            $response->addError('generic', new ApplicationError($e->getMessage(), ApplicationErrorType::PERSISTENCE_ERROR()));
+            $response->addError('generic', $this->applicationErrorFactory->build($e->getMessage(), ApplicationErrorType::PERSISTENCE_ERROR));
             return;
         }
 
@@ -76,11 +82,25 @@ final class DeleteUserUseCase implements ValidableUseCaseInterface
     public function isValid(RequestInterface $request, ResponseInterface $response) : bool
     {
         try {
-            UserId::createFromString($request->get('id', ''));
+            $userId = $this->createUserId($request);
+            unset($userId);
         } catch (\InvalidArgumentException $e) {
-            $response->addError('generics', new ApplicationError($e->getMessage(), ApplicationErrorType::NOT_FOUND_ENTITY()));
+            $response->addError('generics', $this->applicationErrorFactory->build($e->getMessage(), ApplicationErrorType::NOT_FOUND_ENTITY));
         }
 
         return !$response->hasErrors();
+    }
+
+    /**
+     * Create a UserId using a string
+     * Extracted for better testability
+     *
+     * @param RequestInterface $request
+     *
+     * @return UserId
+     */
+    private function createUserId(RequestInterface $request): UserId
+    {
+        return UserId::createFromString($request->get('id', ''));
     }
 }
