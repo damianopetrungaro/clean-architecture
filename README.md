@@ -33,7 +33,7 @@ And this is only an example. There can be a lot of more reasons why you want to 
 
 #### How can i isolate it?
 
-Using some DDD concepts, you can totally (or quasi) isolate your domain code from the Application layer (Laravel for example) and from the Infrastructure layer (Postgresql or Mysql for example).
+Using some DDD concepts, you can totally (or almost) isolate your domain code from the Application layer (Laravel for example) and from the Infrastructure layer (Postgresql or Mysql for example).
 
 So the Domain of my application is not relegated to a particular framework/package/database, and can be "easily" switched.
 
@@ -53,24 +53,98 @@ There are some books that helped me to "think" in this way. Here some of them:
 
   - Collections
   
+    - CollectionInterface
+      
+      An interface to use instead an array of objects.
+    
+    - Collection
+    
+      An implementation of CollectionInterface using php array.
+  
   - Enum
+  
+    - EnumInterface
+      
+       Used for give Enum support on PHP.
+      
+    - Enum
+    
+      An implementation of EnumInterface.
   
 - Mapper
 
-- Use Cases
-
-  - Request
+  - MapperInterface
   
-  - Response
+    An interface to use for transform object into array and viceversa.
   
-  - Validation
-  
-  - Error
   
 - Persistence
 
-  - Transaction
+  - TransactionInterface
 
+    An interface to use for transaction cross Bounded Contexts.
+  
+- Use Cases
+
+  - UseCaseInterface
+    
+    An interface to use for isolate the use case from the request (CLI,HTTP...).
+    
+  - Error
+  
+    - ErrorInterface
+    
+      A representation of a generic error in the domain. The error it will be specified using type & code.
+      
+    - AbstractError
+    
+      An abstract implementation of ErrorInterface.
+    
+    - ErrorTypeInterface
+    
+      An interface that extends EnumInterface, used for specify all the error type of your domain.
+      
+    - ErrorType
+    
+      An implementation of ErrorTypeInterface.
+    
+  - Request
+  
+    - RequestInterface
+    
+      An interface used as DTO for pass data from the infrastructure/application to the domain.
+    
+    - Request
+    
+      An implementation of the RequestInterface using CollectionInterface.
+    
+  - Response
+  
+    - ResponseInterface
+    
+      An interface used for pass data from the domain to the infrastructure/application, it uses two main properties
+      Errors: pass all "errors"
+      Data:  pass all other "data/information"
+      
+      
+    - Response
+    
+      An implementation of ResponseInterface using CollectionInterface. 
+      
+    
+  - Validation
+  
+    - ValidableRequestInterface
+    
+      An interface used for the validate request's data inside the self request
+    
+    - ValidableuseCaseInterface
+
+      An interface used for the validate request's data inside the UseCaseInterface
+      
 ## A Practical Example
 
 - Slim
+
+  This is a simple example of a TODO list of users, using slim microframework and clean architecture package.
+  For any doubt or info add an issue.
