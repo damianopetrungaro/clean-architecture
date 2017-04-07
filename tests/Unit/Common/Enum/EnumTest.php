@@ -3,8 +3,9 @@ namespace Damianopetrungaro\CleanArchitecture\Unit\Common\Enum;
 
 use Damianopetrungaro\CleanArchitecture\Common\Enum\Enum;
 use Damianopetrungaro\CleanArchitecture\Common\Enum\EnumInterface;
+use PHPUnit\Framework\TestCase;
 
-class EnumTest extends \PHPUnit_Framework_TestCase
+class EnumTest extends TestCase
 {
     /**
      * Check that an InvalidArgumentException is thrown

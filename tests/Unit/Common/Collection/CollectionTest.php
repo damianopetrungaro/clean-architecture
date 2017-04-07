@@ -3,8 +3,9 @@
 namespace Damianopetrungaro\CleanArchitecture\Unit\Common\Collection;
 
 use Damianopetrungaro\CleanArchitecture\Common\Collection\Collection;
+use PHPUnit\Framework\TestCase;
 
-class CollectionTest extends \PHPUnit_Framework_TestCase
+class CollectionTest extends TestCase
 {
     /**
      * Check that the items passed in the constructor is correctly assigned

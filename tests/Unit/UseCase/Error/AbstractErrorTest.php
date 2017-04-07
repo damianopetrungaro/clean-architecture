@@ -5,13 +5,14 @@ namespace Damianopetrungaro\CleanArchitecture\Unit\UseCase\Error;
 
 use Damianopetrungaro\CleanArchitecture\UseCase\Error\AbstractError;
 use Damianopetrungaro\CleanArchitecture\UseCase\Error\ErrorTypeInterface;
+use PHPUnit\Framework\TestCase;
 
-class AbstractErrorTest extends \PHPUnit_Framework_TestCase
+class AbstractErrorTest extends TestCase
 {
     /**
      * Test that abstract error return excepted code and type
      * @param $code
-     * @dataProvider testAbstractErrorDataProvider
+     * @dataProvider errorCodeDataProvider
      */
     public function testAbstractError($code)
     {
@@ -27,7 +28,7 @@ class AbstractErrorTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array
      */
-    public function testAbstractErrorDataProvider()
+    public function errorCodeDataProvider()
     {
         return [['error_code_1'], ['error_code_2'], [123]];
     }

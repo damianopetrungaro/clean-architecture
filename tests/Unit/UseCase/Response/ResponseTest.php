@@ -5,8 +5,9 @@ namespace Damianopetrungaro\CleanArchitecture\Unit\UseCase\Response;
 use Damianopetrungaro\CleanArchitecture\Common\Collection\CollectionInterface;
 use Damianopetrungaro\CleanArchitecture\UseCase\Error\ErrorInterface;
 use Damianopetrungaro\CleanArchitecture\UseCase\Response\Response;
+use PHPUnit\Framework\TestCase;
 
-class ResponseTest extends \PHPUnit_Framework_TestCase
+class ResponseTest extends TestCase
 {
     /**
      * Check that Response object when initialized set 'data' and 'errors' properties as CollectionInterface

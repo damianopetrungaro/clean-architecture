@@ -5,8 +5,9 @@ namespace Damianopetrungaro\CleanArchitecture\Unit\UseCase\Request;
 
 use Damianopetrungaro\CleanArchitecture\Common\Collection\CollectionInterface;
 use Damianopetrungaro\CleanArchitecture\UseCase\Request\Request;
+use PHPUnit\Framework\TestCase;
 
-class RequestTest extends \PHPUnit_Framework_TestCase
+class RequestTest extends TestCase
 {
     /**
      * Check that Request object when initialized set 'collection' properties as CollectionInterface
