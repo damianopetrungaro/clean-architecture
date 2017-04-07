@@ -144,7 +144,7 @@ There are some books that helped me to "think" in this way. Here some of them:
       
 ## A Practical Example
 
-- Slim
+- [Slim](https://github.com/damianopetrungaro/clean-architecture/tree/master/examples/slim)
 
   This is a simple example of a TODO list of users, using slim microframework and clean architecture package.
   For any doubt or info add an issue.
