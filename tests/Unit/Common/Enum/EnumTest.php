@@ -5,6 +5,13 @@ use Damianopetrungaro\CleanArchitecture\Common\Enum\Enum;
 use Damianopetrungaro\CleanArchitecture\Common\Enum\EnumInterface;
 use PHPUnit\Framework\TestCase;
 
+class MyEnum extends Enum
+{
+    protected const CONSTANT_NAME = 'this is a value';
+    protected const ANOTHER_CONSTANT_NAME = 'ANOTHER_CONSTANT_NAME';
+    protected const LAST_CONSTANT_NAME = 'Last!';
+}
+
 class EnumTest extends TestCase
 {
     /**
@@ -24,17 +31,9 @@ class EnumTest extends TestCase
      */
     public function testValidEnum()
     {
-        $extendedEnum = new class extends Enum
-        {
-            protected const CONSTANT_NAME = 'this is a value';
-            protected const ANOTHER_CONSTANT_NAME = 'ANOTHER_CONSTANT_NAME';
-            protected const LAST_CONSTANT_NAME = 'Last!';
-        };
-
-        $firstEnum = $extendedEnum::CONSTANT_NAME();
-        $secondEnum = $extendedEnum::ANOTHER_CONSTANT_NAME();
-        $thirdEnum = $extendedEnum::LAST_CONSTANT_NAME();
-
+        $firstEnum = MyEnum::CONSTANT_NAME();
+        $secondEnum = MyEnum::ANOTHER_CONSTANT_NAME();
+        $thirdEnum = MyEnum::LAST_CONSTANT_NAME();
 
         $this->assertTrue($firstEnum instanceof Enum);
         $this->assertTrue($secondEnum instanceof Enum);

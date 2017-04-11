@@ -14,12 +14,21 @@ use ReflectionClass;
  * protected const ENTITY_NOT_FOUND = 'ENTITY_NOT_FOUND';
  * protected const PERSISTENCE_ERROR= 'PERSISTENCE_ERROR';
  */
-class Enum implements EnumInterface
+abstract class Enum implements EnumInterface
 {
     /**
      * @var string $value
      */
     private $value;
+
+    public function __construct(string $value)
+    {
+        if (!static::isValid($value)) {
+            throw new \InvalidArgumentException("$value is not available in " . static::class);
+        }
+
+        $this->value = $value;
+    }
 
     /**
      * {@inheritDoc}
@@ -29,14 +38,11 @@ class Enum implements EnumInterface
         $self = new ReflectionClass(static::class);
         $constants = $self->getConstants();
 
-        if (!isset($constants[$value])) {
-            throw new \InvalidArgumentException("$value is not available in " . static::class);
+        if (!array_key_exists($value, $constants)) {
+            throw new \InvalidArgumentException(sprintf('The value "%s" is not available in %s', $value, static::class));
         }
 
-        $enum = new static();
-        $enum->value = $constants[$value];
-
-        return $enum;
+        return new static($constants[$value]);
     }
 
     /**
@@ -45,5 +51,20 @@ class Enum implements EnumInterface
     public function getValue(): string
     {
         return $this->value;
+    }
+
+    public function isValid(string $value): bool
+    {
+        $self = new ReflectionClass(static::class);
+
+        return in_array($value, $self->getConstants(), true);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function __toString(): string
+    {
+        return $this->getValue();
     }
 }
