@@ -19,7 +19,7 @@ class Enum implements EnumInterface
     /**
      * @var string $value
      */
-    protected $value;
+    private $value;
 
     /**
      * {@inheritDoc}

@@ -15,7 +15,7 @@ class Collection implements CollectionInterface
      *
      * @var array $items
      */
-    protected $items;
+    private $items;
 
     /**
      * Request constructor.

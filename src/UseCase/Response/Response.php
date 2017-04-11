@@ -18,7 +18,7 @@ class Response implements ResponseInterface
     /**
      * @var string $status
      */
-    protected $status;
+    private $status;
 
     /**
      * Contains the error list
@@ -26,7 +26,7 @@ class Response implements ResponseInterface
      *
      * @var CollectionInterface $errors
      */
-    protected $errors;
+    private $errors;
 
     /**
      * Contains the data list
@@ -34,7 +34,7 @@ class Response implements ResponseInterface
      *
      * @var CollectionInterface $data
      */
-    protected $data;
+    private $data;
 
     /**
      * Response constructor.

@@ -14,7 +14,7 @@ class Request implements RequestInterface
     /**
      * @var CollectionInterface $collection
      */
-    protected $collection;
+    private $collection;
 
     /**
      * Request constructor.
