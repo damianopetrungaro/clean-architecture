@@ -34,13 +34,6 @@ interface EnumInterface
     public function getValue(): string;
 
     /**
-     * Check if the value is a valid Enum value
-     *
-     * @return bool
-     */
-    public function isValid(string $value): bool;
-
-    /**
      * Return the enum value
      *
      * @return string
