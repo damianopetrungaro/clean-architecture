@@ -21,12 +21,17 @@ abstract class Enum implements EnumInterface
      */
     private $value;
 
+    /**
+     * Enum constructor.
+     *
+     * @param string $value
+     */
     public function __construct(string $value)
     {
         if (!static::isValid($value)) {
-            throw new \InvalidArgumentException("$value is not available in " . static::class);
+            throw new \InvalidArgumentException(sprintf('The value "%s" is not available in %s', $value, static::class));
         }
-
+        
         $this->value = $value;
     }
 
@@ -35,10 +40,7 @@ abstract class Enum implements EnumInterface
      */
     public static function __callStatic(string $value, array $args = []): EnumInterface
     {
-        $self = new ReflectionClass(static::class);
-        $constants = $self->getConstants();
-
-        if (!array_key_exists($value, $constants)) {
+        if (!static::isValid($value)) {
             throw new \InvalidArgumentException(sprintf('The value "%s" is not available in %s', $value, static::class));
         }
 
@@ -53,11 +55,19 @@ abstract class Enum implements EnumInterface
         return $this->value;
     }
 
-    public function isValid(string $value): bool
+    /**
+     * Check if the value is available as constant
+     *
+     * @params string $value
+     *
+     * @return bool
+     */
+    private static function isValid(string $value): bool
     {
         $self = new ReflectionClass(static::class);
+        $constants = $self->getConstants();
 
-        return in_array($value, $self->getConstants(), true);
+        return array_key_exists($value, $constants));
     }
 
     /**
