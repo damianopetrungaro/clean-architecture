@@ -17,9 +17,9 @@ interface EnumInterface
     /**
      * Enum constructor.
      *
-     * @param string $value
+     * @param mixed $value
      */
-    public function __construct(string $value);
+    public function __construct($value);
 
     /**
      * Throw an exception if there's no constant in the child class, otherwise return the constant value.
@@ -36,12 +36,12 @@ interface EnumInterface
     /**
      * Return the enum value
      *
-     * @return string
+     * @return mixed
      */
-    public function getValue(): string;
+    public function getValue();
 
     /**
-     * Return the enum value
+     * Return the enum value as string
      *
      * @return string
      */

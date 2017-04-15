@@ -35,17 +35,20 @@ class EnumTest extends TestCase
      */
     public function testConstructorValidEnum()
     {
-        $firstEnum = new MyEnum(MyEnum::VALUE_A);
-        $secondEnum = new MyEnum(MyEnum::VALUE_B);
-        $thirdEnum = new MyEnum(MyEnum::VALUE_C);
+        $firstEnum = new MyEnum(MyEnum::A);
+        $secondEnum = new MyEnum(MyEnum::B);
+        $thirdEnum = new MyEnum(MyEnum::C);
+        $fourthEnum = new MyEnum(MyEnum::VALUE_NUMB);
 
         $this->assertTrue($firstEnum instanceof EnumInterface);
         $this->assertTrue($secondEnum instanceof EnumInterface);
         $this->assertTrue($thirdEnum instanceof EnumInterface);
+        $this->assertTrue($fourthEnum instanceof EnumInterface);
 
         $this->assertEquals($firstEnum->getValue(), 'VALUE_A');
         $this->assertEquals($secondEnum->getValue(), 'VALUE_B');
         $this->assertEquals($thirdEnum->getValue(), 'VALUE_C');
+        $this->assertEquals($fourthEnum->getValue(), 12);
     }
 
     /**
@@ -54,13 +57,16 @@ class EnumTest extends TestCase
     public function testCallStaticValidEnum()
     {
         /** @var EnumInterface $firstEnum */
-        $firstEnum = MyEnum::VALUE_A();
+        $firstEnum = MyEnum::A();
 
         /** @var EnumInterface $secondEnum */
-        $secondEnum = MyEnum::VALUE_B();
+        $secondEnum = MyEnum::B();
 
         /** @var EnumInterface $thirdEnum */
-        $thirdEnum = MyEnum::VALUE_C();
+        $thirdEnum = MyEnum::C();
+
+        /** @var EnumInterface $fourthEnum */
+        $fourthEnum = MyEnum::VALUE_NUMB();
 
         $this->assertTrue($firstEnum instanceof EnumInterface);
         $this->assertTrue($secondEnum instanceof EnumInterface);
@@ -69,6 +75,7 @@ class EnumTest extends TestCase
         $this->assertEquals($firstEnum->getValue(), 'VALUE_A');
         $this->assertEquals($secondEnum->getValue(), 'VALUE_B');
         $this->assertEquals($thirdEnum->getValue(), 'VALUE_C');
+        $this->assertEquals($fourthEnum->getValue(), 12);
     }
 
     /**
@@ -76,8 +83,10 @@ class EnumTest extends TestCase
      */
     public function testToStringMagicMethod()
     {
-        $enum = new MyEnum(MyEnum::VALUE_A);
+        $firstEnum = new MyEnum(MyEnum::A);
+        $secondEnum = new MyEnum(MyEnum::VALUE_NUMB);
 
-        $this->assertEquals((string)$enum, MyEnum::VALUE_A);
+        $this->assertEquals((string)$firstEnum, MyEnum::A);
+        $this->assertEquals((string)$secondEnum, '12');
     }
 }

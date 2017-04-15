@@ -24,12 +24,12 @@ abstract class Enum implements EnumInterface
     /**
      * {@inheritDoc}
      */
-    public function __construct(string $value)
+    public function __construct($value)
     {
         $self = new ReflectionClass(static::class);
         $constants = $self->getConstants();
 
-        if (!array_key_exists($value, $constants)) {
+        if (!in_array($value, $constants)) {
             throw new \InvalidArgumentException(sprintf('The value "%s" is not available in %s', $value, static::class));
         }
 
@@ -41,13 +41,20 @@ abstract class Enum implements EnumInterface
      */
     public static function __callStatic(string $value, array $args = []): EnumInterface
     {
-        return new static($value);
+        $self = new ReflectionClass(static::class);
+        $constants = $self->getConstants();
+
+        if (!array_key_exists($value, $constants)) {
+            throw new \InvalidArgumentException(sprintf('The key "%s" is not available in %s', $value, static::class));
+        }
+
+        return new static($constants[$value]);
     }
 
     /**
      * {@inheritDoc}
      */
-    public function getValue(): string
+    public function getValue()
     {
         return $this->value;
     }
@@ -57,6 +64,6 @@ abstract class Enum implements EnumInterface
      */
     public function __toString(): string
     {
-        return $this->getValue();
+        return (string)$this->getValue();
     }
 }

@@ -6,7 +6,8 @@ use Damianopetrungaro\CleanArchitecture\Common\Enum\Enum;
 
 final class MyEnum extends Enum
 {
-    const VALUE_A = 'VALUE_A';
-    const VALUE_B = 'VALUE_B';
-    const VALUE_C = 'VALUE_C';
+    const A = 'VALUE_A';
+    const B = 'VALUE_B';
+    const C = 'VALUE_C';
+    const VALUE_NUMB = 12;
 }
