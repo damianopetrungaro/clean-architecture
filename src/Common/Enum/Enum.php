@@ -14,7 +14,7 @@ use ReflectionClass;
  * protected const ENTITY_NOT_FOUND = 'ENTITY_NOT_FOUND';
  * protected const PERSISTENCE_ERROR= 'PERSISTENCE_ERROR';
  */
-class Enum implements EnumInterface
+abstract class Enum implements EnumInterface
 {
     /**
      * @var string $value
@@ -24,19 +24,24 @@ class Enum implements EnumInterface
     /**
      * {@inheritDoc}
      */
-    public static function __callStatic(string $value, array $args = []): EnumInterface
+    public function __construct(string $value)
     {
         $self = new ReflectionClass(static::class);
         $constants = $self->getConstants();
 
-        if (!isset($constants[$value])) {
-            throw new \InvalidArgumentException("$value is not available in " . static::class);
+        if (!array_key_exists($value, $constants)) {
+            throw new \InvalidArgumentException(sprintf('The value "%s" is not available in %s', $value, static::class));
         }
 
-        $enum = new static();
-        $enum->value = $constants[$value];
+        $this->value = $value;
+    }
 
-        return $enum;
+    /**
+     * {@inheritDoc}
+     */
+    public static function __callStatic(string $value, array $args = []): EnumInterface
+    {
+        return new static($value);
     }
 
     /**
@@ -45,5 +50,13 @@ class Enum implements EnumInterface
     public function getValue(): string
     {
         return $this->value;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function __toString(): string
+    {
+        return $this->getValue();
     }
 }

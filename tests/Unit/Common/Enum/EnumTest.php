@@ -1,8 +1,8 @@
 <?php
 namespace Damianopetrungaro\CleanArchitecture\Unit\Common\Enum;
 
-use Damianopetrungaro\CleanArchitecture\Common\Enum\Enum;
 use Damianopetrungaro\CleanArchitecture\Common\Enum\EnumInterface;
+use Damianopetrungaro\CleanArchitecture\Unit\Common\Enum\Fixtures\MyEnum;
 use PHPUnit\Framework\TestCase;
 
 class EnumTest extends TestCase
@@ -12,36 +12,72 @@ class EnumTest extends TestCase
      *
      * @expectedException \InvalidArgumentException
      */
-    public function testInvalidArgumentException()
+    public function testCallStaticInvalidArgumentException()
     {
         $this->expectException(\InvalidArgumentException::class);
-        Enum::NOT_EXISTS();
+        MyEnum::NOT_EXISTS();
+    }
+
+    /**
+     * Check that an InvalidArgumentException is thrown using the Enum constructor
+     *
+     * @expectedException \InvalidArgumentException
+     */
+    public function testConstructorInvalidArgumentException()
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        new MyEnum('NOT_EXISTS');
     }
 
     /**
      * Check that the call static method return the expected value
      *
      */
-    public function testValidEnum()
+    public function testConstructorValidEnum()
     {
-        $extendedEnum = new class extends Enum
-        {
-            protected const CONSTANT_NAME = 'this is a value';
-            protected const ANOTHER_CONSTANT_NAME = 'ANOTHER_CONSTANT_NAME';
-            protected const LAST_CONSTANT_NAME = 'Last!';
-        };
+        $firstEnum = new MyEnum(MyEnum::VALUE_A);
+        $secondEnum = new MyEnum(MyEnum::VALUE_B);
+        $thirdEnum = new MyEnum(MyEnum::VALUE_C);
 
-        $firstEnum = $extendedEnum::CONSTANT_NAME();
-        $secondEnum = $extendedEnum::ANOTHER_CONSTANT_NAME();
-        $thirdEnum = $extendedEnum::LAST_CONSTANT_NAME();
+        $this->assertTrue($firstEnum instanceof EnumInterface);
+        $this->assertTrue($secondEnum instanceof EnumInterface);
+        $this->assertTrue($thirdEnum instanceof EnumInterface);
 
+        $this->assertEquals($firstEnum->getValue(), 'VALUE_A');
+        $this->assertEquals($secondEnum->getValue(), 'VALUE_B');
+        $this->assertEquals($thirdEnum->getValue(), 'VALUE_C');
+    }
 
-        $this->assertTrue($firstEnum instanceof Enum);
-        $this->assertTrue($secondEnum instanceof Enum);
-        $this->assertTrue($thirdEnum instanceof Enum);
+    /**
+     * Check that the call static method return the expected value
+     */
+    public function testCallStaticValidEnum()
+    {
+        /** @var EnumInterface $firstEnum */
+        $firstEnum = MyEnum::VALUE_A();
 
-        $this->assertEquals($firstEnum->getValue(), 'this is a value');
-        $this->assertEquals($secondEnum->getValue(), 'ANOTHER_CONSTANT_NAME');
-        $this->assertEquals($thirdEnum->getValue(), 'Last!');
+        /** @var EnumInterface $secondEnum */
+        $secondEnum = MyEnum::VALUE_B();
+
+        /** @var EnumInterface $thirdEnum */
+        $thirdEnum = MyEnum::VALUE_C();
+
+        $this->assertTrue($firstEnum instanceof EnumInterface);
+        $this->assertTrue($secondEnum instanceof EnumInterface);
+        $this->assertTrue($thirdEnum instanceof EnumInterface);
+
+        $this->assertEquals($firstEnum->getValue(), 'VALUE_A');
+        $this->assertEquals($secondEnum->getValue(), 'VALUE_B');
+        $this->assertEquals($thirdEnum->getValue(), 'VALUE_C');
+    }
+
+    /**
+     * Check that the toString magic method return valid value
+     */
+    public function testToStringMagicMethod()
+    {
+        $enum = new MyEnum(MyEnum::VALUE_A);
+
+        $this->assertEquals((string)$enum, MyEnum::VALUE_A);
     }
 }

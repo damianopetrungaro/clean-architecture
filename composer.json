@@ -13,6 +13,11 @@
       "Damianopetrungaro\\CleanArchitecture\\": "src/"
     }
   },
+  "autoload-dev": {
+    "psr-4": {
+      "Damianopetrungaro\\CleanArchitecture\\Unit\\": "tests/Unit/"
+    }
+  },
   "require": {
     "php": ">=7.1"
   },

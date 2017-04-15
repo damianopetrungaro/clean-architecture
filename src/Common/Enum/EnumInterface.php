@@ -15,6 +15,13 @@ namespace Damianopetrungaro\CleanArchitecture\Common\Enum;
 interface EnumInterface
 {
     /**
+     * Enum constructor.
+     *
+     * @param string $value
+     */
+    public function __construct(string $value);
+
+    /**
      * Throw an exception if there's no constant in the child class, otherwise return the constant value.
      *
      * @param string $enum
@@ -32,4 +39,11 @@ interface EnumInterface
      * @return string
      */
     public function getValue(): string;
+
+    /**
+     * Return the enum value
+     *
+     * @return string
+     */
+    public function __toString(): string;
 }
