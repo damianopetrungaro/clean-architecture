@@ -13,17 +13,15 @@ trait CloneArrayTrait
      *
      * @return array
      */
-    protected function cloneArray(array $array)
+    protected function cloneArray(array $array): array
     {
         foreach ($array as $key => $value) {
             if (is_array($value)) {
                 $array[$key] = $this->cloneArray($value);
-                continue;
             }
 
             if (is_object($value)) {
                 $array[$key] = clone $value;
-                continue;
             }
         }
 
