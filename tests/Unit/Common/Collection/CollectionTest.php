@@ -237,9 +237,9 @@ class CollectionTest extends TestCase
         $this->assertTrue($clonedCollection->get('very')['deep'] == $collection->get('very')['deep']);
 
         // Object is not the same instance
-        $this->assertTrue($clonedCollection->get(0) !== $collection->get(0));
-        $this->assertTrue($clonedCollection->get('deep') !== $collection->get('deep'));
-        $this->assertTrue($clonedCollection->get('very')['deep'] !== $collection->get('very')['deep']);
+        $this->assertNotEquals(spl_object_hash($clonedCollection->get(0)), spl_object_hash($collection->get(0)));
+        $this->assertNotEquals(spl_object_hash($clonedCollection->get('deep')), spl_object_hash($collection->get('deep')));
+        $this->assertNotEquals(spl_object_hash($clonedCollection->get('very')['deep']), spl_object_hash($collection->get('very')['deep']));
     }
 
     /**
