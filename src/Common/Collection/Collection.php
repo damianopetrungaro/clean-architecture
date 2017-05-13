@@ -134,7 +134,7 @@ class Collection implements CollectionInterface
      */
     public function __clone()
     {
-        return new self($this->cloneArray($this->items));
+        $this->cloneArray($this->items);
     }
 
     /**

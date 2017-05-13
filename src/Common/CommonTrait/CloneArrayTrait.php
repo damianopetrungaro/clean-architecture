@@ -13,7 +13,7 @@ trait CloneArrayTrait
      *
      * @return array
      */
-    protected function cloneArray(array $array): array
+    protected function cloneArray(array &$array): array
     {
         foreach ($array as $key => $value) {
             if (is_array($value)) {
