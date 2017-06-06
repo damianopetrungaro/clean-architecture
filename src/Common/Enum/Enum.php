@@ -10,16 +10,16 @@ use ReflectionClass;
  * The class that will extents Enum should only contains constant.
  * Example:
  *
- * protected const ERROR_VALIDATION = 'ERROR_VALIDATION';
- * protected const ENTITY_NOT_FOUND = 'ENTITY_NOT_FOUND';
- * protected const PERSISTENCE_ERROR= 'PERSISTENCE_ERROR';
+ * public const ERROR_VALIDATION = 'ERROR_VALIDATION';
+ * public const ENTITY_NOT_FOUND = 'ENTITY_NOT_FOUND';
+ * public const PERSISTENCE_ERROR= 'PERSISTENCE_ERROR';
  */
 abstract class Enum implements EnumInterface
 {
     /**
      * @var string $value
      */
-    private $value;
+    protected $value;
 
     /**
      * {@inheritDoc}
