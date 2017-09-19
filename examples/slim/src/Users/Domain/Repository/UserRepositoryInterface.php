@@ -2,7 +2,7 @@
 
 namespace Damianopetrungaro\CleanArchitectureSlim\Users\Domain\Repository;
 
-use Damianopetrungaro\CleanArchitectureSlim\Users\Domain\Collection\UsersCollection;
+use Damianopetrungaro\CleanArchitectureSlim\Users\Domain\Collection\UsersArrayCollection;
 use Damianopetrungaro\CleanArchitectureSlim\Users\Domain\Entity\UserEntity;
 use Damianopetrungaro\CleanArchitectureSlim\Users\Domain\Repository\Exception\UserNotFoundException;
 use Damianopetrungaro\CleanArchitectureSlim\Users\Domain\Repository\Exception\UserPersistenceException;
@@ -13,11 +13,11 @@ interface UserRepositoryInterface
     /**
      * Return a collection of all the Users saved to persistence
      *
-     * @return UsersCollection
+     * @return UsersArrayCollection
      *
      * @throws UserPersistenceException
      */
-    public function all(): UsersCollection;
+    public function all(): UsersArrayCollection;
 
     /**
      * Return a User by UserId

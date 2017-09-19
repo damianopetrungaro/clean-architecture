@@ -84,9 +84,9 @@ $entries['app.response.slim'] = function () {
 ##########################################################################
 ##########################################################################
 $entries['domain.response'] = function () {
-    return new Damianopetrungaro\CleanArchitecture\UseCase\Response\Response(
-        new \Damianopetrungaro\CleanArchitecture\Common\Collection\Collection(),
-        new \Damianopetrungaro\CleanArchitecture\Common\Collection\Collection()
+    return new Damianopetrungaro\CleanArchitecture\UseCase\Response\CollectionResponse(
+        new \Damianopetrungaro\CleanArchitecture\Common\Collection\ArrayCollection(),
+        new \Damianopetrungaro\CleanArchitecture\Common\Collection\ArrayCollection()
     );
 };
 

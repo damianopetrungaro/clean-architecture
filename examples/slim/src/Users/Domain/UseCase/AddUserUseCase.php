@@ -2,13 +2,13 @@
 
 namespace Damianopetrungaro\CleanArchitectureSlim\Users\Domain\UseCase;
 
-use Damianopetrungaro\CleanArchitecture\UseCase\Request\RequestInterface;
-use Damianopetrungaro\CleanArchitecture\UseCase\Response\ResponseInterface;
-use Damianopetrungaro\CleanArchitecture\UseCase\Validation\ValidableUseCaseInterface;
+use Damianopetrungaro\CleanArchitecture\UseCase\Request\Request;
+use Damianopetrungaro\CleanArchitecture\UseCase\Response\Response;
+use Damianopetrungaro\CleanArchitecture\UseCase\Validation\ValidableUseCase;
 use Damianopetrungaro\CleanArchitectureSlim\Common\Error\ApplicationErrorFactory;
 use Damianopetrungaro\CleanArchitectureSlim\Common\Error\ApplicationErrorType;
 use Damianopetrungaro\CleanArchitectureSlim\Users\Domain\Entity\UserEntity;
-use Damianopetrungaro\CleanArchitectureSlim\Users\Domain\Mapper\UserMapperInterface;
+use Damianopetrungaro\CleanArchitectureSlim\Users\Domain\Mapper\UserMapper;
 use Damianopetrungaro\CleanArchitectureSlim\Users\Domain\Repository\Exception\UserPersistenceException;
 use Damianopetrungaro\CleanArchitectureSlim\Users\Domain\Repository\UserRepositoryInterface;
 use Damianopetrungaro\CleanArchitectureSlim\Users\Domain\ValueObjects\Email;
@@ -16,14 +16,14 @@ use Damianopetrungaro\CleanArchitectureSlim\Users\Domain\ValueObjects\Name;
 use Damianopetrungaro\CleanArchitectureSlim\Users\Domain\ValueObjects\Password;
 use Damianopetrungaro\CleanArchitectureSlim\Users\Domain\ValueObjects\Surname;
 
-final class AddUserUseCase implements ValidableUseCaseInterface
+final class AddUserUseCase implements ValidableUseCase
 {
     /**
      * @var UserRepositoryInterface
      */
     private $userRepository;
     /**
-     * @var UserMapperInterface
+     * @var UserMapper
      */
     private $userMapper;
     /**
@@ -33,11 +33,12 @@ final class AddUserUseCase implements ValidableUseCaseInterface
 
     /**
      * ListUsersUseCase constructor.
+     *
      * @param ApplicationErrorFactory $applicationErrorFactory
      * @param UserRepositoryInterface $userRepository
-     * @param UserMapperInterface $userMapper
+     * @param UserMapper $userMapper
      */
-    public function __construct(ApplicationErrorFactory $applicationErrorFactory, UserRepositoryInterface $userRepository, UserMapperInterface $userMapper)
+    public function __construct(ApplicationErrorFactory $applicationErrorFactory, UserRepositoryInterface $userRepository, UserMapper $userMapper)
     {
         $this->applicationErrorFactory = $applicationErrorFactory;
         $this->userRepository = $userRepository;
@@ -47,7 +48,7 @@ final class AddUserUseCase implements ValidableUseCaseInterface
     /**
      * {@inheritdoc}
      */
-    public function __invoke(RequestInterface $request, ResponseInterface $response): void
+    public function __invoke(Request $request, Response $response): void
     {
         // If request is not valid set response as failed and return
         if (!$this->isValid($request, $response)) {
@@ -79,7 +80,7 @@ final class AddUserUseCase implements ValidableUseCaseInterface
     /**
      * {@inheritdoc}
      */
-    public function isValid(RequestInterface $request, ResponseInterface $response) : bool
+    public function isValid(Request $request, Response $response) : bool
     {
         try {
             $name = new Name($request->get('name', ''));
@@ -116,11 +117,11 @@ final class AddUserUseCase implements ValidableUseCaseInterface
      * Create a new User
      * Extracted as method for better testability
      *
-     * @param RequestInterface $request
+     * @param Request $request
      *
      * @return UserEntity
      */
-    private function createUser(RequestInterface $request): UserEntity
+    private function createUser(Request $request): UserEntity
     {
         // Create new User using valueObjects
         return new UserEntity(

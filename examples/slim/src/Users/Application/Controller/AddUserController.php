@@ -2,9 +2,9 @@
 
 namespace Damianopetrungaro\CleanArchitectureSlim\Users\Application\Controller;
 
-use Damianopetrungaro\CleanArchitecture\Common\Collection\Collection;
-use Damianopetrungaro\CleanArchitecture\UseCase\Request\Request as DomainRequest;
-use Damianopetrungaro\CleanArchitecture\UseCase\Response\ResponseInterface;
+use Damianopetrungaro\CleanArchitecture\Common\Collection\ArrayCollection;
+use Damianopetrungaro\CleanArchitecture\UseCase\Request\CollectionRequest as DomainRequest;
+use Damianopetrungaro\CleanArchitecture\UseCase\Response\Response;
 use Damianopetrungaro\CleanArchitectureSlim\Common\Container;
 use Damianopetrungaro\CleanArchitectureSlim\Common\Response\SlimResponseBuilder;
 use Damianopetrungaro\CleanArchitectureSlim\Users\Application\Transformer\UserTransformer;
@@ -19,7 +19,7 @@ final class AddUserController
      */
     private $useCase;
     /**
-     * @var ResponseInterface
+     * @var Response
      */
     private $domainResponse;
     /**
@@ -78,6 +78,6 @@ final class AddUserController
     {
         // The request for this useCase requires all user info
         $entries = $request->getParsedBody();
-        return new DomainRequest(new Collection($entries));
+        return new DomainRequest(new ArrayCollection($entries));
     }
 }

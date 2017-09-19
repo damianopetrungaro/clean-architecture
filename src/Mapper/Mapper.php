@@ -1,10 +1,10 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Damianopetrungaro\CleanArchitecture\Mapper;
 
-interface MapperInterface
+interface Mapper
 {
     /**
      * Transform an object into an array
@@ -13,7 +13,7 @@ interface MapperInterface
      *
      * @return array
      */
-    public function toArray($object) : array;
+    public function toArray($object): array;
 
     /**
      * Transform an array into an object

@@ -7,7 +7,7 @@
         "ramsey/uuid": "^3.5",
         "monolog/monolog": "^1.22",
         "vlucas/phpdotenv": "^2.4",
-        "damianopetrungaro/clean-architecture": "^0.1.1",
+        "damianopetrungaro/clean-architecture": "^0.3",
         "zendframework/zend-hydrator": "^2.2",
         "robmorgan/phinx": "^0.8.0"
     },

@@ -2,20 +2,20 @@
 
 namespace Damianopetrungaro\CleanArchitectureSlim\Users\Domain\Collection;
 
+use Damianopetrungaro\CleanArchitecture\Common\Collection\ArrayCollection;
 use Damianopetrungaro\CleanArchitecture\Common\Collection\Collection;
-use Damianopetrungaro\CleanArchitecture\Common\Collection\CollectionInterface;
 use Damianopetrungaro\CleanArchitectureSlim\Users\Domain\Entity\UserEntity;
 
 /**
  * @property UserEntity[] $items
- * @method UsersCollection clear() : UsersCollection
- * @method UsersCollection with($item, $key = null) : UsersCollection
- * @method UsersCollection without($key) : UsersCollection
+ * @method UsersArrayCollection clear() : UsersArrayCollection
+ * @method UsersArrayCollection with($item, $key = null) : UsersArrayCollection
+ * @method UsersArrayCollection without($key) : UsersArrayCollection
  */
-final class UsersCollection extends Collection
+final class UsersArrayCollection extends ArrayCollection
 {
     /**
-     * UsersCollection constructor.
+     * UsersArrayCollection constructor.
      * @param array $users
      */
     public function __construct(array $users = [])
@@ -34,14 +34,14 @@ final class UsersCollection extends Collection
      * PHP 7.1 haven't generic types
      * {@inheritDoc}
      *
-     * @return UsersCollection
+     * @return UsersArrayCollection
      */
-    public function mergeWith(CollectionInterface...$users) : CollectionInterface
+    public function mergeWith(Collection...$users) : Collection
     {
         $clone = clone $this;
         foreach ($users as $user) {
-            if (!$user instanceof UsersCollection) {
-                throw new \InvalidArgumentException(get_class($user) . " must be an instance of UsersCollection");
+            if (!$user instanceof UsersArrayCollection) {
+                throw new \InvalidArgumentException(get_class($user) . " must be an instance of UsersArrayCollection");
             }
             $clone->items = array_merge($clone->all(), $user->all());
         }

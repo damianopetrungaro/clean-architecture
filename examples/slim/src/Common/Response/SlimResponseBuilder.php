@@ -2,8 +2,8 @@
 
 namespace Damianopetrungaro\CleanArchitectureSlim\Common\Response;
 
-use Damianopetrungaro\CleanArchitecture\UseCase\Error\ErrorTypeInterface;
-use Damianopetrungaro\CleanArchitecture\UseCase\Response\ResponseInterface;
+use Damianopetrungaro\CleanArchitecture\UseCase\Error\ErrorType;
+use Damianopetrungaro\CleanArchitecture\UseCase\Response\Response;
 use Damianopetrungaro\CleanArchitectureSlim\Common\Error\ApplicationError;
 use Damianopetrungaro\CleanArchitectureSlim\Common\Error\ApplicationErrorType;
 use Ramsey\Uuid\Uuid;
@@ -31,7 +31,7 @@ final class SlimResponseBuilder implements ResponseBuilderInterface
      *
      * @return Response
      */
-    public function build(ResponseInterface $response): Response
+    public function build(Response $response): Response
     {
         if ($response->isSuccessful()) {
             return $this->buildSuccessResponse($response);
@@ -45,13 +45,13 @@ final class SlimResponseBuilder implements ResponseBuilderInterface
     }
 
     /**
-     * Return a Response with listed errors
+     * Return a CollectionResponse with listed errors
      *
-     * @param ResponseInterface $response
+     * @param Response $response
      *
-     * @return Response
+     * @return CollectionResponse
      */
-    private function buildErrorResponse(ResponseInterface $response): Response
+    private function buildErrorResponse(Response $response): Response
     {
         $status = null;
         $errorList = $response->getErrors();
@@ -93,13 +93,13 @@ final class SlimResponseBuilder implements ResponseBuilderInterface
     }
 
     /**
-     * Return a Response with a standardized response
+     * Return a CollectionResponse with a standardized response
      *
-     * @param ResponseInterface $response
+     * @param Response $response
      *
-     * @return Response
+     * @return CollectionResponse
      */
-    private function buildSuccessResponse(ResponseInterface $response): Response
+    private function buildSuccessResponse(Response $response): Response
     {
         if ($response->hasData()) {
 
@@ -119,7 +119,7 @@ final class SlimResponseBuilder implements ResponseBuilderInterface
      *
      * @return int
      */
-    private function statusCodeFromErrorType(ErrorTypeInterface $type): int
+    private function statusCodeFromErrorType(ErrorType $type): int
     {
         if (in_array($type->getValue(), [ApplicationErrorType::VALIDATION_ERROR, ApplicationErrorType::USER_PASSWORD_MISMATCH])) {
             return 422;

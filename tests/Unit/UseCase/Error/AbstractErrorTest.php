@@ -4,25 +4,28 @@ namespace Damianopetrungaro\CleanArchitecture\Unit\UseCase\Error;
 
 
 use Damianopetrungaro\CleanArchitecture\UseCase\Error\AbstractError;
-use Damianopetrungaro\CleanArchitecture\UseCase\Error\ErrorTypeInterface;
+use Damianopetrungaro\CleanArchitecture\UseCase\Error\ErrorType;
 use PHPUnit\Framework\TestCase;
 
 class AbstractErrorTest extends TestCase
 {
     /**
      * Test that abstract error return excepted code and type
+     *
      * @param $code
+     *
      * @dataProvider errorCodeDataProvider
      */
     public function testAbstractError($code)
     {
-        $errorTypeMock = $this->getMockBuilder(ErrorTypeInterface::class)->getMock();
+        $errorType = $this->prophesize(ErrorType::class)->reveal();
         /** @var AbstractError $error */
-        $error = (new class($code, $errorTypeMock) extends AbstractError
+        $error = new class($code, $errorType) extends AbstractError
         {
-        });
+        };
+
         $this->assertEquals($code, $error->code());
-        $this->assertEquals($errorTypeMock, $error->type());
+        $this->assertEquals($errorType, $error->type());
     }
 
     /**

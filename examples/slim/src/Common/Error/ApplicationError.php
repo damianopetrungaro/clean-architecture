@@ -4,7 +4,7 @@ namespace Damianopetrungaro\CleanArchitectureSlim\Common\Error;
 
 
 use Damianopetrungaro\CleanArchitecture\UseCase\Error\AbstractError;
-use Damianopetrungaro\CleanArchitecture\UseCase\Error\ErrorTypeInterface;
+use Damianopetrungaro\CleanArchitecture\UseCase\Error\ErrorType;
 
 class ApplicationError extends AbstractError
 {
@@ -30,14 +30,15 @@ class ApplicationError extends AbstractError
 
     /**
      * ApplicationError constructor.
+     *
      * @param string $code
-     * @param ErrorTypeInterface $errorType
+     * @param ErrorType $errorType
      * @param string $pointer
      * @param string $title
      * @param string $detail
      * @param array $meta
      */
-    public function __construct($code, ErrorTypeInterface $errorType, string $pointer = '', string $title = '', string $detail = '', array $meta = [])
+    public function __construct($code, ErrorType $errorType, string $pointer = '', string $title = '', string $detail = '', array $meta = [])
     {
         parent::__construct($code, $errorType);
         $this->pointer = $pointer;

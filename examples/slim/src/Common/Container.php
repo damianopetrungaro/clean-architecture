@@ -2,11 +2,11 @@
 
 namespace Damianopetrungaro\CleanArchitectureSlim\Common;
 
-use Damianopetrungaro\CleanArchitecture\UseCase\Response\ResponseInterface;
+use Damianopetrungaro\CleanArchitecture\UseCase\Response\Response;
 use Damianopetrungaro\CleanArchitectureSlim\Common\Error\ApplicationErrorFactory;
 use Damianopetrungaro\CleanArchitectureSlim\Common\Response\SlimResponseBuilder;
 use Damianopetrungaro\CleanArchitectureSlim\Users\Application\Transformer\UserTransformer;
-use Damianopetrungaro\CleanArchitectureSlim\Users\Domain\Mapper\UserMapperInterface;
+use Damianopetrungaro\CleanArchitectureSlim\Users\Domain\Mapper\UserMapper;
 use Damianopetrungaro\CleanArchitectureSlim\Users\Domain\Repository\UserRepositoryInterface;
 use Damianopetrungaro\CleanArchitectureSlim\Users\Domain\UseCase\AddUserUseCase;
 use Damianopetrungaro\CleanArchitectureSlim\Users\Domain\UseCase\DeleteUserUseCase;
@@ -43,9 +43,9 @@ final class Container extends \Slim\Container
     }
 
     /**
-     * @return ResponseInterface
+     * @return Response
      */
-    public function getDomainResponse(): ResponseInterface
+    public function getDomainResponse(): Response
     {
         return $this->get('domain.response');
     }
@@ -107,9 +107,9 @@ final class Container extends \Slim\Container
     }
 
     /**
-     * @return UserMapperInterface
+     * @return UserMapper
      */
-    public function getUserMapper(): UserMapperInterface
+    public function getUserMapper(): UserMapper
     {
         return $this->get('app.users.mapper');
     }
