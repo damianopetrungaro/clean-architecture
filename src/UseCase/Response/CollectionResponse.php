@@ -6,15 +6,10 @@ namespace Damianopetrungaro\CleanArchitecture\UseCase\Response;
 
 use Damianopetrungaro\CleanArchitecture\Common\Collection\Collection;
 use Damianopetrungaro\CleanArchitecture\UseCase\Error\Error;
+use function is_array;
 
 class CollectionResponse implements Response
 {
-    /**
-     * Available CollectionResponse status
-     */
-    protected const STATUS_FAILED = 'FAILED';
-    protected const STATUS_SUCCESSFUL = 'SUCCESSFUL';
-
     /**
      * @var string $status
      */
@@ -49,13 +44,15 @@ class CollectionResponse implements Response
     }
 
     /**
+     * ATTENTION: If the data is an array, the content will be added to the existing array
      * {@inheritDoc}
      */
     public function addData($key, $value): void
     {
         $values = $this->data->get($key, []);
+        is_array($values) ?: $values = [$values];
         $values[] = $value;
-        $this->data = $this->data->with($values, $key);
+        $this->data = $this->data->with($key, $values);
     }
 
     /**
@@ -63,9 +60,26 @@ class CollectionResponse implements Response
      */
     public function addError($key, Error $error): void
     {
-        $values = $this->errors->get($key, []);
-        $values[] = $error;
-        $this->errors = $this->errors->with($values, $key);
+        $errors = $this->errors->get($key, []);
+        is_array($errors) ?: $errors = [$errors];
+        $errors[] = $error;
+        $this->errors = $this->errors->with($key, $errors);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function replaceData($key, $value): void
+    {
+        $this->data = $this->data->with($key, $value);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function replaceError($key, Error $error): void
+    {
+        $this->errors = $this->errors->with($key, $error);
     }
 
     /**
@@ -105,7 +119,7 @@ class CollectionResponse implements Response
      */
     public function isFailed(): bool
     {
-        return $this->status === self::STATUS_FAILED;
+        return $this->status === Response::STATUS_FAILED;
     }
 
     /**
@@ -113,7 +127,7 @@ class CollectionResponse implements Response
      */
     public function isSuccessful(): bool
     {
-        return $this->status === self::STATUS_SUCCESSFUL;
+        return $this->status === Response::STATUS_SUCCESSFUL;
     }
 
     /**
@@ -137,7 +151,7 @@ class CollectionResponse implements Response
      */
     public function setAsFailed(): void
     {
-        $this->status = self::STATUS_FAILED;
+        $this->status = Response::STATUS_FAILED;
     }
 
     /**
@@ -145,6 +159,6 @@ class CollectionResponse implements Response
      */
     public function setAsSuccess(): void
     {
-        $this->status = self::STATUS_SUCCESSFUL;
+        $this->status = Response::STATUS_SUCCESSFUL;
     }
 }

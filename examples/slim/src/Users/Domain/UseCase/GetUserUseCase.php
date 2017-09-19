@@ -62,19 +62,19 @@ final class GetUserUseCase implements ValidableUseCase
         } catch (UserPersistenceException $e) {
             // If User is not found set response as failed, add the error and return
             $response->setAsFailed();
-            $response->addError('generic', $this->applicationErrorFactory->build($e->getMessage(), ApplicationErrorType::PERSISTENCE_ERROR));
+            $response->replaceError('generic', $this->applicationErrorFactory->build($e->getMessage(), ApplicationErrorType::PERSISTENCE_ERROR));
             return;
         } catch (UserNotFoundException $e) {
             // If there's an error on getting set response as failed, add the error and return
             $response->setAsFailed();
-            $response->addError('generic', $this->applicationErrorFactory->build('user_not_found', ApplicationErrorType::NOT_FOUND_ENTITY));
+            $response->replaceError('generic', $this->applicationErrorFactory->build('user_not_found', ApplicationErrorType::NOT_FOUND_ENTITY));
             return;
         }
 
         // Transform User instances into array
         // Set the response as success, add the user to the response and return
         $user = $this->userMapper->toArray($user);
-        $response->addData('user', $user);
+        $response->replaceData('user', $user);
         $response->setAsSuccess();
         return;
     }
@@ -88,7 +88,7 @@ final class GetUserUseCase implements ValidableUseCase
             $userId = $this->createUserId($request);
             unset($userId);
         } catch (\InvalidArgumentException $e) {
-            $response->addError('generics', $this->applicationErrorFactory->build($e->getMessage(), ApplicationErrorType::NOT_FOUND_ENTITY));
+            $response->replaceError('generics', $this->applicationErrorFactory->build($e->getMessage(), ApplicationErrorType::NOT_FOUND_ENTITY));
         }
 
         return !$response->hasErrors();

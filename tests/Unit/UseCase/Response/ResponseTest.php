@@ -6,12 +6,52 @@ use Damianopetrungaro\CleanArchitecture\Common\Collection\Collection;
 use Damianopetrungaro\CleanArchitecture\UseCase\Error\Error;
 use Damianopetrungaro\CleanArchitecture\UseCase\Response\CollectionResponse;
 use PHPUnit\Framework\TestCase;
-use ReflectionClass;
 
 class ResponseTest extends TestCase
 {
     /**
-     * Test that the addData method push new element into an array
+     * Test that the replaceData method replace the data
+     *
+     * @param $valueì
+     *
+     * @dataProvider replaceDataMethodDataProvider
+     */
+    public function testReplaceDataMethod($value)
+    {
+        // Create a mock for data and error
+        $dataCollection = $this->prophesize(Collection::class);
+        $dataCollection->with('key', $value)->shouldBeCalledTimes(1);
+        $dataCollection = $dataCollection->reveal();
+        $errorCollection = $this->prophesize(Collection::class)->reveal();
+
+        // Create CollectionResponse and call replaceData method
+        $response = new CollectionResponse($dataCollection, $errorCollection);
+        $response->replaceData('key', $value);
+    }
+
+    /**
+     * Test that the addError method replace the errors
+     *
+     * @param $value
+     * @param $expectedValue
+     *
+     * @dataProvider replaceErrorMethodDataProvider
+     */
+    public function testReplaceErrorMethod($value)
+    {
+        // Create a mock for data and error
+        $errorCollection = $this->prophesize(Collection::class);
+        $errorCollection->with('key', $value)->shouldBeCalledTimes(1);
+        $errorCollection = $errorCollection->reveal();
+        $dataCollection = $this->prophesize(Collection::class)->reveal();
+
+        // Create CollectionResponse and call replaceData method
+        $response = new CollectionResponse($dataCollection, $errorCollection);
+        $response->replaceError('key', $value);
+    }
+
+    /**
+     * Test that the addData method add data to the response
      *
      * @param $fakeInitialArray
      * @param $value
@@ -24,17 +64,17 @@ class ResponseTest extends TestCase
         // Create a mock for data and error
         $dataCollection = $this->prophesize(Collection::class);
         $dataCollection->get('key', [])->shouldBeCalledTimes(1)->willReturn($fakeInitialArray);
-        $dataCollection->with($expectedValue, 'key')->shouldBeCalledTimes(1);
+        $dataCollection->with('key', $expectedValue)->shouldBeCalledTimes(1);
         $dataCollection = $dataCollection->reveal();
         $errorCollection = $this->prophesize(Collection::class)->reveal();
 
-        // Create CollectionResponse and call addData method
+        // Create CollectionResponse and call replaceData method
         $response = new CollectionResponse($dataCollection, $errorCollection);
         $response->addData('key', $value);
     }
 
     /**
-     * Test that the addError method push new error into an array
+     * Test that the addError add Errorto the response
      *
      * @param $fakeInitialArray
      * @param $value
@@ -47,11 +87,11 @@ class ResponseTest extends TestCase
         // Create a mock for data and error
         $errorCollection = $this->prophesize(Collection::class);
         $errorCollection->get('key', [])->shouldBeCalledTimes(1)->willReturn($fakeInitialArray);
-        $errorCollection->with($expectedValue, 'key')->shouldBeCalledTimes(1);
+        $errorCollection->with('key', $expectedValue)->shouldBeCalledTimes(1);
         $errorCollection = $errorCollection->reveal();
         $dataCollection = $this->prophesize(Collection::class)->reveal();
 
-        // Create CollectionResponse and call addData method
+        // Create CollectionResponse and call replaceData method
         $response = new CollectionResponse($dataCollection, $errorCollection);
         $response->addError('key', $value);
     }
@@ -143,7 +183,22 @@ class ResponseTest extends TestCase
     }
 
     /**
-     * Retr
+     * // TODO Add description
+     *
+     * @return array
+     */
+    public function replaceDataMethodDataProvider()
+    {
+        return [
+            ['value'],
+            ['d'],
+            ['secondValue'],
+        ];
+    }
+
+
+    /**
+     * // TODO Add description
      *
      * @return array
      */
@@ -151,6 +206,7 @@ class ResponseTest extends TestCase
     {
         return [
             [[], 'value', ['value']],
+            ['hello', 'value', ['hello', 'value']],
             [['a', 'b', 'c'], 'd', ['a', 'b', 'c', 'd']],
             [['firstKey' => 'firstValue'], 'secondValue', ['secondValue', 'firstKey' => 'firstValue']],
         ];
@@ -170,6 +226,16 @@ class ResponseTest extends TestCase
         return [
             [[], $firstError, [$firstError]],
             [$arrayErrors, $secondError, $expectedArray],
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public function replaceErrorMethodDataProvider()
+    {
+        return [
+            [$this->getErrorsList()],
         ];
     }
 

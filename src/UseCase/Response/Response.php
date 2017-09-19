@@ -9,7 +9,33 @@ use Damianopetrungaro\CleanArchitecture\UseCase\Error\Error;
 interface Response
 {
     /**
-     * Add data to the data list.
+     * Available Response status
+     */
+    public const STATUS_FAILED = 'FAILED';
+    public const STATUS_SUCCESSFUL = 'SUCCESSFUL';
+
+    /**
+     * Replace data to the data list by key.
+     *
+     * @param $key
+     * @param $value
+     *
+     * @return void
+     */
+    public function replaceData($key, $value): void;
+
+    /**
+     * Replace an Error to the error list by key.
+     *
+     * @param $key
+     * @param Error $error
+     *
+     * @return void
+     */
+    public function replaceError($key, Error $error): void;
+
+    /**
+     * Add data to the data list by key.
      *
      * @param $key
      * @param $value
@@ -19,7 +45,7 @@ interface Response
     public function addData($key, $value): void;
 
     /**
-     * Add an Error to the error list.
+     * Add an Error to the error list by key.
      *
      * @param $key
      * @param Error $error
@@ -57,14 +83,14 @@ interface Response
     public function hasErrors(): bool;
 
     /**
-     * Check if CollectionResponse is failed.
+     * Check if Response is failed.
      *
      * @return bool
      */
     public function isFailed(): bool;
 
     /**
-     * Check if CollectionResponse is successful.
+     * Check if Response is successful.
      *
      * @return bool
      */

@@ -51,14 +51,14 @@ final class ListUsersUseCase implements UseCase
         } catch (UserPersistenceException $e) {
             // If there's an error on getting set response as failed, add the error and return
             $response->setAsFailed();
-            $response->addError('generic', $this->applicationErrorFactory->build($e->getMessage(), ApplicationErrorType::PERSISTENCE_ERROR));
+            $response->replaceError('generic', $this->applicationErrorFactory->build($e->getMessage(), ApplicationErrorType::PERSISTENCE_ERROR));
             return;
         }
 
         // Transform UsersArrayCollection instances into array
         // Set the response as success, add the users to the response and return
         $users = $this->userMapper->toMultipleArray($userCollection);
-        $response->addData('users', $users);
+        $response->replaceData('users', $users);
         $response->setAsSuccess();
         return;
     }

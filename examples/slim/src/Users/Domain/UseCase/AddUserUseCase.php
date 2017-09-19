@@ -65,14 +65,14 @@ final class AddUserUseCase implements ValidableUseCase
         } catch (UserPersistenceException $e) {
             // If there's an error on saving set response as failed, add the error and return
             $response->setAsFailed();
-            $response->addError('generic', $this->applicationErrorFactory->build($e->getMessage(), ApplicationErrorType::PERSISTENCE_ERROR));
+            $response->replaceError('generic', $this->applicationErrorFactory->build($e->getMessage(), ApplicationErrorType::PERSISTENCE_ERROR));
             return;
         }
 
         // Transform User instances into array
         // Set the response as success, add the user to the response and return
         $user = $this->userMapper->toArray($user);
-        $response->addData('user', $user);
+        $response->replaceData('user', $user);
         $response->setAsSuccess();
         return;
     }
@@ -86,28 +86,28 @@ final class AddUserUseCase implements ValidableUseCase
             $name = new Name($request->get('name', ''));
             unset($name);
         } catch (\InvalidArgumentException $e) {
-            $response->addError('name', $this->applicationErrorFactory->build($e->getMessage(), ApplicationErrorType::VALIDATION_ERROR));
+            $response->replaceError('name', $this->applicationErrorFactory->build($e->getMessage(), ApplicationErrorType::VALIDATION_ERROR));
         }
 
         try {
             $surname = new Surname($request->get('surname', ''));
             unset($surname);
         } catch (\InvalidArgumentException $e) {
-            $response->addError('surname', $this->applicationErrorFactory->build($e->getMessage(), ApplicationErrorType::VALIDATION_ERROR));
+            $response->replaceError('surname', $this->applicationErrorFactory->build($e->getMessage(), ApplicationErrorType::VALIDATION_ERROR));
         }
 
         try {
             $email = new Email($request->get('email', ''));
             unset($email);
         } catch (\InvalidArgumentException $e) {
-            $response->addError('email', $this->applicationErrorFactory->build($e->getMessage(), ApplicationErrorType::VALIDATION_ERROR));
+            $response->replaceError('email', $this->applicationErrorFactory->build($e->getMessage(), ApplicationErrorType::VALIDATION_ERROR));
         }
 
         try {
             $password = new Password($request->get('password', ''));
             unset($password);
         } catch (\InvalidArgumentException $e) {
-            $response->addError('password', $this->applicationErrorFactory->build($e->getMessage(), ApplicationErrorType::VALIDATION_ERROR));
+            $response->replaceError('password', $this->applicationErrorFactory->build($e->getMessage(), ApplicationErrorType::VALIDATION_ERROR));
         }
 
         return !$response->hasErrors();

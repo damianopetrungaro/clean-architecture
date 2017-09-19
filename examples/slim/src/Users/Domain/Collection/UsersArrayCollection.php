@@ -9,13 +9,14 @@ use Damianopetrungaro\CleanArchitectureSlim\Users\Domain\Entity\UserEntity;
 /**
  * @property UserEntity[] $items
  * @method UsersArrayCollection clear() : UsersArrayCollection
- * @method UsersArrayCollection with($item, $key = null) : UsersArrayCollection
+ * @method UsersArrayCollection with($key, $value) : UsersArrayCollection
  * @method UsersArrayCollection without($key) : UsersArrayCollection
  */
 final class UsersArrayCollection extends ArrayCollection
 {
     /**
      * UsersArrayCollection constructor.
+     *
      * @param array $users
      */
     public function __construct(array $users = [])
@@ -36,7 +37,7 @@ final class UsersArrayCollection extends ArrayCollection
      *
      * @return UsersArrayCollection
      */
-    public function mergeWith(Collection...$users) : Collection
+    public function mergeWith(Collection...$users): Collection
     {
         $clone = clone $this;
         foreach ($users as $user) {

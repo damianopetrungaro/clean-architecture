@@ -76,13 +76,13 @@ interface Collection extends \IteratorAggregate
     /**
      * Return a Collection with a new item value.
      *
-     * @param mixed $item
      * @param mixed $key
+     * @param mixed $item
      *
      * @return Collection
      */
 
-    public function with($item, $key = null): Collection;
+    public function with($key, $item): Collection;
 
     /**
      * Return a Collection without a specific key.

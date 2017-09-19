@@ -102,10 +102,10 @@ class ArrayCollection implements Collection
     /**
      * {@inheritDoc}
      */
-    public function with($item, $key = null): Collection
+    public function with($key, $item): Collection
     {
         $clone = clone $this;
-        ($key !== null) ? $clone->items[$key] = $item : $clone->items[] = $item;
+        $clone->items[$key] = $item;
 
         return $clone;
     }

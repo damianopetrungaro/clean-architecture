@@ -60,7 +60,7 @@ final class DeleteUserUseCase implements ValidableUseCase
             // If user is not found set response as failed, add the error and return
             if (!$this->userRepository->findByUserId($userId)) {
                 $response->setAsFailed();
-                $response->addError('generic', $this->applicationErrorFactory->build('user_not_found', ApplicationErrorType::NOT_FOUND_ENTITY));
+                $response->replaceError('generic', $this->applicationErrorFactory->build('user_not_found', ApplicationErrorType::NOT_FOUND_ENTITY));
                 return;
             }
             // Delete user using the UserId
@@ -68,7 +68,7 @@ final class DeleteUserUseCase implements ValidableUseCase
         } catch (UserPersistenceException $e) {
             // If there's an error on deleting set response as failed, add the error and return
             $response->setAsFailed();
-            $response->addError('generic', $this->applicationErrorFactory->build($e->getMessage(), ApplicationErrorType::PERSISTENCE_ERROR));
+            $response->replaceError('generic', $this->applicationErrorFactory->build($e->getMessage(), ApplicationErrorType::PERSISTENCE_ERROR));
             return;
         }
 
@@ -86,7 +86,7 @@ final class DeleteUserUseCase implements ValidableUseCase
             $userId = $this->createUserId($request);
             unset($userId);
         } catch (\InvalidArgumentException $e) {
-            $response->addError('generics', $this->applicationErrorFactory->build($e->getMessage(), ApplicationErrorType::NOT_FOUND_ENTITY));
+            $response->replaceError('generics', $this->applicationErrorFactory->build($e->getMessage(), ApplicationErrorType::NOT_FOUND_ENTITY));
         }
 
         return !$response->hasErrors();

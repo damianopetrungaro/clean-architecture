@@ -176,14 +176,14 @@ class CollectionTest extends TestCase
     }
 
     /**
-     * Check that the returned collection have the inserted key
      *
+     * Check that the returned collection have inserted key
      */
     public function testWithMethod()
     {
-        $collection1 = new ArrayCollection(['key2' => 'value2']);
-        $final = new ArrayCollection(['key1' => 'value1', 'key2' => 'value2']);
-        $this->assertEquals($final, $collection1->with('value1', 'key1'));
+        $collection1 = new ArrayCollection(['key1' => 'value1', 'key2' => 'value2']);
+        $final = new ArrayCollection(['key1' => 'new_value', 'key2' => 'value2']);
+        $this->assertEquals($final, $collection1->with('key1', 'new_value'));
     }
 
     /**

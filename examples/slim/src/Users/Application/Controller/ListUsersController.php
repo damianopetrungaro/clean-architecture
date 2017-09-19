@@ -62,7 +62,7 @@ final class ListUsersController
         if (isset($data['users'])) {
             $users = $this->userTransformer->mapMultiple(reset($data['users']));
             $this->domainResponse->removeData('users');
-            $this->domainResponse->addData('users', $users);
+            $this->domainResponse->replaceData('users', $users);
         }
 
         return $this->slimResponseBuilder->build($this->domainResponse);
