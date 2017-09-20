@@ -20,7 +20,7 @@ final class DBALUserRepository implements UserRepositoryInterface
      */
     private $connection;
     /**
-     * @var Mapper
+     * @var UserMapper
      */
     private $mapper;
     /**
