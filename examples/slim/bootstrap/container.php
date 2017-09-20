@@ -32,6 +32,7 @@ $entries['errorHandler'] = function (Container $c) {
     };
 };
 
+
 $entries['phpErrorHandler'] = function (Container $c) {
     return function ($request, \Slim\Http\Response $response, $exception) use ($c) {
         /** @var Exception $exception */
@@ -54,7 +55,7 @@ $entries['app.logger'] = function () {
 
 $entries['app.connection'] = function () {
     $config = new Doctrine\DBAL\Configuration();
-    $connectionParams = array(
+    $connectionParams = [
         'dbname' => getenv('DB_APP_NAME'),
         'user' => getenv('DB_APP_USER'),
         'password' => getenv('DB_APP_PASS'),
@@ -63,7 +64,7 @@ $entries['app.connection'] = function () {
         'driver' => getenv('DB_APP_DOCTRINE_DRIVER'),
         'unix_socket' => getenv('DB_APP_SOCKET') ?: null,
         'port' => getenv('DB_APP_PORT') ?: 3306,
-    );
+    ];
 
     return Doctrine\DBAL\DriverManager::getConnection($connectionParams, $config);
 };
@@ -106,7 +107,7 @@ $entries['app.users.transformer'] = function () {
 };
 
 $entries['app.users.mapper'] = function () {
-    return new Damianopetrungaro\CleanArchitectureSlim\Users\Domain\Mapper\UserMapper(
+    return new Damianopetrungaro\CleanArchitectureSlim\Users\Domain\Mapper\HydratorUserMapper(
         \Damianopetrungaro\CleanArchitectureSlim\Users\Application\Mapper\ZendHydratorFactory::build()
     );
 };

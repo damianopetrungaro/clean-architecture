@@ -15,6 +15,7 @@ use Damianopetrungaro\CleanArchitectureSlim\Users\Domain\ValueObjects\Email;
 use Damianopetrungaro\CleanArchitectureSlim\Users\Domain\ValueObjects\Name;
 use Damianopetrungaro\CleanArchitectureSlim\Users\Domain\ValueObjects\Password;
 use Damianopetrungaro\CleanArchitectureSlim\Users\Domain\ValueObjects\Surname;
+use Throwable;
 
 final class AddUserUseCase implements ValidableUseCase
 {
@@ -53,6 +54,7 @@ final class AddUserUseCase implements ValidableUseCase
         // If request is not valid set response as failed and return
         if (!$this->isValid($request, $response)) {
             $response->setAsFailed();
+
             return;
         }
 
@@ -66,6 +68,7 @@ final class AddUserUseCase implements ValidableUseCase
             // If there's an error on saving set response as failed, add the error and return
             $response->setAsFailed();
             $response->replaceError('generic', $this->applicationErrorFactory->build($e->getMessage(), ApplicationErrorType::PERSISTENCE_ERROR));
+
             return;
         }
 
@@ -74,18 +77,17 @@ final class AddUserUseCase implements ValidableUseCase
         $user = $this->userMapper->toArray($user);
         $response->replaceData('user', $user);
         $response->setAsSuccess();
-        return;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function isValid(Request $request, Response $response) : bool
+    public function isValid(Request $request, Response $response): bool
     {
         try {
             $name = new Name($request->get('name', ''));
             unset($name);
-        } catch (\InvalidArgumentException $e) {
+        } catch (\InvalidArgumentException|Throwable $e) {
             $response->replaceError('name', $this->applicationErrorFactory->build($e->getMessage(), ApplicationErrorType::VALIDATION_ERROR));
         }
 

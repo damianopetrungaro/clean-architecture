@@ -8,7 +8,7 @@ use InvalidArgumentException;
 use ReflectionClass;
 
 /**
- * The class that will extents ReflectionEnum should only contains constant.
+ * The class that extents ReflectionEnum should only contains constant.
  * Example:
  *
  * public const ERROR_VALIDATION = 'ERROR_VALIDATION';

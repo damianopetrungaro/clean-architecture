@@ -4,15 +4,15 @@ namespace Damianopetrungaro\CleanArchitectureSlim\Users\Domain\Mapper;
 
 
 use Damianopetrungaro\CleanArchitecture\Mapper\Mapper;
-use Damianopetrungaro\CleanArchitectureSlim\Users\Domain\Entity\UserEntity;
 use Damianopetrungaro\CleanArchitectureSlim\Users\Domain\Collection\UsersArrayCollection;
+use Damianopetrungaro\CleanArchitectureSlim\Users\Domain\Entity\UserEntity;
 
 interface UserMapper extends Mapper
 {
     /**
      * {@inheritdoc}
      */
-    public function toArray($object) : array;
+    public function toArray($object): array;
 
     /**
      * {@inheritdoc}
@@ -26,7 +26,7 @@ interface UserMapper extends Mapper
      *
      * @return array
      */
-    public function toMultipleArray(UsersArrayCollection $collection) : array;
+    public function toMultipleArray(UsersArrayCollection $collection): array;
 
     /**
      * Return an UsersArrayCollection from an array of data
@@ -36,5 +36,5 @@ interface UserMapper extends Mapper
      *
      * @return UsersArrayCollection
      */
-    public function toMultipleObject($class, array $array) : UsersArrayCollection;
+    public function toMultipleObject($class, array $array): UsersArrayCollection;
 }

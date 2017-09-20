@@ -3,7 +3,7 @@
 namespace Damianopetrungaro\CleanArchitectureSlim\Common\Error;
 
 
-use Damianopetrungaro\CleanArchitecture\UseCase\Error\ErrorType;
+use Damianopetrungaro\CleanArchitecture\UseCase\Error\AbstractErrorType;
 
 /**
  * @method static ApplicationErrorType NOT_FOUND_ENTITY()
@@ -11,7 +11,7 @@ use Damianopetrungaro\CleanArchitecture\UseCase\Error\ErrorType;
  * @method static ApplicationErrorType PERSISTENCE_ERROR()
  * @method static ApplicationErrorType USER_PASSWORD_MISMATCH()
  */
-class ApplicationErrorType extends ErrorType
+class ApplicationErrorType extends AbstractErrorType
 {
     public const NOT_FOUND_ENTITY = 'NOT_FOUND_ENTITY';
     public const VALIDATION_ERROR = 'VALIDATION_ERROR';

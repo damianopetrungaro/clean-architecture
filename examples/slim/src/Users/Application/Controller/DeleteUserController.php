@@ -10,7 +10,7 @@ use Damianopetrungaro\CleanArchitectureSlim\Common\Response\SlimResponseBuilder;
 use Damianopetrungaro\CleanArchitectureSlim\Users\Application\Transformer\UserTransformer;
 use Damianopetrungaro\CleanArchitectureSlim\Users\Domain\UseCase\DeleteUserUseCase;
 use Slim\Http\Request;
-use Slim\Http\Response;
+use Slim\Http\Response as SlimResponse;
 
 final class DeleteUserController
 {
@@ -33,6 +33,7 @@ final class DeleteUserController
 
     /**
      * DeleteUserController constructor.
+     *
      * @param Container $container
      */
     public function __construct(Container $container)
@@ -47,13 +48,14 @@ final class DeleteUserController
      * Controller for DeleteUserUseCase
      *
      * @param Request $request
-     * 
-     * @return Response
+     *
+     * @return SlimResponse
      */
-    public function __invoke(Request $request): Response
+    public function __invoke(Request $request): SlimResponse
     {
         // Invoke the UseCase and use the domainResponse reference for build a response
         $this->useCase->__invoke($this->createRequest($request), $this->domainResponse);
+
         return $this->slimResponseBuilder->build($this->domainResponse);
     }
 
@@ -61,12 +63,14 @@ final class DeleteUserController
      * Create the specific DomainRequest
      *
      * @param Request $request
+     *
      * @return DomainRequest
      */
     private function createRequest(Request $request): DomainRequest
     {
         // The request for this useCase requires only the id
         $entries = ['id' => $request->getAttribute('id')];
+
         return new DomainRequest(new ArrayCollection($entries));
     }
 }

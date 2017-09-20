@@ -18,7 +18,7 @@ final class SurnameStrategy implements StrategyInterface
     public function extract($surname): string
     {
         if (!$surname instanceof Surname) {
-            throw new \InvalidArgumentException(get_class($surname) . " must be a Surname instance");
+            throw new \InvalidArgumentException(get_class($surname) . ' must be a Surname instance');
         }
 
         return $surname->getValue();

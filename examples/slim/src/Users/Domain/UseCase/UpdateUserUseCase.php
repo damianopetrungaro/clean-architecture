@@ -55,6 +55,7 @@ final class UpdateUserUseCase implements ValidableUseCase
         // If request is not valid set response as failed and return
         if (!$this->isValid($request, $response)) {
             $response->setAsFailed();
+
             return;
         }
 
@@ -69,6 +70,7 @@ final class UpdateUserUseCase implements ValidableUseCase
             if (!$user->password()->checkValidity($request->get('old_password'))) {
                 $response->setAsFailed();
                 $response->replaceError('generic', $this->applicationErrorFactory->build('password_mismatch', ApplicationErrorType::USER_PASSWORD_MISMATCH));
+
                 return;
             }
 
@@ -81,11 +83,13 @@ final class UpdateUserUseCase implements ValidableUseCase
             // If User is not found set response as failed, add the error and return
             $response->setAsFailed();
             $response->replaceError('generic', $this->applicationErrorFactory->build('user_not_found', ApplicationErrorType::NOT_FOUND_ENTITY));
+
             return;
         } catch (UserPersistenceException $e) {
             // If there's an error on updating set response as failed, add the error and return
             $response->setAsFailed();
             $response->replaceError('generic', $this->applicationErrorFactory->build($e->getMessage(), ApplicationErrorType::PERSISTENCE_ERROR));
+
             return;
         }
 
@@ -94,13 +98,12 @@ final class UpdateUserUseCase implements ValidableUseCase
         $user = $this->userMapper->toArray($user);
         $response->replaceData('user', $user);
         $response->setAsSuccess();
-        return;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function isValid(Request $request, Response $response) : bool
+    public function isValid(Request $request, Response $response): bool
     {
         try {
             $userId = $this->createUserId($request);
@@ -169,7 +172,7 @@ final class UpdateUserUseCase implements ValidableUseCase
      *
      * @return void
      */
-    private function updateUser(Request $request, UserEntity &$user): void
+    private function updateUser(Request $request, UserEntity $user): void
     {
         $user->update(
             new Name($request->get('name')),

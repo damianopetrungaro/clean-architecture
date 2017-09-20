@@ -10,7 +10,7 @@ use Damianopetrungaro\CleanArchitectureSlim\Common\Response\SlimResponseBuilder;
 use Damianopetrungaro\CleanArchitectureSlim\Users\Application\Transformer\UserTransformer;
 use Damianopetrungaro\CleanArchitectureSlim\Users\Domain\UseCase\ListUsersUseCase;
 use Slim\Http\Request;
-use Slim\Http\Response;
+use Slim\Http\Response as SlimResponse;
 
 final class ListUsersController
 {
@@ -33,6 +33,7 @@ final class ListUsersController
 
     /**
      * ListUsersController constructor.
+     *
      * @param Container $container
      */
     public function __construct(Container $container)
@@ -48,9 +49,9 @@ final class ListUsersController
      *
      * @param Request $request
      *
-     * @return Response
+     * @return SlimResponse
      */
-    public function __invoke(Request $request): Response
+    public function __invoke(Request $request): SlimResponse
     {
         // Invoke the UseCase and use the domainResponse reference for build a response
         $this->useCase->__invoke($this->createRequest(), $this->domainResponse);
@@ -60,8 +61,7 @@ final class ListUsersController
 
         // If the response has a data key, transform it, and override it in the response
         if (isset($data['users'])) {
-            $users = $this->userTransformer->mapMultiple(reset($data['users']));
-            $this->domainResponse->removeData('users');
+            $users = $this->userTransformer->mapMultiple($data['users']);
             $this->domainResponse->replaceData('users', $users);
         }
 

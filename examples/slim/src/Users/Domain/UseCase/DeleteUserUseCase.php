@@ -49,6 +49,7 @@ final class DeleteUserUseCase implements ValidableUseCase
         // If request is not valid set response as failed and return
         if (!$this->isValid($request, $response)) {
             $response->setAsFailed();
+
             return;
         }
 
@@ -61,6 +62,7 @@ final class DeleteUserUseCase implements ValidableUseCase
             if (!$this->userRepository->findByUserId($userId)) {
                 $response->setAsFailed();
                 $response->replaceError('generic', $this->applicationErrorFactory->build('user_not_found', ApplicationErrorType::NOT_FOUND_ENTITY));
+
                 return;
             }
             // Delete user using the UserId
@@ -69,18 +71,18 @@ final class DeleteUserUseCase implements ValidableUseCase
             // If there's an error on deleting set response as failed, add the error and return
             $response->setAsFailed();
             $response->replaceError('generic', $this->applicationErrorFactory->build($e->getMessage(), ApplicationErrorType::PERSISTENCE_ERROR));
+
             return;
         }
 
         // Set the response as success and return
         $response->setAsSuccess();
-        return;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function isValid(Request $request, Response $response) : bool
+    public function isValid(Request $request, Response $response): bool
     {
         try {
             $userId = $this->createUserId($request);

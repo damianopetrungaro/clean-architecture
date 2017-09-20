@@ -10,7 +10,7 @@ use Damianopetrungaro\CleanArchitectureSlim\Common\Response\SlimResponseBuilder;
 use Damianopetrungaro\CleanArchitectureSlim\Users\Application\Transformer\UserTransformer;
 use Damianopetrungaro\CleanArchitectureSlim\Users\Domain\UseCase\GetUserUseCase;
 use Slim\Http\Request;
-use Slim\Http\Response;
+use Slim\Http\Response as SlimResponse;
 
 final class GetUserController
 {
@@ -33,6 +33,7 @@ final class GetUserController
 
     /**
      * ListUsersController constructor.
+     *
      * @param Container $container
      */
     public function __construct(Container $container)
@@ -48,9 +49,9 @@ final class GetUserController
      *
      * @param Request $request
      *
-     * @return Response
+     * @return SlimResponse
      */
-    public function __invoke(Request $request): Response
+    public function __invoke(Request $request): SlimResponse
     {
         // Invoke the UseCase and use the domainResponse reference for build a response
         $this->useCase->__invoke($this->createRequest($request), $this->domainResponse);
@@ -60,8 +61,7 @@ final class GetUserController
 
         // If the response has a data key, transform it, and override it in the response
         if (isset($data['user'])) {
-            $user = $this->userTransformer->map(reset($data['user']));
-            $this->domainResponse->removeData('user');
+            $user = $this->userTransformer->map($data['user']);
             $this->domainResponse->replaceData('user', $user);
         }
 
@@ -72,12 +72,14 @@ final class GetUserController
      * Create the specific DomainRequest
      *
      * @param Request $request
+     *
      * @return DomainRequest
      */
     private function createRequest(Request $request): DomainRequest
     {
         // The request for this useCase requires only the id
         $entries = ['id' => $request->getAttribute('id')];
+
         return new DomainRequest(new ArrayCollection($entries));
     }
 }

@@ -7,7 +7,7 @@ namespace Damianopetrungaro\CleanArchitecture\Common\Enum;
 use InvalidArgumentException;
 
 /**
- * The class that will extents Enum should only contains constant.
+ * The class that implement Enum should only contains constant.
  * Example:
  *
  * const ERROR_VALIDATION = 'ERROR_VALIDATION';

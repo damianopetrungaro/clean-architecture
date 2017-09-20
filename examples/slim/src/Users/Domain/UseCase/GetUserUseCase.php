@@ -50,6 +50,7 @@ final class GetUserUseCase implements ValidableUseCase
         // If request is not valid set response as failed and return
         if (!$this->isValid($request, $response)) {
             $response->setAsFailed();
+
             return;
         }
 
@@ -63,11 +64,13 @@ final class GetUserUseCase implements ValidableUseCase
             // If User is not found set response as failed, add the error and return
             $response->setAsFailed();
             $response->replaceError('generic', $this->applicationErrorFactory->build($e->getMessage(), ApplicationErrorType::PERSISTENCE_ERROR));
+
             return;
         } catch (UserNotFoundException $e) {
             // If there's an error on getting set response as failed, add the error and return
             $response->setAsFailed();
             $response->replaceError('generic', $this->applicationErrorFactory->build('user_not_found', ApplicationErrorType::NOT_FOUND_ENTITY));
+
             return;
         }
 
@@ -76,13 +79,12 @@ final class GetUserUseCase implements ValidableUseCase
         $user = $this->userMapper->toArray($user);
         $response->replaceData('user', $user);
         $response->setAsSuccess();
-        return;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function isValid(Request $request, Response $response) : bool
+    public function isValid(Request $request, Response $response): bool
     {
         try {
             $userId = $this->createUserId($request);
