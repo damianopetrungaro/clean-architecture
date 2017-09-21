@@ -33,6 +33,7 @@ final class UserEntity
 
     /**
      * UserEntity constructor.
+     *
      * @param UserId $userId
      * @param Name $name
      * @param Surname $surname

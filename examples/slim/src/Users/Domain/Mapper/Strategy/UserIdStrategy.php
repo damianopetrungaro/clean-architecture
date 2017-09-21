@@ -18,7 +18,7 @@ final class UserIdStrategy implements StrategyInterface
     public function extract($userId): string
     {
         if (!$userId instanceof UserId) {
-            throw new \InvalidArgumentException(get_class($userId) . " must be an UserId instance");
+            throw new \InvalidArgumentException(get_class($userId) . ' must be an UserId instance');
         }
 
         return $userId->getValue();

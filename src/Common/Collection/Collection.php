@@ -1,149 +1,110 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Damianopetrungaro\CleanArchitecture\Common\Collection;
 
-use Damianopetrungaro\CleanArchitecture\Common\CommonTrait\CloneArrayTrait;
-
-class Collection implements CollectionInterface
+interface Collection extends \IteratorAggregate
 {
-    use CloneArrayTrait;
-
     /**
-     * Array of request parameters.
+     * Return all the items.
      *
-     * @var array $items
+     * @return array
      */
-    private $items;
+    public function all(): array;
 
     /**
-     * Request constructor.
+     * Remove all the items.
      *
-     * @param array $items Populate the items.
+     * @return Collection
      */
-    public function __construct(array $items = [])
-    {
-        $this->items = $items;
-    }
+    public function clear(): Collection;
 
     /**
-     * {@inheritDoc}
+     * Return true if collection contains the required value, otherwise return false.
+     *
+     * @param mixed $item
+     * @param bool $strict
+     *
+     * @return bool
      */
-    public function clear() : CollectionInterface
-    {
-        $clone = clone $this;
-        $clone->items = [];
-
-        return $clone;
-    }
+    public function contains($item, bool $strict = true): bool;
 
     /**
-     * {@inheritDoc}
+     * Return the value of required key.
+     * Default if is not found.
+     *
+     * @param mixed $key
+     * @param mixed|null $default
+     *
+     * @return mixed
      */
-    public function contains($item, bool $strict = true) : bool
-    {
-        return in_array($item, $this->items, $strict);
-    }
+    public function get($key, $default = null);
 
     /**
-     * {@inheritDoc}
+     * Return true if key is set, otherwise false.
+     *
+     * @param mixed $key
+     *
+     * @return bool
      */
-    public function get($key, $default = null)
-    {
-        return isset($this->items[$key]) ? $this->items[$key] : $default;
-    }
+    public function has($key): bool;
 
     /**
-     * {@inheritDoc}
+     * Return an array containing all the collection's keys.
+     *
+     * @return array
      */
-    public function has($key) : bool
-    {
-        return isset($this->items[$key]);
-    }
+    public function keys(): array;
 
     /**
-     * {@inheritDoc}
+     * Return the number of items.
+     *
+     * @return int
      */
-    public function keys() : array
-    {
-        return array_keys($this->items);
-    }
+    public function length(): int;
 
     /**
-     * {@inheritDoc}
+     * Return a Collection merging it with one or more collection.
+     *
+     * @param Collection[] $collection
+     *
+     * @return Collection
      */
-    public function length() : int
-    {
-        return count($this->items);
-    }
+    public function mergeWith(Collection...$collection): Collection;
 
     /**
-     * {@inheritDoc}
+     * Return a Collection with a new item value.
+     *
+     * @param mixed $key
+     * @param mixed $item
+     *
+     * @return Collection
      */
-    public function mergeWith(CollectionInterface...$collections) : CollectionInterface
-    {
-        $clone = clone $this;
-        foreach ($collections as $collection) {
-            $clone->items = array_merge($clone->all(), $collection->all());
-        }
 
-        return $clone;
-    }
+    public function with($key, $item): Collection;
 
     /**
-     * @inheritdoc
+     * Return a Collection without a specific key.
+     *
+     * @param mixed $key
+     *
+     * @return Collection
      */
-    public function all() : array
-    {
-        return $this->items;
-    }
+    public function without($key): Collection;
 
     /**
-     * {@inheritDoc}
+     * Return an array containing all the collection's items.
+     *
+     * @return array
      */
-    public function with($item, $key = null) : CollectionInterface
-    {
-        $clone = clone $this;
-        ($key !== null) ? $clone->items[$key] = $item : $clone->items[] = $item;
-
-        return $clone;
-    }
+    public function values(): array;
 
     /**
-     * {@inheritDoc}
+     * Return a new cloned object
+     * It's recommended to deep clone the object
+     *
+     * @return Collection
      */
-    public function without($key) : CollectionInterface
-    {
-        $clone = clone $this;
-        unset($clone->items[$key]);
-
-        return $clone;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function values() : array
-    {
-        return array_values($this->items);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function __clone()
-    {
-        $this->cloneArray($this->items);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getIterator()
-    {
-        foreach ($this->items as $key => $item) {
-            yield $key => $item;
-        }
-    }
+    public function __clone();
 }

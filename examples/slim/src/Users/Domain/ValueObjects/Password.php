@@ -12,12 +12,13 @@ final class Password
 
     /**
      * Email constructor.
+     *
      * @param string $password
      */
     public function __construct(string $password)
     {
         if (strlen($password) < 6) {
-            throw new \InvalidArgumentException("Password must be longer than 6 char");
+            throw new \InvalidArgumentException('Password must be longer than 6 char');
         }
 
         $this->password = password_hash($password, PASSWORD_DEFAULT);
@@ -45,7 +46,7 @@ final class Password
      *
      * @return bool
      */
-    public function checkValidity(string $password) : bool
+    public function checkValidity(string $password): bool
     {
         return password_verify($password, $this->password);
     }

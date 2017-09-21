@@ -3,67 +3,38 @@
 namespace Damianopetrungaro\CleanArchitectureSlim\Users\Domain\Mapper;
 
 
+use Damianopetrungaro\CleanArchitecture\Mapper\Mapper;
+use Damianopetrungaro\CleanArchitectureSlim\Users\Domain\Collection\UsersArrayCollection;
 use Damianopetrungaro\CleanArchitectureSlim\Users\Domain\Entity\UserEntity;
-use Damianopetrungaro\CleanArchitectureSlim\Users\Domain\Collection\UsersCollection;
-use Zend\Hydrator\Reflection as Hydrator;
 
-final class UserMapper implements UserMapperInterface
+interface UserMapper extends Mapper
 {
     /**
-     * @var Hydrator
+     * {@inheritdoc}
      */
-    private $hydrator;
-
-    /**
-     * UserMapper constructor.
-     * @param Hydrator $hydrator
-     */
-    public function __construct(Hydrator $hydrator)
-    {
-        $this->hydrator = $hydrator;
-    }
+    public function toArray($object): array;
 
     /**
      * {@inheritdoc}
      */
-    public function toMultipleArray(UsersCollection $collection) : array
-    {
-        $users = [];
-        /** @var UserEntity $user */
-        foreach ($collection->getIterator() as $user) {
-            $users[] = $this->toArray($user);
-        }
-
-        return $users;
-    }
+    public function toObject($class, array $array): UserEntity;
 
     /**
-     * {@inheritdoc}
+     * Return an array with multiple user's array
+     *
+     * @param UsersArrayCollection $collection
+     *
+     * @return array
      */
-    public function toMultipleObject($class, array $array): UsersCollection
-    {
-        $users = [];
-        foreach ($array as $user) {
-            $users[] = $this->toObject($class, $user);
-        }
-
-        return new UsersCollection($users);
-    }
+    public function toMultipleArray(UsersArrayCollection $collection): array;
 
     /**
-     * {@inheritdoc}
+     * Return an UsersArrayCollection from an array of data
+     *
+     * @param $class
+     * @param array $array
+     *
+     * @return UsersArrayCollection
      */
-    public function toArray($object) : array
-    {
-        return $this->hydrator->extract($object);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function toObject($class, array $array): UserEntity
-    {
-        $user = unserialize(sprintf('O:%u:"%s":0:{}', strlen($class), $class));
-        return $this->hydrator->hydrate($array, $user);
-    }
+    public function toMultipleObject($class, array $array): UsersArrayCollection;
 }

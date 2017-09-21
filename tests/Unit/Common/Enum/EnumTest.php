@@ -1,32 +1,30 @@
 <?php
+
 namespace Damianopetrungaro\CleanArchitecture\Unit\Common\Enum;
 
-use Damianopetrungaro\CleanArchitecture\Common\Enum\EnumInterface;
-use Damianopetrungaro\CleanArchitecture\Unit\Common\Enum\Fixtures\MyEnum;
+use Damianopetrungaro\CleanArchitecture\Common\Enum\Enum;
+use Damianopetrungaro\CleanArchitecture\Unit\Common\Enum\Fixtures\FixtureEnum;
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 
 class EnumTest extends TestCase
 {
     /**
      * Check that an InvalidArgumentException is thrown
-     *
-     * @expectedException \InvalidArgumentException
      */
     public function testCallStaticInvalidArgumentException()
     {
-        $this->expectException(\InvalidArgumentException::class);
-        MyEnum::NOT_EXISTS();
+        $this->expectException(InvalidArgumentException::class);
+        FixtureEnum::NOT_EXISTS();
     }
 
     /**
-     * Check that an InvalidArgumentException is thrown using the Enum constructor
-     *
-     * @expectedException \InvalidArgumentException
+     * Check that an InvalidArgumentException is thrown using the ReflectionEnum constructor
      */
     public function testConstructorInvalidArgumentException()
     {
-        $this->expectException(\InvalidArgumentException::class);
-        new MyEnum('NOT_EXISTS');
+        $this->expectException(InvalidArgumentException::class);
+        new FixtureEnum('NOT_EXISTS');
     }
 
     /**
@@ -35,20 +33,20 @@ class EnumTest extends TestCase
      */
     public function testConstructorValidEnum()
     {
-        $firstEnum = new MyEnum(MyEnum::A);
-        $secondEnum = new MyEnum(MyEnum::B);
-        $thirdEnum = new MyEnum(MyEnum::C);
-        $fourthEnum = new MyEnum(MyEnum::VALUE_NUMB);
+        $firstEnum = new FixtureEnum(FixtureEnum::A);
+        $secondEnum = new FixtureEnum(FixtureEnum::B);
+        $thirdEnum = new FixtureEnum(FixtureEnum::C);
+        $fourthEnum = new FixtureEnum(FixtureEnum::VALUE_NUMB);
 
-        $this->assertTrue($firstEnum instanceof EnumInterface);
-        $this->assertTrue($secondEnum instanceof EnumInterface);
-        $this->assertTrue($thirdEnum instanceof EnumInterface);
-        $this->assertTrue($fourthEnum instanceof EnumInterface);
+        $this->assertInstanceOf(Enum::class, $firstEnum);
+        $this->assertInstanceOf(Enum::class, $secondEnum);
+        $this->assertInstanceOf(Enum::class, $thirdEnum);
+        $this->assertInstanceOf(Enum::class, $fourthEnum);
 
-        $this->assertEquals($firstEnum->getValue(), 'VALUE_A');
-        $this->assertEquals($secondEnum->getValue(), 'VALUE_B');
-        $this->assertEquals($thirdEnum->getValue(), 'VALUE_C');
-        $this->assertEquals($fourthEnum->getValue(), 12);
+        $this->assertSame($firstEnum->getValue(), 'VALUE_A');
+        $this->assertSame($secondEnum->getValue(), 'VALUE_B');
+        $this->assertSame($thirdEnum->getValue(), 'VALUE_C');
+        $this->assertSame($fourthEnum->getValue(), 12);
     }
 
     /**
@@ -56,26 +54,26 @@ class EnumTest extends TestCase
      */
     public function testCallStaticValidEnum()
     {
-        /** @var EnumInterface $firstEnum */
-        $firstEnum = MyEnum::A();
+        /** @var Enum $firstEnum */
+        $firstEnum = FixtureEnum::A();
 
-        /** @var EnumInterface $secondEnum */
-        $secondEnum = MyEnum::B();
+        /** @var Enum $secondEnum */
+        $secondEnum = FixtureEnum::B();
 
-        /** @var EnumInterface $thirdEnum */
-        $thirdEnum = MyEnum::C();
+        /** @var Enum $thirdEnum */
+        $thirdEnum = FixtureEnum::C();
 
-        /** @var EnumInterface $fourthEnum */
-        $fourthEnum = MyEnum::VALUE_NUMB();
+        /** @var Enum $fourthEnum */
+        $fourthEnum = FixtureEnum::VALUE_NUMB();
 
-        $this->assertTrue($firstEnum instanceof EnumInterface);
-        $this->assertTrue($secondEnum instanceof EnumInterface);
-        $this->assertTrue($thirdEnum instanceof EnumInterface);
+        $this->assertInstanceOf(Enum::class, $firstEnum);
+        $this->assertInstanceOf(Enum::class, $secondEnum);
+        $this->assertInstanceOf(Enum::class, $thirdEnum);
 
-        $this->assertEquals($firstEnum->getValue(), 'VALUE_A');
-        $this->assertEquals($secondEnum->getValue(), 'VALUE_B');
-        $this->assertEquals($thirdEnum->getValue(), 'VALUE_C');
-        $this->assertEquals($fourthEnum->getValue(), 12);
+        $this->assertSame($firstEnum->getValue(), 'VALUE_A');
+        $this->assertSame($secondEnum->getValue(), 'VALUE_B');
+        $this->assertSame($thirdEnum->getValue(), 'VALUE_C');
+        $this->assertSame($fourthEnum->getValue(), 12);
     }
 
     /**
@@ -83,10 +81,10 @@ class EnumTest extends TestCase
      */
     public function testToStringMagicMethod()
     {
-        $firstEnum = new MyEnum(MyEnum::A);
-        $secondEnum = new MyEnum(MyEnum::VALUE_NUMB);
+        $firstEnum = new FixtureEnum(FixtureEnum::A);
+        $secondEnum = new FixtureEnum(FixtureEnum::VALUE_NUMB);
 
-        $this->assertEquals((string)$firstEnum, MyEnum::A);
-        $this->assertEquals((string)$secondEnum, '12');
+        $this->assertSame((string)$firstEnum, FixtureEnum::A);
+        $this->assertSame((string)$secondEnum, '12');
     }
 }

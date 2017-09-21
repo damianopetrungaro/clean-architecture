@@ -31,6 +31,7 @@ class ZendHydratorFactory
         $reflectionHydrator->addStrategy('surname', new SurnameStrategy());
         $reflectionHydrator->addStrategy('email', new EmailStrategy());
         $reflectionHydrator->addStrategy('password', new PasswordStrategy());
+
         return $reflectionHydrator;
     }
 }

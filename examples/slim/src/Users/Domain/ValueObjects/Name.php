@@ -12,6 +12,7 @@ final class Name
 
     /**
      * Name constructor.
+     *
      * @param string $name
      */
     public function __construct(string $name)

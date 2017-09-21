@@ -14,6 +14,7 @@ final class UserId
 
     /**
      * UserId constructor.
+     *
      * @param UuidInterface $userId
      */
     public function __construct(UuidInterface $userId)

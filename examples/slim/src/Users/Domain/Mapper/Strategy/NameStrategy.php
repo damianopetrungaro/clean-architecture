@@ -4,6 +4,7 @@ namespace Damianopetrungaro\CleanArchitectureSlim\Users\Domain\Mapper\Strategy;
 
 
 use Damianopetrungaro\CleanArchitectureSlim\Users\Domain\ValueObjects\Name;
+use InvalidArgumentException;
 use Zend\Hydrator\Strategy\StrategyInterface;
 
 final class NameStrategy implements StrategyInterface
@@ -14,11 +15,13 @@ final class NameStrategy implements StrategyInterface
      * @param Name $name
      *
      * @return string
+     *
+     * @throws InvalidArgumentException
      */
     public function extract($name): string
     {
         if (!$name instanceof Name) {
-            throw new \InvalidArgumentException(get_class($name) . " must be a Name instance");
+            throw new InvalidArgumentException(get_class($name) . ' must be a Name instance');
         }
 
         return $name->getValue();

@@ -2,8 +2,11 @@
 
 namespace Damianopetrungaro\CleanArchitecture\Unit\Common\Collection;
 
-use Damianopetrungaro\CleanArchitecture\Common\Collection\Collection;
+use ArrayIterator;
+use ArrayObject;
+use Damianopetrungaro\CleanArchitecture\Common\Collection\ArrayCollection;
 use PHPUnit\Framework\TestCase;
+use SplObjectStorage;
 
 class CollectionTest extends TestCase
 {
@@ -11,40 +14,40 @@ class CollectionTest extends TestCase
      * Check that the items passed in the constructor is correctly assigned
      *
      * @param $items
+     *
      * @dataProvider itemsDataProviders
      */
     public function testCollectionInit($items)
     {
-        $collection = new Collection($items);
-        $reflection = new \ReflectionClass($collection);
-        $reflectedItems = $reflection->getProperty('items');
-        $reflectedItems->setAccessible(true);
-        $this->assertEquals($reflectedItems->getValue($collection), $items);
+        $collection = new ArrayCollection($items);
+        $this->assertSame($collection->all(), $items);
     }
 
     /**
      * Check that the items retrieved is the same inserted
      *
      * @param $items
+     *
      * @dataProvider itemsDataProviders
      */
     public function testAllMethod($items)
     {
-        $collection = new Collection($items);
-        $this->assertEquals($collection->all(), $items);
+        $collection = new ArrayCollection($items);
+        $this->assertSame($collection->all(), $items);
     }
 
     /**
      * Check that the new instance of collection returned from clear has no items
      *
      * @param $items
+     *
      * @dataProvider itemsDataProviders
      */
     public function testClearMethod($items)
     {
-        $collection = new Collection($items);
+        $collection = new ArrayCollection($items);
         $collection = $collection->clear();
-        $this->assertEquals($collection->all(), []);
+        $this->assertSame($collection->all(), []);
     }
 
     /**
@@ -57,7 +60,7 @@ class CollectionTest extends TestCase
      */
     public function testContainsMethodExpectingTrue($items, $expectedValue)
     {
-        $collection = new Collection($items);
+        $collection = new ArrayCollection($items);
         $this->assertTrue($collection->contains($expectedValue));
     }
 
@@ -71,7 +74,7 @@ class CollectionTest extends TestCase
      */
     public function testContainsMethodExpectingFalse($items, $expectedValue)
     {
-        $collection = new Collection($items);
+        $collection = new ArrayCollection($items);
         $this->assertFalse($collection->contains($expectedValue));
     }
 
@@ -86,8 +89,8 @@ class CollectionTest extends TestCase
      */
     public function testGetMethodExpectingNonDefaultValue($items, $expectedKey, $expectedValue)
     {
-        $collection = new Collection($items);
-        $this->assertEquals($collection->get($expectedKey), $expectedValue);
+        $collection = new ArrayCollection($items);
+        $this->assertSame($collection->get($expectedKey), $expectedValue);
     }
 
     /**
@@ -101,8 +104,8 @@ class CollectionTest extends TestCase
      */
     public function testGetMethodExpectingDefaultValue($items, $expectedKey, $expectedValue)
     {
-        $collection = new Collection($items);
-        $this->assertEquals($collection->get($expectedKey, $expectedValue), $expectedValue);
+        $collection = new ArrayCollection($items);
+        $this->assertSame($collection->get($expectedKey, $expectedValue), $expectedValue);
     }
 
     /**
@@ -116,34 +119,36 @@ class CollectionTest extends TestCase
      */
     public function testHasMethod($items, $requiredKey, $expectedValue)
     {
-        $collection = new Collection($items);
-        $this->assertEquals($collection->has($requiredKey), $expectedValue);
+        $collection = new ArrayCollection($items);
+        $this->assertSame($collection->has($requiredKey), $expectedValue);
     }
 
     /**
      * Check that keys method return all the inserted keys
      *
      * @param $items
+     *
      * @dataProvider itemsDataProviders
      */
     public function testKeysMethod($items)
     {
-        $collection = new Collection($items);
+        $collection = new ArrayCollection($items);
         $keys = array_keys($items);
-        $this->assertEquals($collection->keys(), $keys);
+        $this->assertSame($collection->keys(), $keys);
     }
 
     /**
      * Check that the expected length is right
      *
      * @param $items
+     *
      * @dataProvider itemsDataProviders
      */
     public function testLengthMethod($items)
     {
-        $collection = new Collection($items);
+        $collection = new ArrayCollection($items);
         $length = count($items);
-        $this->assertEquals($collection->length(), $length);
+        $this->assertSame($collection->length(), $length);
     }
 
     /**
@@ -152,11 +157,11 @@ class CollectionTest extends TestCase
      */
     public function testMergeWithMethod()
     {
-        $collection1 = new Collection(['a', 'b']);
-        $collection2 = new Collection(['c', 'd']);
-        $collection3 = new Collection(['e' => 'val-e', 'f' => 'val-f']);
-        $final = new Collection(['a', 'b', 'c', 'd', 'e' => 'val-e', 'f' => 'val-f']);
-        $this->assertTrue($final == $collection1->mergeWith($collection2, $collection3));
+        $collection1 = new ArrayCollection(['a', 'b']);
+        $collection2 = new ArrayCollection(['c', 'd']);
+        $collection3 = new ArrayCollection(['e' => 'val-e', 'f' => 'val-f']);
+        $final = new ArrayCollection(['a', 'b', 'c', 'd', 'e' => 'val-e', 'f' => 'val-f']);
+        $this->assertEquals($final, $collection1->mergeWith($collection2, $collection3));
     }
 
     /**
@@ -165,33 +170,34 @@ class CollectionTest extends TestCase
      */
     public function testWithoutMethod()
     {
-        $collection1 = new Collection(['key1' => 'value1', 'key2' => 'value2']);
-        $final = new Collection(['key2' => 'value2']);
-        $this->assertTrue($final == $collection1->without('key1'));
+        $collection1 = new ArrayCollection(['key1' => 'value1', 'key2' => 'value2']);
+        $final = new ArrayCollection(['key2' => 'value2']);
+        $this->assertEquals($final, $collection1->without('key1'));
     }
 
     /**
-     * Check that the returned collection have the inserted key
      *
+     * Check that the returned collection have inserted key
      */
     public function testWithMethod()
     {
-        $collection1 = new Collection(['key2' => 'value2']);
-        $final = new Collection(['key1' => 'value1', 'key2' => 'value2']);
-        $this->assertTrue($final == $collection1->with('value1', 'key1'));
+        $collection1 = new ArrayCollection(['key1' => 'value1', 'key2' => 'value2']);
+        $final = new ArrayCollection(['key1' => 'new_value', 'key2' => 'value2']);
+        $this->assertEquals($final, $collection1->with('key1', 'new_value'));
     }
 
     /**
      * Check that all the values inserted is returned
      *
      * @param $items
+     *
      * @dataProvider itemsDataProviders
      */
     public function testValuesMethod($items)
     {
-        $collection = new Collection($items);
+        $collection = new ArrayCollection($items);
         $keys = array_values($items);
-        $this->assertEquals($collection->values(), $keys);
+        $this->assertSame($collection->values(), $keys);
     }
 
     /**
@@ -203,15 +209,15 @@ class CollectionTest extends TestCase
         $keys = ['key-0', 'key-1'];
         $indexKey = 0;
         $items = ['key-0' => 'value-0', 'key-1' => 'value-1'];
-        $collection = new Collection($items);
-        foreach ($collection->getIterator() as $key => $value) {
-            $this->assertTrue($items[$keys[$indexKey]] === $value);
+        $collection = new ArrayCollection($items);
+        foreach ($collection as $key => $value) {
+            $this->assertSame($items[$keys[$indexKey]], $value);
             $indexKey++;
         }
     }
 
     /**
-     * Check that the clone of the Collection is a deep clone.
+     * Check that the clone of the ArrayCollection is a deep clone.
      * All the object inside the collection must be cloned too.
      */
     public function testDeepClone()
@@ -219,27 +225,27 @@ class CollectionTest extends TestCase
         // The array has object nested object inside
         $items = [
             'very' => [
-                'deep' => new \SplObjectStorage()
+                'deep' => new SplObjectStorage()
             ],
             'simple' => 'variable',
-            'deep' => new \ArrayIterator(),
-            new \ArrayObject()
+            'deep' => new ArrayIterator(),
+            new ArrayObject()
         ];
 
         // Init and clone the object
-        $collection = new Collection($items);
+        $collection = new ArrayCollection($items);
         $clonedCollection = clone $collection;
 
         // Object has the same type
-        $this->assertTrue($clonedCollection->get(0) == $collection->get(0));
-        $this->assertTrue($clonedCollection->get('deep') == $collection->get('deep'));
-        $this->assertTrue($clonedCollection->get('simple') == $collection->get('simple'));
-        $this->assertTrue($clonedCollection->get('very')['deep'] == $collection->get('very')['deep']);
+        $this->assertEquals($clonedCollection->get(0), $collection->get(0));
+        $this->assertEquals($clonedCollection->get('deep'), $collection->get('deep'));
+        $this->assertEquals($clonedCollection->get('simple'), $collection->get('simple'));
+        $this->assertEquals($clonedCollection->get('very')['deep'], $collection->get('very')['deep']);
 
         // Object is not the same instance
-        $this->assertNotEquals(spl_object_hash($clonedCollection->get(0)), spl_object_hash($collection->get(0)));
-        $this->assertNotEquals(spl_object_hash($clonedCollection->get('deep')), spl_object_hash($collection->get('deep')));
-        $this->assertNotEquals(spl_object_hash($clonedCollection->get('very')['deep']), spl_object_hash($collection->get('very')['deep']));
+        $this->assertNotSame(spl_object_hash($clonedCollection->get(0)), spl_object_hash($collection->get(0)));
+        $this->assertNotSame(spl_object_hash($clonedCollection->get('deep')), spl_object_hash($collection->get('deep')));
+        $this->assertNotSame(spl_object_hash($clonedCollection->get('very')['deep']), spl_object_hash($collection->get('very')['deep']));
     }
 
     /**
@@ -249,7 +255,7 @@ class CollectionTest extends TestCase
     {
         return [
             [['key1' => 0, 'secondKey' => 'a value', 'onlyValue']],
-            [[new \SplObjectStorage(), 'b' => 'sample', 'c' => 'anotherSample']],
+            [[new SplObjectStorage(), 'b' => 'sample', 'c' => 'anotherSample']],
         ];
     }
 
@@ -259,7 +265,8 @@ class CollectionTest extends TestCase
      */
     public function itemsWithValidValueForTestContainsMethodDataProviders()
     {
-        $object = new \SplObjectStorage();
+        $object = new SplObjectStorage();
+
         return [
             [['key1' => 'value1'], 'value1'],
             [[1], 1],
@@ -275,7 +282,7 @@ class CollectionTest extends TestCase
         return [
             [['key1' => 'value1'], 'no value'],
             [[1], 2],
-            [[new \SplObjectStorage()], new \SplObjectStorage()],
+            [[new SplObjectStorage()], new SplObjectStorage()],
         ];
     }
 
@@ -284,7 +291,8 @@ class CollectionTest extends TestCase
      */
     public function itemsWithValidKeyValueForTestGetMethodDataProviders()
     {
-        $object = new \SplObjectStorage();
+        $object = new SplObjectStorage();
+
         return [
             [['key1' => 'value1'], 'key1', 'value1'],
             [[1 => 0], 1, 0],
@@ -300,7 +308,7 @@ class CollectionTest extends TestCase
         return [
             [['key1' => 'value1'], 'key2', 'default'],
             [[1 => 0], 0, 'default_number'],
-            [['object' => ''], 'object', null],
+            [['object' => null], 'object', null],
         ];
     }
 

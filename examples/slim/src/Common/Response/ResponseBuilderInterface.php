@@ -2,16 +2,16 @@
 
 namespace Damianopetrungaro\CleanArchitectureSlim\Common\Response;
 
-use Damianopetrungaro\CleanArchitecture\UseCase\Response\ResponseInterface;
+use Damianopetrungaro\CleanArchitecture\UseCase\Response\Response;
 
 interface ResponseBuilderInterface
 {
     /**
      * Build a Response
      *
-     * @param ResponseInterface $response
+     * @param Response $response
      *
      * @return mixed
      */
-    public function build(ResponseInterface $response);
+    public function build(Response $response);
 }

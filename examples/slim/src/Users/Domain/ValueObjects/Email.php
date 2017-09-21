@@ -12,12 +12,13 @@ final class Email
 
     /**
      * Email constructor.
+     *
      * @param string $email
      */
     public function __construct(string $email)
     {
         if (empty($email)) {
-            throw new \InvalidArgumentException("Email must be sent");
+            throw new \InvalidArgumentException('Email must be sent');
         }
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             throw new \InvalidArgumentException("Email '$email' is not a valid email");

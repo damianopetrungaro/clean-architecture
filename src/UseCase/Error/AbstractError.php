@@ -1,10 +1,10 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Damianopetrungaro\CleanArchitecture\UseCase\Error;
 
-abstract class AbstractError implements ErrorInterface
+abstract class AbstractError implements Error
 {
     /**
      * @var string $code
@@ -12,7 +12,7 @@ abstract class AbstractError implements ErrorInterface
     private $code;
 
     /**
-     * @var ErrorTypeInterface $errorType
+     * @var ErrorType $errorType
      */
     private $errorType;
 
@@ -20,9 +20,9 @@ abstract class AbstractError implements ErrorInterface
      * AbstractError constructor.
      *
      * @param string $code
-     * @param ErrorTypeInterface $errorType
+     * @param ErrorType $errorType
      */
-    public function __construct(string $code, ErrorTypeInterface $errorType)
+    public function __construct(string $code, ErrorType $errorType)
     {
         $this->code = $code;
         $this->errorType = $errorType;
@@ -31,7 +31,7 @@ abstract class AbstractError implements ErrorInterface
     /**
      * {@inheritDoc}
      */
-    public function code() : string
+    public function code(): string
     {
         return $this->code;
     }
@@ -39,7 +39,7 @@ abstract class AbstractError implements ErrorInterface
     /**
      * {@inheritDoc}
      */
-    public function type() : ErrorTypeInterface
+    public function type(): ErrorType
     {
         return $this->errorType;
     }

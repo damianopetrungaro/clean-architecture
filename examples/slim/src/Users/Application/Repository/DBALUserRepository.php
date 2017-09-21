@@ -2,10 +2,10 @@
 
 namespace Damianopetrungaro\CleanArchitectureSlim\Users\Application\Repository;
 
-use Damianopetrungaro\CleanArchitecture\Mapper\MapperInterface;
-use Damianopetrungaro\CleanArchitectureSlim\Users\Domain\Collection\UsersCollection;
+use Damianopetrungaro\CleanArchitecture\Mapper\Mapper;
+use Damianopetrungaro\CleanArchitectureSlim\Users\Domain\Collection\UsersArrayCollection;
 use Damianopetrungaro\CleanArchitectureSlim\Users\Domain\Entity\UserEntity;
-use Damianopetrungaro\CleanArchitectureSlim\Users\Domain\Mapper\UserMapperInterface;
+use Damianopetrungaro\CleanArchitectureSlim\Users\Domain\Mapper\UserMapper;
 use Damianopetrungaro\CleanArchitectureSlim\Users\Domain\Repository\Exception\UserNotFoundException;
 use Damianopetrungaro\CleanArchitectureSlim\Users\Domain\Repository\Exception\UserPersistenceException;
 use Damianopetrungaro\CleanArchitectureSlim\Users\Domain\Repository\UserRepositoryInterface;
@@ -20,7 +20,7 @@ final class DBALUserRepository implements UserRepositoryInterface
      */
     private $connection;
     /**
-     * @var MapperInterface
+     * @var UserMapper
      */
     private $mapper;
     /**
@@ -30,11 +30,12 @@ final class DBALUserRepository implements UserRepositoryInterface
 
     /**
      * DBALUserRepository constructor.
+     *
      * @param string $userTable
      * @param Connection $connection
-     * @param UserMapperInterface $mapper
+     * @param UserMapper $mapper
      */
-    public function __construct(Connection $connection, UserMapperInterface $mapper, string $userTable)
+    public function __construct(Connection $connection, UserMapper $mapper, string $userTable)
     {
         $this->connection = $connection;
         $this->mapper = $mapper;
@@ -44,7 +45,7 @@ final class DBALUserRepository implements UserRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function all(): UsersCollection
+    public function all(): UsersArrayCollection
     {
         try {
             $stmt = $this->connection->prepare("SELECT * FROM {$this->userTable}");

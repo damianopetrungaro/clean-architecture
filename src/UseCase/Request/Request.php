@@ -1,85 +1,62 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Damianopetrungaro\CleanArchitecture\UseCase\Request;
 
-use Damianopetrungaro\CleanArchitecture\Common\Collection\CollectionInterface;
-use Damianopetrungaro\CleanArchitecture\Common\CommonTrait\CloneArrayTrait;
-
-class Request implements RequestInterface
+interface Request
 {
-    use CloneArrayTrait;
-
     /**
-     * @var CollectionInterface $collection
-     */
-    private $collection;
-
-    /**
-     * Request constructor.
+     * Return all the data.
      *
-     * @param CollectionInterface $collection
+     * @return array
      */
-    public function __construct(CollectionInterface $collection)
-    {
-        $this->collection = $collection;
-    }
+    public function all(): array;
 
     /**
-     * {@inheritDoc}
+     * Remove all the data.
+     *
+     * @return Request
      */
-    public function all(): array
-    {
-        return $this->collection->all();
-    }
+    public function clear(): Request;
 
     /**
-     * {@inheritDoc}
+     * Return the value of required key.
+     * Default if is not found.
+     *
+     * @param mixed $key
+     * @param mixed|null $default
+     *
+     * @return mixed
      */
-    public function clear(): RequestInterface
-    {
-        $clone = clone $this;
-        $clone->collection = $clone->collection->clear();
-
-        return $clone;
-    }
+    public function get($key, $default = null);
 
     /**
-     * {@inheritDoc}
+     * Return true if key is set, otherwise false.
+     *
+     * @param mixed $key
+     *
+     * @return bool
      */
-    public function get($key, $default = null)
-    {
-        return $this->collection->get($key, $default);
-    }
+    public function has($key): bool;
 
     /**
-     * {@inheritDoc}
+     * Return a Request with a new data value.
+     *
+     *
+     * @param mixed $data
+     * @param mixed $key
+     *
+     * @return Request
      */
-    public function has($key): bool
-    {
-        return $this->collection->has($key);
-    }
+    public function with($data, $key = null): Request;
 
     /**
-     * {@inheritDoc}
+     * Return a Request without a specific key.
+     *
+     * @param mixed $key
+     *
+     * @return Request
      */
-    public function with($data, $key = null): RequestInterface
-    {
-        $clone = clone $this;
-        $clone->collection = $clone->collection->with($data, $key);
-
-        return $clone;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function without($key): RequestInterface
-    {
-        $clone = clone $this;
-        $clone->collection = $clone->collection->without($key);
-
-        return $clone;
-    }
+    public function without($key): Request;
 }

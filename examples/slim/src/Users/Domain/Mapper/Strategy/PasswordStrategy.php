@@ -4,6 +4,7 @@ namespace Damianopetrungaro\CleanArchitectureSlim\Users\Domain\Mapper\Strategy;
 
 
 use Damianopetrungaro\CleanArchitectureSlim\Users\Domain\ValueObjects\Password;
+use InvalidArgumentException;
 use Zend\Hydrator\Strategy\StrategyInterface;
 
 final class PasswordStrategy implements StrategyInterface
@@ -14,11 +15,13 @@ final class PasswordStrategy implements StrategyInterface
      * @param Password $password
      *
      * @return string
+     *
+     * @throws InvalidArgumentException
      */
     public function extract($password): string
     {
         if (!$password instanceof Password) {
-            throw new \InvalidArgumentException(get_class($password) . " must be a Password instance");
+            throw new InvalidArgumentException(get_class($password) . ' must be a Password instance');
         }
 
         return $password->getValue();

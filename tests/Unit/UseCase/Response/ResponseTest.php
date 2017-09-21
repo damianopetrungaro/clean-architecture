@@ -2,88 +2,97 @@
 
 namespace Damianopetrungaro\CleanArchitecture\Unit\UseCase\Response;
 
-use Damianopetrungaro\CleanArchitecture\Common\Collection\CollectionInterface;
-use Damianopetrungaro\CleanArchitecture\UseCase\Error\ErrorInterface;
-use Damianopetrungaro\CleanArchitecture\UseCase\Response\Response;
+use Damianopetrungaro\CleanArchitecture\Common\Collection\Collection;
+use Damianopetrungaro\CleanArchitecture\UseCase\Error\Error;
+use Damianopetrungaro\CleanArchitecture\UseCase\Response\CollectionResponse;
 use PHPUnit\Framework\TestCase;
 
 class ResponseTest extends TestCase
 {
     /**
-     * Check that Response object when initialized set 'data' and 'errors' properties as CollectionInterface
+     * Test that the replaceData method replace the data
      *
+     * @param $valueì
+     *
+     * @dataProvider replaceDataMethodDataProvider
      */
-    public function testThatResponseOnInitSetErrorAndData()
+    public function testReplaceDataMethod($value)
     {
-        $data = $this->getMockBuilder(CollectionInterface::class)->disableOriginalConstructor()->getMock();
-        $errors = $this->getMockBuilder(CollectionInterface::class)->disableOriginalConstructor()->getMock();
-        $response = new Response($data, $errors);
-        $reflection = new \ReflectionClass($response);
+        // Create a mock for data and error
+        $dataCollection = $this->prophesize(Collection::class);
+        $dataCollection->with('key', $value)->shouldBeCalledTimes(1);
+        $dataCollection = $dataCollection->reveal();
+        $errorCollection = $this->prophesize(Collection::class)->reveal();
 
-        $dataCollectionReflected = $reflection->getProperty('data');
-        $dataCollectionReflected->setAccessible(true);
-        $this->assertTrue($dataCollectionReflected->getValue($response) instanceof CollectionInterface);
-
-        $errorsCollectionReflected = $reflection->getProperty('errors');
-        $errorsCollectionReflected->setAccessible(true);
-        $this->assertTrue($errorsCollectionReflected->getValue($response) instanceof CollectionInterface);
+        // Create CollectionResponse and call replaceData method
+        $response = new CollectionResponse($dataCollection, $errorCollection);
+        $response->replaceData('key', $value);
     }
 
     /**
-     * Test that the addData method push new element into an array
+     * Test that the addError method replace the errors
+     *
+     * @param $value
+     * @param $expectedValue
+     *
+     * @dataProvider replaceErrorMethodDataProvider
+     */
+    public function testReplaceErrorMethod($value)
+    {
+        // Create a mock for data and error
+        $errorCollection = $this->prophesize(Collection::class);
+        $errorCollection->with('key', $value)->shouldBeCalledTimes(1);
+        $errorCollection = $errorCollection->reveal();
+        $dataCollection = $this->prophesize(Collection::class)->reveal();
+
+        // Create CollectionResponse and call replaceData method
+        $response = new CollectionResponse($dataCollection, $errorCollection);
+        $response->replaceError('key', $value);
+    }
+
+    /**
+     * Test that the addData method add data to the response
      *
      * @param $fakeInitialArray
      * @param $value
      * @param $expectedValue
-     * @internal param $key
+     *
      * @dataProvider addDataMethodDataProvider
      */
     public function testAddDataMethod($fakeInitialArray, $value, $expectedValue)
     {
         // Create a mock for data and error
-        $dataCollectionMock = $this->getMockBuilder(CollectionInterface::class)->getMockForAbstractClass();
-        $errorCollectionMock = $this->getMockBuilder(CollectionInterface::class)->disableOriginalConstructor()->getMock();
-        // On 'get' method calls will return a fake value
-        $dataCollectionMock->method('get')->will($this->returnValue($fakeInitialArray));
-        // On 'with' method calls will assert the expected behavior (add into an array or set an empty array with a value)
-        // And return a CollectionInterface because the return type is specified
-        $dataCollectionMock->method('with')->will($this->returnCallback(function ($value) use ($expectedValue) {
-            $this->assertEquals($expectedValue, $value);
+        $dataCollection = $this->prophesize(Collection::class);
+        $dataCollection->get('key', [])->shouldBeCalledTimes(1)->willReturn($fakeInitialArray);
+        $dataCollection->with('key', $expectedValue)->shouldBeCalledTimes(1);
+        $dataCollection = $dataCollection->reveal();
+        $errorCollection = $this->prophesize(Collection::class)->reveal();
 
-            return $this->getMockBuilder(CollectionInterface::class)->getMock();
-        }));
-
-        // Create Response and call addData method
-        $response = new Response($dataCollectionMock, $errorCollectionMock);
+        // Create CollectionResponse and call replaceData method
+        $response = new CollectionResponse($dataCollection, $errorCollection);
         $response->addData('key', $value);
     }
 
     /**
-     * Test that the addError method push new error into an array
+     * Test that the addError add Errorto the response
      *
      * @param $fakeInitialArray
      * @param $value
      * @param $expectedValue
-     * @internal param $key
+     *
      * @dataProvider addErrorMethodDataProvider
      */
     public function testAddErrorMethod($fakeInitialArray, $value, $expectedValue)
     {
         // Create a mock for data and error
-        $dataCollectionMock = $this->getMockBuilder(CollectionInterface::class)->disableOriginalConstructor()->getMock();
-        $errorCollectionMock = $this->getMockBuilder(CollectionInterface::class)->getMockForAbstractClass();
-        // On 'get' method calls will return a fake value
-        $errorCollectionMock->method('get')->will($this->returnValue($fakeInitialArray));
-        // On 'with' method calls will assert the expected behavior (add into an array or set an empty array with a value)
-        // And return a CollectionInterface because the return type is specified
-        $errorCollectionMock->method('with')->will($this->returnCallback(function ($value) use ($expectedValue) {
-            $this->assertTrue($expectedValue === $value);
+        $errorCollection = $this->prophesize(Collection::class);
+        $errorCollection->get('key', [])->shouldBeCalledTimes(1)->willReturn($fakeInitialArray);
+        $errorCollection->with('key', $expectedValue)->shouldBeCalledTimes(1);
+        $errorCollection = $errorCollection->reveal();
+        $dataCollection = $this->prophesize(Collection::class)->reveal();
 
-            return $this->getMockBuilder(CollectionInterface::class)->getMock();
-        }));
-
-        // Create Response and call addData method
-        $response = new Response($dataCollectionMock, $errorCollectionMock);
+        // Create CollectionResponse and call replaceData method
+        $response = new CollectionResponse($dataCollection, $errorCollection);
         $response->addError('key', $value);
     }
 
@@ -92,39 +101,19 @@ class ResponseTest extends TestCase
      *
      * @param array $expected
      * @param array $actual
-     * @dataProvider getDataAndGetErrorsMethodAreEqualsDataProvider
-     */
-    public function testGetDataAndGetErrorsMethodAreEquals(array $expected, array $actual)
-    {
-        // Create a mock for data and error
-        list($dataCollectionMock, $errorCollectionMock) = $this->getCollectionsMock();
-        // On 'all' method calls will return a fake value
-        $dataCollectionMock->method('all')->will($this->returnValue($expected));
-        $errorCollectionMock->method('all')->will($this->returnValue($expected));
-        // Create Response and call getData,getErrors methods
-        $response = new Response($dataCollectionMock, $errorCollectionMock);
-        $this->assertEquals($response->getData(), $actual);
-        $this->assertEquals($response->getErrors(), $actual);
-    }
-
-    /**
-     * Test that the getData and getErrors method return a different collection's array
      *
-     * @param array $expected
-     * @param array $actual
-     * @dataProvider getDataAndGetErrorsMethodAreNotEqualsDataProvider
+     * @dataProvider getDataAndGetErrorsMethodDataProvider
      */
-    public function testGetDataAndErrorsMethodAreNotEquals(array $expected, $actual)
+    public function testGetDataAndGetErrors(array $expected, array $actual)
     {
         // Create a mock for data and error
-        list($dataCollectionMock, $errorCollectionMock) = $this->getCollectionsMock();
-        // On 'all' method calls will return a fake value
-        $dataCollectionMock->method('all')->will($this->returnValue($expected));
-        $errorCollectionMock->method('all')->will($this->returnValue($expected));
-        // Create Response and call getData, getErrors methods
-        $response = new Response($dataCollectionMock, $errorCollectionMock);
-        $this->assertNotEquals($response->getData(), $actual);
-        $this->assertNotEquals($response->getErrors(), $actual);
+        $collectionProphecy = $this->prophesize(Collection::class);
+        $collectionProphecy->all()->willReturn($expected);
+        $collectionProphecy = $collectionProphecy->reveal();
+        // Create CollectionResponse and call getData,getErrors methods
+        $response = new CollectionResponse($collectionProphecy, $collectionProphecy);
+        $this->assertSame($response->getData(), $actual);
+        $this->assertSame($response->getErrors(), $actual);
     }
 
     /**
@@ -132,176 +121,84 @@ class ResponseTest extends TestCase
      *
      * @param array $expected
      * @param array $actual
+     *
      * @dataProvider hasDataAndHasErrorsMethodAreEqualsDataProvider
      */
     public function testHasDataAndHasErrorsMethodAreEquals($expected, $actual)
     {
         // Create a mock for data and error
-        list($dataCollectionMock, $errorCollectionMock) = $this->getCollectionsMock();
-        // On 'length' method calls will return a fake value
-        $dataCollectionMock->method('length')->will($this->returnValue($expected));
-        $errorCollectionMock->method('length')->will($this->returnValue($expected));
-        // Create Response and call hasData, hasErrors methods
-        $response = new Response($dataCollectionMock, $errorCollectionMock);
-        $this->assertEquals($response->hasData(), $actual);
-        $this->assertEquals($response->hasErrors(), $actual);
-    }
+        $collectionProphecy = $this->prophesize(Collection::class);
+        $collectionProphecy->length()->willReturn($expected);
+        $collectionProphecy = $collectionProphecy->reveal();
 
-    /**
-     * Test that the hasData and hasErrors method return a different expected value
-     *
-     * @param array $expected
-     * @param array $actual
-     * @dataProvider hasDataAndHasErrorsMethodAreNotEqualsDataProvider
-     */
-    public function testHasDataAndHasErrorsMethodAreNotEquals($expected, $actual)
-    {
-        // Create a mock for data and error
-        list($dataCollectionMock, $errorCollectionMock) = $this->getCollectionsMock();
-        // On 'length' method calls will return a fake value
-        $dataCollectionMock->method('length')->will($this->returnValue($expected));
-        $errorCollectionMock->method('length')->will($this->returnValue($expected));
-        // Create Response and call hasData, hasErrors methods
-        $response = new Response($dataCollectionMock, $errorCollectionMock);
-        $this->assertNotEquals($response->hasData(), $actual);
-        $this->assertNotEquals($response->hasErrors(), $actual);
+        // Create CollectionResponse and call hasData, hasErrors methods
+        $response = new CollectionResponse($collectionProphecy, $collectionProphecy);
+        $this->assertSame($response->hasData(), $actual);
+        $this->assertSame($response->hasErrors(), $actual);
     }
 
     /**
      * Test that is failed return right value
-     *
-     * @param $expected
-     * @param $value
-     * @dataProvider isFailedMethodAreEqualsDataProvider
      */
-    public function testIsFailedMethod($expected, $value)
+    public function testIsFailedMethod()
     {
-        list($dataCollectionMock, $errorCollectionMock) = $this->getCollectionsMock();
+        // Create a mock for data and error
+        $collectionProphecy = $this->prophesize(Collection::class)->reveal();
 
-        // Create Response and call isFailed method after set the status
-        $response = new Response($dataCollectionMock, $errorCollectionMock);
-        $responseReflected = new \ReflectionClass($response);
-        $statusReflected = $responseReflected->getProperty('status');
-        $statusReflected->setAccessible(true);
-        $statusReflected->setValue($response, $value);
-        $this->assertEquals($response->isFailed(), $expected);
+        // Create CollectionResponse and call isFailed method after set the status
+        $response = new CollectionResponse($collectionProphecy, $collectionProphecy);
+        $response->setAsFailed();
+        $this->assertTrue($response->isFailed());
+        $this->assertFalse($response->isSuccessful());
     }
 
     /**
-     * Test that is successful return right value
-     *
-     * @param $expected
-     * @param $value
-     * @dataProvider isSuccessMethodAreEqualsDataProvider
+     * Test that is failed return right value
      */
-    public function testIsSuccessfulMethod($expected, $value)
+    public function testIsSuccessfulMethod()
     {
         // Create a mock for data and error
-        $dataCollectionMock = $this->getMockBuilder(CollectionInterface::class)->disableOriginalConstructor()->getMock();
-        $errorCollectionMock = $this->getMockBuilder(CollectionInterface::class)->disableOriginalConstructor()->getMock();
-        // Create Response and call isFailed method after set the status
-        $response = new Response($dataCollectionMock, $errorCollectionMock);
-        $responseReflected = new \ReflectionClass($response);
-        $statusReflected = $responseReflected->getProperty('status');
-        $statusReflected->setAccessible(true);
-        $statusReflected->setValue($response, $value);
-        $this->assertEquals($response->isSuccessful(), $expected);
+        $collectionProphecy = $this->prophesize(Collection::class)->reveal();
+
+        // Create CollectionResponse and call isFailed method after set the status
+        $response = new CollectionResponse($collectionProphecy, $collectionProphecy);
+        $response->setAsSuccess();
+        $this->assertTrue($response->isSuccessful());
+        $this->assertFalse($response->isFailed());
     }
 
     /**
      * Test that removeData method set a new collection on data property
      */
-    public function testRemoveDataErrorMethod()
+    public function testRemoveDataAndErrorMethod()
     {
         // Create a mock for data and error
-        list($dataCollectionMock, $errorCollectionMock) = $this->getCollectionsMock();
-        // On 'without' method calls will assert the expected behavior (return a new collection)
-        // And return a CollectionInterface because the return type is specified
-        $dataCollectionMock->method('without')->will($this->returnCallback(function () {
-            return $this->getMockBuilder(CollectionInterface::class)->disableOriginalConstructor()->getMock();
-        }));
+        $collection = $this->prophesize(Collection::class);
+        $collection->without('key')->shouldBeCalledTimes(2)->willReturn($collection->reveal());
+        $collection = $collection->reveal();
 
-        $response = new Response($dataCollectionMock, $errorCollectionMock);
-        // Set accessible data and errors property
-        $responseReflected = new \ReflectionClass($response);
-        $dataReflected = $responseReflected->getProperty('data');
-        $dataReflected->setAccessible(true);
-        // Get data, change it and get the new one that has been set
-        $firstDataCollection = $dataReflected->getValue($response);
+        $response = new CollectionResponse($collection, $collection);
         $response->removeData('key');
-        $secondDataCollection = $dataReflected->getValue($response);
-        // The instance id must be different
-        $this->assertNotEquals(spl_object_hash($firstDataCollection), spl_object_hash($secondDataCollection));
-    }
-
-
-    /**
-     * Test that removeError method set a new collection on errors property
-     */
-    public function testRemoveDataAndRemoveErrorMethod()
-    {
-        // Create a mock for data and error
-        list($dataCollectionMock, $errorCollectionMock) = $this->getCollectionsMock();
-        // On 'without' method calls will assert the expected behavior (return a new collection)
-        // And return a CollectionInterface because the return type is specified
-        $errorCollectionMock->method('without')->will($this->returnCallback(function () {
-            return $this->getMockBuilder(CollectionInterface::class)->disableOriginalConstructor()->getMock();
-        }));
-
-        $response = new Response($dataCollectionMock, $errorCollectionMock);
-        // Set accessible data and errors property
-        $responseReflected = new \ReflectionClass($response);
-        $errorReflected = $responseReflected->getProperty('errors');
-        $errorReflected->setAccessible(true);
-        // Get errors, change it and get the new one that has been set
-        $firstErrorCollection = $errorReflected->getValue($response);
         $response->removeError('key');
-        $secondErrorCollection = $errorReflected->getValue($response);
-
-        $this->assertNotEquals(spl_object_hash($firstErrorCollection), spl_object_hash($secondErrorCollection));
     }
 
     /**
-     * Test that setAsFailed set right value
+     * // TODO Add description
      *
+     * @return array
      */
-    public function testSetAsFailedMethod()
+    public function replaceDataMethodDataProvider()
     {
-        // Create a mock for data and error
-        list($dataCollectionMock, $errorCollectionMock) = $this->getCollectionsMock();
-        // Create Response and call setAsFailed method
-        $response = new Response($dataCollectionMock, $errorCollectionMock);
-        $response->setAsFailed();
-        // Check the validity of status
-        $responseReflected = new \ReflectionClass($response);
-        $statusReflected = $responseReflected->getProperty('status');
-        $statusReflected->setAccessible(true);
-        $this->assertEquals($statusReflected->getValue($response), 'FAILED');
-        $this->assertNotEquals($statusReflected->getValue($response), 'SUCCESSFUL');
+        return [
+            ['value'],
+            ['d'],
+            ['secondValue'],
+        ];
     }
 
-    /**
-     * Test that setAsSuccessful set right value
-     *
-     */
-    public function testSetAsSuccessfulMethod()
-    {
-        // Create a mock for data and error
-        $dataCollectionMock = $this->getMockBuilder(CollectionInterface::class)->disableOriginalConstructor()->getMock();
-        $errorCollectionMock = $this->getMockBuilder(CollectionInterface::class)->disableOriginalConstructor()->getMock();
-        // Create Response and call setAsSuccess method
-        $response = new Response($dataCollectionMock, $errorCollectionMock);
-        $response->setAsSuccess();
-        // Check the validity of status
-        $responseReflected = new \ReflectionClass($response);
-        $statusReflected = $responseReflected->getProperty('status');
-        $statusReflected->setAccessible(true);
-        $this->assertEquals($statusReflected->getValue($response), 'SUCCESSFUL');
-        $this->assertNotEquals($statusReflected->getValue($response), 'FAILED');
-    }
 
     /**
-     * Retr
+     * // TODO Add description
      *
      * @return array
      */
@@ -309,6 +206,7 @@ class ResponseTest extends TestCase
     {
         return [
             [[], 'value', ['value']],
+            ['hello', 'value', ['hello', 'value']],
             [['a', 'b', 'c'], 'd', ['a', 'b', 'c', 'd']],
             [['firstKey' => 'firstValue'], 'secondValue', ['secondValue', 'firstKey' => 'firstValue']],
         ];
@@ -319,9 +217,9 @@ class ResponseTest extends TestCase
      */
     public function addErrorMethodDataProvider()
     {
-        $firstError = $this->getMockedError();
-        $secondError = $this->getMockedError();
-        $arrayErrors = $this->getMockedError(3);
+        $firstError = $this->getErrorsList();
+        $secondError = $this->getErrorsList();
+        $arrayErrors = $this->getErrorsList(3);
         $expectedArray = $arrayErrors;
         array_push($expectedArray, $secondError);
 
@@ -334,7 +232,17 @@ class ResponseTest extends TestCase
     /**
      * @return array
      */
-    public function getDataAndGetErrorsMethodAreEqualsDataProvider()
+    public function replaceErrorMethodDataProvider()
+    {
+        return [
+            [$this->getErrorsList()],
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public function getDataAndGetErrorsMethodDataProvider()
     {
         return [
             [[], []],
@@ -388,33 +296,23 @@ class ResponseTest extends TestCase
     }
 
     /**
-     * Helper for return one or an array of ErrorInterface
+     * Helper for return one or an array of Error
      *
      * @param int $number
      *
      * @return mixed
      */
-    private function getMockedError(int $number = 1)
+    private function getErrorsList(int $number = 1)
     {
         if ($number <= 1) {
-            return $this->getMockBuilder(ErrorInterface::class)->getMockForAbstractClass();
+            return $this->prophesize(Error::class)->reveal();
         }
 
         $errors = [];
         for ($i = 0; $i < $number; $i++) {
-            $errors[] = $this->getMockedError();
+            $errors[] = $this->prophesize(Error::class)->reveal();
         }
 
         return $errors;
-    }
-
-    /**
-     * @return array
-     */
-    private function getCollectionsMock()
-    {
-        $dataCollectionMock = $this->getMockBuilder(CollectionInterface::class)->disableOriginalConstructor()->getMock();
-        $errorCollectionMock = $this->getMockBuilder(CollectionInterface::class)->disableOriginalConstructor()->getMock();
-        return array($dataCollectionMock, $errorCollectionMock);
     }
 }

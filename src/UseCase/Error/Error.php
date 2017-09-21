@@ -1,22 +1,22 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Damianopetrungaro\CleanArchitecture\UseCase\Error;
 
-interface ErrorInterface
+interface Error
 {
     /**
      * Return the error code.
      *
      * @return string
      */
-    public function code() : string;
+    public function code(): string;
 
     /**
      * Return the error type.
      *
-     * @return ErrorTypeInterface
+     * @return ErrorType
      */
-    public function type() : ErrorTypeInterface;
+    public function type(): ErrorType;
 }

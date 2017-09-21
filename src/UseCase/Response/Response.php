@@ -1,150 +1,130 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Damianopetrungaro\CleanArchitecture\UseCase\Response;
 
-use Damianopetrungaro\CleanArchitecture\Common\Collection\CollectionInterface;
-use Damianopetrungaro\CleanArchitecture\UseCase\Error\ErrorInterface;
+use Damianopetrungaro\CleanArchitecture\UseCase\Error\Error;
 
-class Response implements ResponseInterface
+interface Response
 {
     /**
      * Available Response status
      */
-    protected const STATUS_FAILED = 'FAILED';
-    protected const STATUS_SUCCESSFUL = 'SUCCESSFUL';
+    public const STATUS_FAILED = 'FAILED';
+    public const STATUS_SUCCESSFUL = 'SUCCESSFUL';
 
     /**
-     * @var string $status
-     */
-    private $status;
-
-    /**
-     * Contains the error list
-     * (This list contains of data to show in case of failure)
+     * Replace data to the data list by key.
      *
-     * @var CollectionInterface $errors
-     */
-    private $errors;
-
-    /**
-     * Contains the data list
-     * (This list contains of data to show in case of success)
+     * @param $key
+     * @param $value
      *
-     * @var CollectionInterface $data
+     * @return void
      */
-    private $data;
+    public function replaceData($key, $value): void;
 
     /**
-     * Response constructor.
+     * Replace an Error to the error list by key.
      *
-     * @param CollectionInterface $data
-     * @param CollectionInterface $errors
+     * @param $key
+     * @param Error $error
+     *
+     * @return void
      */
-    public function __construct(CollectionInterface $data, CollectionInterface $errors)
-    {
-        $this->data = $data;
-        $this->errors = $errors;
-    }
+    public function replaceError($key, Error $error): void;
 
     /**
-     * {@inheritDoc}
+     * Add data to the data list by key.
+     *
+     * @param $key
+     * @param $value
+     *
+     * @return void
      */
-    public function addData($key, $value) : void
-    {
-        $values = $this->data->get($key, []);
-        $values[] = $value;
-        $this->data = $this->data->with($values, $key);
-    }
+    public function addData($key, $value): void;
 
     /**
-     * {@inheritDoc}
+     * Add an Error to the error list by key.
+     *
+     * @param $key
+     * @param Error $error
+     *
+     * @return void
      */
-    public function addError($key, ErrorInterface $error) : void
-    {
-        $values = $this->errors->get($key, []);
-        $values[] = $error;
-        $this->errors = $this->errors->with($values, $key);
-    }
+    public function addError($key, Error $error): void;
 
     /**
-     * {@inheritDoc}
+     * Return the data list content.
+     *
+     * @return array
      */
-    public function getData() : array
-    {
-        return $this->data->all();
-    }
+    public function getData(): array;
 
     /**
-     * {@inheritDoc}
+     * Return the error list content.
+     *
+     * @return array
      */
-    public function getErrors() : array
-    {
-        return $this->errors->all();
-    }
+    public function getErrors(): array;
 
     /**
-     * {@inheritDoc}
+     * Return true if data list is not empty, otherwise return false.
+     *
+     * @return bool
      */
-    public function hasData() : bool
-    {
-        return $this->data->length() !== 0;
-    }
+    public function hasData(): bool;
 
     /**
-     * {@inheritDoc}
+     * Return true if error list is not empty, otherwise return false.
+     *
+     * @return bool
      */
-    public function hasErrors() : bool
-    {
-        return $this->errors->length() !== 0;
-    }
+    public function hasErrors(): bool;
 
     /**
-     * {@inheritDoc}
+     * Check if Response is failed.
+     *
+     * @return bool
      */
-    public function isFailed() : bool
-    {
-        return $this->status === self::STATUS_FAILED;
-    }
+    public function isFailed(): bool;
 
     /**
-     * {@inheritDoc}
+     * Check if Response is successful.
+     *
+     * @return bool
      */
-    public function isSuccessful() : bool
-    {
-        return $this->status === self::STATUS_SUCCESSFUL;
-    }
+    public function isSuccessful(): bool;
 
     /**
-     * {@inheritDoc}
+     * Remove data to the data list.
+     *
+     * @param $key
+     *
+     * @return void
      */
-    public function removeData($key) : void
-    {
-        $this->data = $this->data->without($key);
-    }
+    public function removeData($key): void;
 
     /**
-     * {@inheritDoc}
+     * Remove an Error to the error list.
+     *
+     * @param $key
+     *
+     * @return void
      */
-    public function removeError($key) : void
-    {
-        $this->errors = $this->errors->without($key);
-    }
+    public function removeError($key): void;
 
     /**
-     * {@inheritDoc}
+     * Set the response as failed.
+     *
+     * @return void
      */
-    public function setAsFailed() : void
-    {
-        $this->status = self::STATUS_FAILED;
-    }
+    public function setAsFailed(): void;
 
     /**
-     * {@inheritDoc}
+     * Set the response as success.
+     *
+     * @return void
      */
-    public function setAsSuccess() : void
-    {
-        $this->status = self::STATUS_SUCCESSFUL;
-    }
+    public function setAsSuccess(): void;
 }
