@@ -53,46 +53,49 @@ There are some books that helped me to "think" in this way. Here some of them:
 
   - Collections
   
-    - CollectionInterface
+    - Collection
       
       An interface to use instead an array of objects.
     
-    - Collection
+    - ArrayCollection
     
-      An implementation of CollectionInterface using php array.
+      An implementation of Collection using php array.
   
   - Enum
   
-    - EnumInterface
+    - Enum
       
        Used for give Enum support on PHP.
       
-    - Enum
+    - ReflectionEnum
     
-      An implementation of EnumInterface.
+      An implementation of Enum using reflection.
   
 - Mapper
 
-  - MapperInterface
+  - Mapper
   
     An interface to use for transform object into array and viceversa.
+
+  - UserMapper
   
+    An interface to use for transform User instances into array and viceversa.
   
 - Persistence
 
-  - TransactionInterface
+  - Transaction
 
     An interface to use for transaction cross Bounded Contexts.
   
 - Use Cases
 
-  - UseCaseInterface
+  - UseCase
     
     An interface to use for isolate the use case from the request (CLI,HTTP...).
     
   - Error
   
-    - ErrorInterface
+    - Error
     
       A representation of a generic error in the domain. The error it will be specified using type & code.
       
@@ -100,47 +103,46 @@ There are some books that helped me to "think" in this way. Here some of them:
     
       An abstract implementation of ErrorInterface.
     
-    - ErrorTypeInterface
-    
-      An interface that extends EnumInterface, used for specify all the error type of your domain.
-      
     - ErrorType
     
-      An implementation of ErrorTypeInterface.
+      An interface that extends Enum, used for specify all the error type of your domain.
+      
+    - AbstractErrorType
+    
+      An implementation of ErrorType.
     
   - Request
   
-    - RequestInterface
+    - Request
     
       An interface used as DTO for pass data from the infrastructure/application to the domain.
     
-    - Request
+    - CollectionRequest
     
-      An implementation of the RequestInterface using CollectionInterface.
+      An implementation of the Request using Collection.
     
   - Response
   
-    - ResponseInterface
+    - Response
     
       An interface used for pass data from the domain to the infrastructure/application, it uses two main properties
       Errors: pass all "errors"
       Data:  pass all other "data/information"
       
-      
-    - Response
+    - CollectionResponse
     
-      An implementation of ResponseInterface using CollectionInterface. 
+      An implementation of Response using Collection. 
       
     
   - Validation
   
-    - ValidableRequestInterface
+    - ValidableRequest
     
       An interface used for the validate request's data inside the self request
     
-    - ValidableuseCaseInterface
+    - ValidableUseCase
 
-      An interface used for the validate request's data inside the UseCaseInterface
+      An interface used for the validate request's data inside the UseCase
       
 ## A Practical Example
 
