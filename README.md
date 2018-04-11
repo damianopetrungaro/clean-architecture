@@ -11,13 +11,13 @@ What are Domain,Application and Infrastructure layer? [Click here](http://dddsam
 
 #### Why did you code this package?
 
-When i code, i usually isolate the Domain layer from Application layer and Infrastructure layer, and every time i do it i need to re-build a set of objects that helps me doing this.
+When I code, I usually isolate the Domain layer from Application layer and Infrastructure layer, and every time I do it I need to re-build a set of objects that helps me doing this.
 
 Those objects often are a Request, a Response and some Errors.
 
-This package is born for me, to do not re-build this set of objects, also avoiding some copy paste from different projects.
+This package is born for me, to avoid re-building such set of objects, also avoiding some copy/paste from different projects.
 
-#### Why should you isolate your domain code from Application and Infrastructure dependecies?
+#### Why should you isolate your domain code from Application and Infrastructure dependencies?
 
 Imagine that your PHP application is currently built on top of Laravel framework.
 
@@ -31,7 +31,7 @@ This choose bind you to a tool that might not be as good as before for your proj
 And this is only an example. There can be a lot of more reasons why you want to change framework.
 
 
-#### How can i isolate it?
+#### How can I isolate it?
 
 Using some DDD concepts, you can totally (or almost) isolate your domain code from the Application layer (Laravel for example) and from the Infrastructure layer (Postgresql or Mysql for example).
 
