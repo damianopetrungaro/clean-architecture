@@ -29,8 +29,7 @@ abstract class ReflectionEnum implements Enum
      */
     public function __construct($value)
     {
-        $self = new ReflectionClass(static::class);
-        $constants = $self->getConstants();
+        $constants = static::getAllowedValues();
 
         if (!in_array($value, $constants, true)) {
             throw new InvalidArgumentException(sprintf('The value "%s" is not available in %s', $value, static::class));
@@ -44,8 +43,7 @@ abstract class ReflectionEnum implements Enum
      */
     public static function __callStatic(string $value, array $args = []): Enum
     {
-        $self = new ReflectionClass(static::class);
-        $constants = $self->getConstants();
+        $constants = static::getAllowedValues();
 
         if (!array_key_exists($value, $constants)) {
             throw new InvalidArgumentException(sprintf('The key "%s" is not available in %s', $value, static::class));
@@ -57,9 +55,24 @@ abstract class ReflectionEnum implements Enum
     /**
      * {@inheritDoc}
      */
+    public static function getAllowedValues(): array
+    {
+        $self = new ReflectionClass(static::class);
+
+        return $self->getConstants();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public abstract function equals($enum): bool;
+
+    /**
+     * {@inheritDoc}
+     */
     public function __toString(): string
     {
-        return (string)$this->getValue();
+        return (string) $this->getValue();
     }
 
     /**

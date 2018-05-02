@@ -43,10 +43,10 @@ class EnumTest extends TestCase
         $this->assertInstanceOf(Enum::class, $thirdEnum);
         $this->assertInstanceOf(Enum::class, $fourthEnum);
 
-        $this->assertSame($firstEnum->getValue(), 'VALUE_A');
-        $this->assertSame($secondEnum->getValue(), 'VALUE_B');
-        $this->assertSame($thirdEnum->getValue(), 'VALUE_C');
-        $this->assertSame($fourthEnum->getValue(), 12);
+        $this->assertSame('VALUE_A', $firstEnum->getValue());
+        $this->assertSame('VALUE_B', $secondEnum->getValue());
+        $this->assertSame('VALUE_C', $thirdEnum->getValue());
+        $this->assertSame(12, $fourthEnum->getValue());
     }
 
     /**
@@ -54,26 +54,32 @@ class EnumTest extends TestCase
      */
     public function testCallStaticValidEnum()
     {
-        /** @var Enum $firstEnum */
         $firstEnum = FixtureEnum::A();
-
-        /** @var Enum $secondEnum */
         $secondEnum = FixtureEnum::B();
-
-        /** @var Enum $thirdEnum */
         $thirdEnum = FixtureEnum::C();
-
-        /** @var Enum $fourthEnum */
         $fourthEnum = FixtureEnum::VALUE_NUMB();
 
         $this->assertInstanceOf(Enum::class, $firstEnum);
         $this->assertInstanceOf(Enum::class, $secondEnum);
         $this->assertInstanceOf(Enum::class, $thirdEnum);
+        $this->assertInstanceOf(Enum::class, $fourthEnum);
 
-        $this->assertSame($firstEnum->getValue(), 'VALUE_A');
-        $this->assertSame($secondEnum->getValue(), 'VALUE_B');
-        $this->assertSame($thirdEnum->getValue(), 'VALUE_C');
-        $this->assertSame($fourthEnum->getValue(), 12);
+        $this->assertSame('VALUE_A', $firstEnum->getValue());
+        $this->assertSame('VALUE_B', $secondEnum->getValue());
+        $this->assertSame('VALUE_C', $thirdEnum->getValue());
+        $this->assertSame(12, $fourthEnum->getValue());
+    }
+
+    public function testGetValues()
+    {
+        $expected = [
+            'A' => 'VALUE_A',
+            'B' => 'VALUE_B',
+            'C' => 'VALUE_C',
+            'VALUE_NUMB' => 12,
+        ];
+
+        $this->assertEquals($expected, FixtureEnum::getAllowedValues());
     }
 
     /**
@@ -84,7 +90,7 @@ class EnumTest extends TestCase
         $firstEnum = new FixtureEnum(FixtureEnum::A);
         $secondEnum = new FixtureEnum(FixtureEnum::VALUE_NUMB);
 
-        $this->assertSame((string)$firstEnum, FixtureEnum::A);
-        $this->assertSame((string)$secondEnum, '12');
+        $this->assertSame('VALUE_A', (string) $firstEnum);
+        $this->assertSame('12', (string) $secondEnum);
     }
 }

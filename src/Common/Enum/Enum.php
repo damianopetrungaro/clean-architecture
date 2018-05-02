@@ -12,7 +12,7 @@ use InvalidArgumentException;
  *
  * const ERROR_VALIDATION = 'ERROR_VALIDATION';
  * const ENTITY_NOT_FOUND = 'ENTITY_NOT_FOUND';
- * const PERSISTENCE_ERROR= 'PERSISTENCE_ERROR';
+ * const PERSISTENCE_ERROR = 'PERSISTENCE_ERROR';
  */
 interface Enum
 {
@@ -36,14 +36,30 @@ interface Enum
     public static function __callStatic(string $enum, array $args = []): Enum;
 
     /**
-     * Return the enum value
+     * Returns the enum's allowed values.
+     *
+     * @return array
+     */
+    public static function getAllowedValues(): array;
+
+    /**
+     * Returns the enum value.
      *
      * @return mixed
      */
     public function getValue();
 
     /**
-     * Return the enum value as string
+     * Returns TRUE if it equals $enum.
+     *
+     * @param mixed $enum
+     *
+     * @return bool
+     */
+    public function equals($enum): bool;
+
+    /**
+     * Returns the enum value as string
      *
      * @return string
      */

@@ -16,4 +16,9 @@ final class FixtureEnum extends ReflectionEnum
     const B = 'VALUE_B';
     const C = 'VALUE_C';
     const VALUE_NUMB = 12;
+
+    public function equals($enum): bool
+    {
+        // TODO: Implement equals() method.
+    }
 }
