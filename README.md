@@ -150,3 +150,10 @@ There are some books that helped me to "think" in this way. Here some of them:
 
   This is a simple example of a TODO list of users, using slim microframework and clean architecture package.
   For any doubt or info add an issue.
+
+## Changelog
+
+#### [0.4] 2018-06-01 
+
+- [BC] added a type-hing to `Enum` interface. You need to adapt `equals` method in your class implementing
+  such inteface (or extending `ReflectionEnum` class)
