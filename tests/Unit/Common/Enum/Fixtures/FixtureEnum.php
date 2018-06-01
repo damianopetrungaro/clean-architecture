@@ -2,6 +2,7 @@
 
 namespace Damianopetrungaro\CleanArchitecture\Unit\Common\Enum\Fixtures;
 
+use Damianopetrungaro\CleanArchitecture\Common\Enum\Enum;
 use Damianopetrungaro\CleanArchitecture\Common\Enum\ReflectionEnum;
 
 /**
@@ -17,7 +18,7 @@ final class FixtureEnum extends ReflectionEnum
     const C = 'VALUE_C';
     const VALUE_NUMB = 12;
 
-    public function equals($enum): bool
+    public function equals(Enum $enum): bool
     {
         // TODO: Implement equals() method.
     }

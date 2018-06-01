@@ -65,7 +65,7 @@ abstract class ReflectionEnum implements Enum
     /**
      * {@inheritDoc}
      */
-    public abstract function equals($enum): bool;
+    abstract public function equals(Enum $enum): bool;
 
     /**
      * {@inheritDoc}

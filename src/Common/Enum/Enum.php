@@ -52,11 +52,11 @@ interface Enum
     /**
      * Returns TRUE if it equals $enum.
      *
-     * @param mixed $enum
+     * @param Enum $enum
      *
      * @return bool
      */
-    public function equals($enum): bool;
+    public function equals(Enum $enum): bool;
 
     /**
      * Returns the enum value as string
